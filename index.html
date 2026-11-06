@@ -13,7 +13,7 @@ a{color:inherit;text-decoration:none}.wrap{width:min(1140px,92%);margin:auto}.na
 @media(max-width:520px){.grid{grid-template-columns:1fr}.metric{grid-template-columns:1fr 1fr}.section-head h2{font-size:29px}}
 
 /* Welcome assistant chat interface */
-.welcome-chat{position:fixed;right:22px;bottom:88px;width:min(410px,calc(100vw - 28px));height:min(650px,calc(100dvh - 115px));z-index:1000;background:#0e172b;border:1px solid #4969a8;border-radius:20px;box-shadow:0 22px 70px #000c;overflow:hidden;display:none;flex-direction:column}
+.welcome-chat{position:fixed;right:22px;bottom:88px;width:min(410px,calc(100vw - 32px));height:min(620px,calc(100dvh - 120px));max-height:calc(100dvh - 120px);min-height:0;z-index:1000;background:#0e172b;border:1px solid #4969a8;border-radius:20px;box-shadow:0 22px 70px #000c;overflow:hidden;display:none;flex-direction:column}.welcome-chat.minimized{height:auto;min-height:0;max-height:none}.welcome-chat.minimized .welcome-messages,.welcome-chat.minimized .chat-compose{display:none}
 .welcome-chat.open{display:flex;animation:chatIn .25s ease-out}
 .welcome-head{display:flex;align-items:center;gap:11px;padding:15px 17px;background:linear-gradient(110deg,#2458a6,#57368d);flex-shrink:0}
 .welcome-avatar{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:#ffffff22;font-size:20px}
@@ -31,7 +31,7 @@ a{color:inherit;text-decoration:none}.wrap{width:min(1140px,92%);margin:auto}.na
 .chat-compose button{border:0;border-radius:50%;width:44px;height:44px;background:#168c59;color:#fff;font-size:19px;cursor:pointer}
 .welcome-launch{position:fixed;right:22px;bottom:20px;z-index:999;border:0;border-radius:30px;padding:13px 18px;background:#168c59;color:#fff;font-weight:800;box-shadow:0 10px 30px #0008;cursor:pointer}
 @keyframes chatIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-@media(max-width:520px){.welcome-chat{right:14px;left:14px;bottom:76px;width:auto;height:min(520px,68dvh);min-height:340px;max-height:68dvh;border-radius:18px}.welcome-messages{padding:12px}.welcome-head{padding:11px 12px}.welcome-launch{right:14px;bottom:14px;z-index:1001}.chat-compose{padding:9px}.chat-compose input{padding:10px 12px}}
+@media(max-width:520px){.welcome-chat{right:12px;left:auto;bottom:76px;width:min(390px,calc(100vw - 24px));height:min(560px,calc(100dvh - 120px));max-height:calc(100dvh - 120px);min-height:0;border-radius:18px}.welcome-messages{padding:12px}.welcome-head{padding:11px 12px}.welcome-launch{right:12px;bottom:12px;z-index:1001}.chat-compose{padding:9px}.chat-compose input{padding:10px 12px}}
 </style>
 </head>
 <body>
@@ -99,11 +99,11 @@ const minimizeWelcome=document.getElementById('minimizeWelcome');
 const welcomeMessages=document.getElementById('welcomeMessages');
 const welcomeChatForm=document.getElementById('welcomeChatForm');
 const welcomeChatInput=document.getElementById('welcomeChatInput');
-function showWelcome(){welcomeChat.classList.add('open');}
-function hideWelcome(){welcomeChat.classList.remove('open');}
+function showWelcome(){welcomeChat.classList.remove('minimized');if(minimizeWelcome){minimizeWelcome.textContent='−';minimizeWelcome.setAttribute('aria-label','Minimize chat');}welcomeChat.classList.add('open');}
+function hideWelcome(){welcomeChat.classList.remove('open','minimized');if(minimizeWelcome){minimizeWelcome.textContent='−';minimizeWelcome.setAttribute('aria-label','Minimize chat');}}
 if(openWelcome)openWelcome.addEventListener('click',showWelcome);
 closeWelcome.addEventListener('click',hideWelcome);
-if(minimizeWelcome)minimizeWelcome.addEventListener('click',hideWelcome);
+if(minimizeWelcome)minimizeWelcome.addEventListener('click',function(){const minimized=welcomeChat.classList.toggle('minimized');minimizeWelcome.textContent=minimized?'+':'−';minimizeWelcome.setAttribute('aria-label',minimized?'Restore chat':'Minimize chat');});
 setTimeout(showWelcome,900);
 
 function addChatBubble(message,kind='bot'){
