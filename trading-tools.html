@@ -12,11 +12,20 @@
 .visual-photo{margin:22px 0 28px;position:relative;overflow:hidden;border:1px solid rgba(137,174,255,.28);border-radius:22px;background:#101a30;box-shadow:0 18px 48px rgba(0,0,0,.28)}.visual-photo img{display:block;width:100%;height:clamp(190px,30vw,330px);object-fit:cover;filter:saturate(1.08);}.visual-photo figcaption{padding:10px 15px;color:#cbd8f4;font-size:12px;letter-spacing:.04em;background:linear-gradient(90deg,#101a30,#17274a)}.hero-card .visual-photo{margin:0 0 18px;border-radius:16px}.hero-card .visual-photo img{height:190px}
 
 .card-photo{display:block;width:calc(100% + 44px);height:150px;object-fit:cover;margin:-22px -22px 17px;border-radius:17px 17px 0 0}.card{overflow:hidden}.panel{overflow:hidden}.grid>.panel .card-photo,.grid>.card .card-photo{height:142px}@media(min-width:900px){.grid>.card .card-photo,.grid>.panel .card-photo{height:155px}}@media(max-width:520px){.card-photo{height:135px}}
+
+/* Subtle cinematic service-page background motion */
+.hero{position:relative;isolation:isolate;overflow:hidden;border-radius:22px;padding:34px 22px 24px;background:linear-gradient(110deg,rgba(7,13,29,.78),rgba(19,14,46,.58));border:1px solid rgba(137,174,255,.16)}
+.service-video-bg{position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none;background:linear-gradient(110deg,#071020,rgba(14,19,42,.8)),url('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1400&q=75') center/cover}
+.service-video-bg video{width:100%;height:100%;object-fit:cover;opacity:.24;filter:saturate(1.2) contrast(1.08)}
+.service-video-bg:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(5,10,23,.78),rgba(5,10,23,.42)),linear-gradient(0deg,#070b18 0%,transparent 65%)}
+.hero>.eyebrow,.hero>h1,.hero>p,.hero>figure{position:relative;z-index:1}
+@media(max-width:700px){.hero{padding:24px 15px 18px}.service-video-bg video{opacity:.16}}
+@media(prefers-reduced-motion:reduce){.service-video-bg video{display:none}}
 </style></head>
 <body>
 <header class="wrap nav"><a class="brand" href="index.html">MARTIN TECH & BUSINESS HUB</a><a href="index.html">← Back to home</a></header>
 <main class="wrap">
-<div class="hero"><span class="eyebrow">Free practical tool</span><h1>Trading management toolkit</h1><p class="muted">Estimate position risk, record trades and review your discipline. Your journal entries are stored in this browser on this device.</p>
+<div class="hero"><div class="service-video-bg" aria-hidden="true"><video autoplay muted loop playsinline preload="none" poster="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&amp;fit=crop&amp;w=1400&amp;q=75"><source src="https://videos.pexels.com/video-files/28561463/12421439_3840_2160_30fps.mp4" type="video/mp4"></video></div><span class="eyebrow">Free practical tool</span><h1>Trading management toolkit</h1><p class="muted">Estimate position risk, record trades and review your discipline. Your journal entries are stored in this browser on this device.</p>
 <figure class="visual-photo"><img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&amp;fit=crop&amp;w=1200&amp;q=78" alt="Financial market charts on a trading screen" loading="lazy" decoding="async"><figcaption>Financial market charts on a trading screen</figcaption></figure></div>
 <div class="grid">
 <section class="panel"><h2>Position risk calculator</h2><p class="muted">Estimate the amount at risk from your planned entry and stop level.</p>
