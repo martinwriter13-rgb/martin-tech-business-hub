@@ -86,6 +86,7 @@ What would you like to know about?</div>
   </form>
 </div>
 
+<button class="welcome-launch" id="openWelcome" type="button">💬 Chat with us</button>
 
 <footer><div class="wrap">© <span id="year"></span> Martin Tech & Business Hub. Built to learn, connect and grow.</div></footer>
 <script>
@@ -99,7 +100,7 @@ const welcomeChatForm=document.getElementById('welcomeChatForm');
 const welcomeChatInput=document.getElementById('welcomeChatInput');
 function showWelcome(){welcomeChat.classList.add('open');}
 function hideWelcome(){welcomeChat.classList.remove('open');}
-openWelcome.addEventListener('click',showWelcome);
+if(openWelcome)openWelcome.addEventListener('click',showWelcome);
 closeWelcome.addEventListener('click',hideWelcome);
 setTimeout(showWelcome,900);
 
