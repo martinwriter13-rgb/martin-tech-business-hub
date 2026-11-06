@@ -95,6 +95,37 @@ a{color:inherit;text-decoration:none}.wrap{width:min(1140px,92%);margin:auto}.na
 @media(max-width:620px){.explainer-player{grid-template-columns:1fr;gap:4px;text-align:center;padding:18px;min-height:390px}.explainer-character{width:110px;height:145px;margin:auto}.explainer-scene p{font-size:15px}.explainer-visual{font-size:30px}}
 @media(prefers-reduced-motion:reduce){.explainer-character{animation:none}.explainer-scene{animation:none}}
 
+/* Broadcast-style studio presenter */
+.explainer-player{min-height:410px;grid-template-columns:230px 1fr;gap:30px;padding:34px;background:radial-gradient(ellipse at 18% 48%,rgba(49,117,220,.3),transparent 36%),radial-gradient(ellipse at 86% 20%,rgba(138,77,255,.27),transparent 38%),linear-gradient(115deg,#071225,#111e40 52%,#201642)}
+.explainer-player:before{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(115deg,transparent 0 70px,rgba(151,190,255,.035) 71px 73px)}
+.explainer-player:after{content:"";position:absolute;left:0;right:0;bottom:0;height:5px;background:linear-gradient(90deg,#46a2ff,#9d6bff,#46a2ff);background-size:200% 100%;animation:studioSweep 5s linear infinite}
+@keyframes studioSweep{to{background-position:200% 0}}
+.explainer-studio-screen{position:absolute;right:20px;top:18px;width:clamp(150px,28%,270px);height:112px;border:1px solid #6e8fd2;border-radius:13px;background:linear-gradient(145deg,rgba(9,20,45,.88),rgba(36,45,103,.78));padding:12px;box-shadow:0 12px 35px #0008}
+.explainer-studio-screen small{display:block;color:#9fc4ff;font-size:9px;letter-spacing:.16em;font-weight:900}
+.explainer-screen-chart{height:55px;display:flex;align-items:end;gap:6px;margin-top:7px}
+.explainer-screen-chart i{display:block;flex:1;border-radius:4px 4px 0 0;background:linear-gradient(#8dc5ff,#6554cb);animation:chartRise 2.4s ease-in-out infinite alternate}
+.explainer-screen-chart i:nth-child(1){height:32%}.explainer-screen-chart i:nth-child(2){height:65%;animation-delay:.2s}.explainer-screen-chart i:nth-child(3){height:45%;animation-delay:.4s}.explainer-screen-chart i:nth-child(4){height:88%;animation-delay:.6s}.explainer-screen-chart i:nth-child(5){height:72%;animation-delay:.8s}
+@keyframes chartRise{to{height:95%;filter:brightness(1.35)}}
+.explainer-live{position:absolute;top:20px;left:20px;display:flex;align-items:center;gap:7px;padding:6px 10px;border:1px solid #ff7676aa;border-radius:6px;background:#351b31;color:#fff;font-size:10px;font-weight:900;letter-spacing:.12em}
+.explainer-live:before{content:"";width:7px;height:7px;border-radius:50%;background:#ff515e;box-shadow:0 0 12px #ff515e;animation:livePulse 1.1s infinite}
+@keyframes livePulse{50%{opacity:.25;transform:scale(.65)}}
+.explainer-character{width:205px;height:260px;margin-top:45px;align-self:end;animation:hostSettle 3s ease-in-out infinite}
+@keyframes hostSettle{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.explainer-character svg{overflow:visible}
+.explainer-arm-left{transform-box:fill-box;transform-origin:85% 15%;animation:hostGestureLeft 3.8s ease-in-out infinite}
+.explainer-arm-right{transform-box:fill-box;transform-origin:15% 15%;animation:hostGestureRight 4.6s ease-in-out infinite}
+@keyframes hostGestureLeft{0%,15%,100%{transform:rotate(0)}28%,42%{transform:rotate(-24deg)}55%{transform:rotate(-8deg)}}
+@keyframes hostGestureRight{0%,35%,100%{transform:rotate(0)}48%,63%{transform:rotate(27deg)}76%{transform:rotate(5deg)}}
+.explainer-scene{position:relative;z-index:1;padding:22px 24px;border:1px solid #7898d355;border-radius:18px;background:linear-gradient(135deg,rgba(8,17,38,.82),rgba(20,23,57,.62));backdrop-filter:blur(7px);box-shadow:0 18px 50px #0005;margin-top:58px}
+.explainer-kicker{display:flex;align-items:center;gap:9px}.explainer-kicker:before{content:"";width:22px;height:2px;background:#76baff}
+.explainer-scene h3{font-size:clamp(26px,4vw,42px);text-shadow:0 5px 22px #0008}
+.explainer-visual{display:inline-block;margin-top:18px;padding:7px 13px;border:1px solid #829fdf55;border-radius:30px;background:#243a6866;letter-spacing:7px;animation:visualFloat 3s ease-in-out infinite}
+@keyframes visualFloat{50%{transform:translateY(-5px);box-shadow:0 8px 25px #538fff33}}
+.explainer-lower-third{position:absolute;left:20px;right:20px;bottom:16px;z-index:3;display:flex;align-items:center;gap:12px;overflow:hidden;border-left:4px solid #62aaff;border-radius:4px;background:linear-gradient(90deg,rgba(8,15,32,.96),rgba(20,33,65,.84));padding:8px 13px;box-shadow:0 8px 22px #0006}
+.explainer-lower-third strong{font-size:11px;letter-spacing:.08em;color:#fff;white-space:nowrap}.explainer-lower-third span{font-size:11px;color:#d3e0ff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media(max-width:620px){.explainer-player{grid-template-columns:1fr;gap:0;min-height:560px;padding:14px 14px 60px}.explainer-studio-screen{right:12px;top:12px;width:145px;height:92px}.explainer-live{top:13px;left:12px}.explainer-character{width:135px;height:175px;margin:75px auto 0}.explainer-scene{margin:0;padding:16px;text-align:center}.explainer-kicker{justify-content:center}.explainer-lower-third{left:10px;right:10px;bottom:10px}.explainer-scene p{font-size:14px}.explainer-visual{font-size:26px}}
+@media(prefers-reduced-motion:reduce){.explainer-player:after,.explainer-screen-chart i,.explainer-live:before,.explainer-character,.explainer-arm-left,.explainer-arm-right,.explainer-visual{animation:none}}
+
 </style>
 </head>
 <body>
@@ -113,6 +144,7 @@ a{color:inherit;text-decoration:none}.wrap{width:min(1140px,92%);margin:auto}.na
     <p>Meet our cartoon presenter and take a quick tour of the services at Martin Tech & Business Hub.</p>
   </div>
   <div class="explainer-player" aria-label="Two-minute animated explainer">
+    <div class="explainer-live">ON AIR · HUB NEWS</div><div class="explainer-studio-screen" aria-hidden="true"><small>MARTIN TECH · DIGITAL BRIEFING</small><div class="explainer-screen-chart"><i></i><i></i><i></i><i></i><i></i></div></div>
     <div class="explainer-character" aria-hidden="true">
       <svg viewBox="0 0 180 240" xmlns="http://www.w3.org/2000/svg">
         <ellipse cx="90" cy="225" rx="58" ry="9" fill="#050b19" opacity=".55"/>
@@ -126,7 +158,7 @@ a{color:inherit;text-decoration:none}.wrap{width:min(1140px,92%);margin:auto}.na
         <ellipse cx="72" cy="86" rx="5" ry="7" fill="#17151a"/><ellipse cx="108" cy="86" rx="5" ry="7" fill="#17151a"/>
         <path d="M79 111 Q90 120 102 110" fill="none" stroke="#542b27" stroke-width="4" stroke-linecap="round"/>
         <path d="M42 82 Q31 78 34 96 Q37 108 49 103 M132 82 Q145 78 146 96 Q143 108 131 103" fill="#9b5d40"/>
-        <path d="M48 165 L20 192 L31 202 L62 180 M132 165 L158 190 L148 202 L118 180" fill="none" stroke="#9b5d40" stroke-width="13" stroke-linecap="round"/>
+        <g class="explainer-arm-left"><path d="M48 165 L20 192 L31 202 L62 180" fill="none" stroke="#9b5d40" stroke-width="13" stroke-linecap="round"/><circle cx="29" cy="198" r="8" fill="#a96748"/></g><g class="explainer-arm-right"><path d="M132 165 L158 190 L148 202 L118 180" fill="none" stroke="#9b5d40" stroke-width="13" stroke-linecap="round"/><circle cx="151" cy="197" r="8" fill="#a96748"/></g>
         <circle cx="90" cy="9" r="5" fill="#8fbaff" opacity=".8"/>
       </svg>
     </div>
@@ -136,6 +168,7 @@ a{color:inherit;text-decoration:none}.wrap{width:min(1140px,92%);margin:auto}.na
       <p id="explainerCopy">Press play to meet the hub and discover how we support learning, digital work and business growth.</p>
       <div class="explainer-visual" id="explainerVisual" aria-hidden="true">💡 💻 🚀</div>
     </div>
+    <div class="explainer-lower-third"><strong>MARTIN TECH & BUSINESS HUB</strong><span id="explainerTicker">Technology · Learning · Business · Digital growth</span></div>
   </div>
   <div class="explainer-subtitle" id="explainerSubtitle" aria-live="polite">Your ideas deserve the right tools, skills and support. Let's explore.</div>
   <div class="explainer-progress" role="progressbar" aria-label="Video progress" aria-valuemin="0" aria-valuemax="120" aria-valuenow="0" id="explainerProgress"><span id="explainerBar"></span></div>
@@ -337,6 +370,7 @@ welcomeMessages.addEventListener('click',function(e){
    $("explainerTitle").textContent=sc.t;
    $("explainerCopy").textContent=sc.s;
    $("explainerVisual").textContent=sc.v;
+   const ticker=$("explainerTicker");if(ticker)ticker.textContent=sc.k+" · "+sc.t;
    $("explainerSubtitle").textContent=sc.s;
    current=i;if(narrate)voice(sc.n);
  }
