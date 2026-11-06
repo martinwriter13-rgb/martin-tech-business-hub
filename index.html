@@ -50,6 +50,25 @@ a{color:inherit;text-decoration:none}.wrap{width:min(1140px,92%);margin:auto}.na
 .hero:before{content:"";position:absolute;width:230px;height:230px;border-radius:50%;right:32%;top:4%;background:radial-gradient(circle,#467fff38,transparent 70%);filter:blur(12px);animation:softGlow 7s ease-in-out infinite;pointer-events:none;z-index:-1}
 @media(max-width:800px){.hero{border-radius:0 0 20px 20px}.hero-video-bg video{opacity:.28}.hero-video-bg:after{background:linear-gradient(90deg,rgba(5,10,23,.86),rgba(5,10,23,.58)),linear-gradient(0deg,#070b18 0%,transparent 50%)}}
 @media(prefers-reduced-motion:reduce){.hero:before{animation:none}.hero-video-bg video{display:none}}
+
+/* Immersive testimonial and contact sections */
+#testimonials,#contact{position:relative;isolation:isolate;overflow:hidden;border:1px solid rgba(137,174,255,.22);border-radius:26px;margin-top:30px;margin-bottom:30px;padding:clamp(28px,5vw,58px)}
+#testimonials:before,#contact:before{content:"";position:absolute;inset:0;z-index:-2;background-size:cover;background-position:center;transform:scale(1.025)}
+#testimonials:before{background-image:url('https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1800&q=82')}
+#contact:before{background-image:url('https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1800&q=82')}
+#testimonials:after,#contact:after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(110deg,rgba(5,10,24,.94),rgba(8,15,34,.82)),linear-gradient(0deg,rgba(22,36,72,.45),rgba(8,12,28,.3))}
+#testimonials .section-head,#contact .section-head,#testimonials>.card,#contact>.contact{position:relative;z-index:1}
+#testimonials .section-head h2,#contact .section-head h2{ text-shadow:0 2px 18px #000}
+#testimonials .section-head p,#contact .section-head p{color:#e0e8ff}
+#testimonials>.card{background:linear-gradient(145deg,rgba(20,34,62,.88),rgba(9,16,32,.86));backdrop-filter:blur(8px);border-color:rgba(183,204,255,.3);box-shadow:0 20px 55px #0007}
+#testimonials>.card p{color:#e0e8ff}
+#contact .contact>div{padding:22px;border-radius:18px;background:rgba(9,17,34,.72);border:1px solid rgba(183,204,255,.25);backdrop-filter:blur(8px)}
+#contact .contact form{padding:22px;border-radius:18px;background:rgba(9,17,34,.78);border:1px solid rgba(183,204,255,.28);backdrop-filter:blur(8px);box-shadow:0 20px 55px #0007}
+#contact .contact input,#contact .contact textarea{background:rgba(5,11,24,.88);border-color:rgba(183,204,255,.28)}
+#contact .contact input:focus,#contact .contact textarea:focus{outline:2px solid #689cff;outline-offset:1px}
+@media(max-width:800px){#testimonials,#contact{width:94%;padding:26px 18px;border-radius:20px}#contact .contact>div,#contact .contact form{padding:17px}}
+@media(prefers-reduced-motion:reduce){#testimonials:before,#contact:before{transform:none}}
+
 </style>
 </head>
 <body>
