@@ -20,7 +20,7 @@ a{color:inherit;text-decoration:none}.wrap{width:min(1140px,92%);margin:auto}.na
 .welcome-head strong{display:block;color:#fff;font-size:14px}.welcome-head small{color:#dbe7ff;font-size:12px}
 .welcome-controls{margin-left:auto;display:flex;gap:7px}
 .welcome-close,.welcome-minimize{background:#ffffff18;border:1px solid #ffffff35;color:white;width:32px;height:32px;border-radius:8px;font-size:20px;line-height:1;cursor:pointer;display:grid;place-items:center}
-.welcome-messages{padding:14px;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:10px}
+.welcome-visual{position:relative;height:128px;flex:0 0 128px;overflow:hidden;background:#101a30}.welcome-visual img{width:100%;height:100%;display:block;object-fit:cover;object-position:center 42%;filter:saturate(1.12)}.welcome-visual:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(5,12,28,.88),rgba(5,12,28,.28)),linear-gradient(0deg,rgba(5,12,28,.5),transparent 70%)}.welcome-visual-copy{position:absolute;z-index:1;left:16px;right:14px;bottom:13px;color:#fff}.welcome-visual-copy strong{display:block;font-size:17px;letter-spacing:.1px}.welcome-visual-copy span{display:block;margin-top:4px;color:#dce8ff;font-size:11px}.welcome-messages{padding:14px;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:10px}
 .chat-bubble{max-width:96%;padding:11px 13px;border-radius:13px;background:#1b2945;color:#e5edff;font-size:13px;line-height:1.5;white-space:pre-line}
 .chat-bubble.user{align-self:flex-end;background:#2458a6;color:#fff}
 .chat-bubble.bot{align-self:flex-start}
@@ -232,6 +232,7 @@ a{color:inherit;text-decoration:none}.wrap{width:min(1140px,92%);margin:auto}.na
       <button class="welcome-close" id="closeWelcome" type="button" aria-label="Close chat">×</button>
     </div>
   </div>
+  <div class="welcome-visual"><img src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=900&q=85" alt="A professional team collaborating in a modern workspace" loading="lazy"><div class="welcome-visual-copy"><strong>Ideas. Technology. Growth.</strong><span>Discover what Martin Tech & Business Hub can do for you</span></div></div>
   <div class="welcome-messages" id="welcomeMessages" aria-live="polite">
     <div class="chat-bubble bot">Hello! 👋 Welcome. I can help you find the right section of the hub.
 
