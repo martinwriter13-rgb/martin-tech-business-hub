@@ -96,7 +96,7 @@ a{color:inherit;text-decoration:none}.wrap{width:min(1140px,92%);margin:auto}.na
 @media(prefers-reduced-motion:reduce){.explainer-character{animation:none}.explainer-scene{animation:none}}
 
 /* Broadcast-style studio presenter */
-.explainer-player{min-height:410px;grid-template-columns:230px 1fr;gap:30px;padding:34px;background:radial-gradient(ellipse at 18% 48%,rgba(49,117,220,.3),transparent 36%),radial-gradient(ellipse at 86% 20%,rgba(138,77,255,.27),transparent 38%),linear-gradient(115deg,#071225,#111e40 52%,#201642)}
+.explainer-player{min-height:430px;grid-template-columns:205px minmax(190px,250px) minmax(0,1fr);gap:22px;padding:34px;background:radial-gradient(ellipse at 18% 48%,rgba(49,117,220,.3),transparent 36%),radial-gradient(ellipse at 86% 20%,rgba(138,77,255,.27),transparent 38%),linear-gradient(115deg,#071225,#111e40 52%,#201642)}
 .explainer-player:before{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(115deg,transparent 0 70px,rgba(151,190,255,.035) 71px 73px)}
 .explainer-player:after{content:"";position:absolute;left:0;right:0;bottom:0;height:5px;background:linear-gradient(90deg,#46a2ff,#9d6bff,#46a2ff);background-size:200% 100%;animation:studioSweep 5s linear infinite}
 @keyframes studioSweep{to{background-position:200% 0}}
@@ -123,7 +123,28 @@ a{color:inherit;text-decoration:none}.wrap{width:min(1140px,92%);margin:auto}.na
 @keyframes visualFloat{50%{transform:translateY(-5px);box-shadow:0 8px 25px #538fff33}}
 .explainer-lower-third{position:absolute;left:20px;right:20px;bottom:16px;z-index:3;display:flex;align-items:center;gap:12px;overflow:hidden;border-left:4px solid #62aaff;border-radius:4px;background:linear-gradient(90deg,rgba(8,15,32,.96),rgba(20,33,65,.84));padding:8px 13px;box-shadow:0 8px 22px #0006}
 .explainer-lower-third strong{font-size:11px;letter-spacing:.08em;color:#fff;white-space:nowrap}.explainer-lower-third span{font-size:11px;color:#d3e0ff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-@media(max-width:620px){.explainer-player{grid-template-columns:1fr;gap:0;min-height:560px;padding:14px 14px 60px}.explainer-studio-screen{right:12px;top:12px;width:145px;height:92px}.explainer-live{top:13px;left:12px}.explainer-character{width:135px;height:175px;margin:75px auto 0}.explainer-scene{margin:0;padding:16px;text-align:center}.explainer-kicker{justify-content:center}.explainer-lower-third{left:10px;right:10px;bottom:10px}.explainer-scene p{font-size:14px}.explainer-visual{font-size:26px}}
+@media(max-width:620px){.explainer-player{grid-template-columns:1fr;gap:0;min-height:700px;padding:14px 14px 60px}.explainer-studio-screen{right:12px;top:12px;width:145px;height:92px}.explainer-live{top:13px;left:12px}.explainer-character{width:135px;height:175px;margin:75px auto 0}.explainer-scene{margin:0;padding:16px;text-align:center}.explainer-kicker{justify-content:center}.explainer-lower-third{left:10px;right:10px;bottom:10px}.explainer-scene p{font-size:14px}.explainer-visual{font-size:26px}}
+
+/* Rotating digital Earth: a central visual in the explainer */
+.explainer-globe-wrap{position:relative;z-index:1;width:clamp(170px,21vw,230px);aspect-ratio:1;margin:55px auto 0;display:grid;place-items:center;isolation:isolate}
+.explainer-globe{width:78%;aspect-ratio:1;border-radius:50%;position:relative;overflow:hidden;background:radial-gradient(circle at 32% 28%,#9be8ff 0,#328bdc 24%,#123d8d 62%,#071735 100%);box-shadow:inset -18px -12px 28px #020a20,inset 8px 7px 20px #b5f4ff66,0 0 22px #4aa9ff99,0 0 55px #5d6dff55;animation:earthSpin 18s linear infinite}
+.explainer-globe:before{content:"";position:absolute;inset:-8%;border-radius:50%;background:repeating-linear-gradient(90deg,transparent 0 17px,#9eeaff55 18px 19px,transparent 20px 35px);transform:rotate(-18deg);animation:earthGrid 12s linear infinite}
+.explainer-globe:after{content:"";position:absolute;inset:0;border-radius:50%;background:linear-gradient(110deg,transparent 35%,#c9f6ff20 48%,transparent 65%),radial-gradient(ellipse at 65% 75%,#030a2355,transparent 58%)}
+.explainer-globe svg{position:absolute;inset:0;width:100%;height:100%;z-index:1;filter:drop-shadow(0 1px 2px #06112b)}
+.explainer-globe svg path{fill:#55d6ad;stroke:#b2ffe6;stroke-width:1.2;opacity:.88}
+.explainer-globe svg .land-shadow{fill:#1a9a88;opacity:.7;stroke:#7af0d0}
+@keyframes earthSpin{0%{transform:rotateY(0deg)}100%{transform:rotateY(360deg)}}
+@keyframes earthGrid{to{transform:rotate(342deg)}}
+.explainer-orbit{position:absolute;inset:2%;border:1px solid #83d9ffbb;border-radius:50%;transform:rotate(-24deg) scaleY(.34);box-shadow:0 0 14px #5caaff77;animation:orbitSpin 7s linear infinite}
+.explainer-orbit:before{content:"";position:absolute;width:9px;height:9px;left:12%;top:12%;border-radius:50%;background:#fff;box-shadow:0 0 14px 4px #71caff}
+.explainer-orbit.orbit-two{inset:9% -5%;transform:rotate(58deg) scaleY(.48);border-color:#bd9affaa;animation-duration:10s;animation-direction:reverse}
+.explainer-orbit.orbit-two:before{background:#d7c3ff;box-shadow:0 0 14px 4px #a77cff}
+@keyframes orbitSpin{to{rotate:360deg}}
+.explainer-globe-label{position:absolute;z-index:3;padding:5px 9px;border:1px solid #a8d7ff77;border-radius:20px;background:#07152ddd;color:#f3f8ff;font-size:10px;font-weight:900;letter-spacing:.13em;text-transform:uppercase;box-shadow:0 5px 16px #0006;white-space:nowrap}
+.explainer-globe-label.ideas{top:2%;left:-7%}.explainer-globe-label.tech{right:-12%;top:43%}.explainer-globe-label.growth{bottom:0;left:14%}
+@media(max-width:620px){.explainer-globe-wrap{width:205px;margin:10px auto 15px;grid-row:2}.explainer-character{grid-row:1}.explainer-scene{grid-row:3}.explainer-studio-screen{opacity:.88}}
+@media(prefers-reduced-motion:reduce){.explainer-globe,.explainer-globe:before,.explainer-orbit{animation:none}}
+
 @media(prefers-reduced-motion:reduce){.explainer-player:after,.explainer-screen-chart i,.explainer-live:before,.explainer-character,.explainer-arm-left,.explainer-arm-right,.explainer-visual{animation:none}}
 
 </style>
@@ -161,6 +182,22 @@ a{color:inherit;text-decoration:none}.wrap{width:min(1140px,92%);margin:auto}.na
         <g class="explainer-arm-left"><path d="M48 165 L20 192 L31 202 L62 180" fill="none" stroke="#9b5d40" stroke-width="13" stroke-linecap="round"/><circle cx="29" cy="198" r="8" fill="#a96748"/></g><g class="explainer-arm-right"><path d="M132 165 L158 190 L148 202 L118 180" fill="none" stroke="#9b5d40" stroke-width="13" stroke-linecap="round"/><circle cx="151" cy="197" r="8" fill="#a96748"/></g>
         <circle cx="90" cy="9" r="5" fill="#8fbaff" opacity=".8"/>
       </svg>
+    </div>
+    <div class="explainer-globe-wrap" role="img" aria-label="A glowing blue and green Earth rotating with orbital rings, representing ideas, technology and growth">
+      <div class="explainer-orbit"></div><div class="explainer-orbit orbit-two"></div>
+      <div class="explainer-globe">
+        <svg viewBox="0 0 160 160" aria-hidden="true">
+          <defs><clipPath id="earthClip"><circle cx="80" cy="80" r="78"/></clipPath></defs>
+          <g clip-path="url(#earthClip)">
+            <path d="M15 38 L29 25 47 28 55 39 49 49 55 59 45 70 37 66 30 79 20 72 14 58Z"/>
+            <path d="M49 79 L63 83 72 99 67 115 61 135 51 126 48 108 40 95Z"/>
+            <path d="M78 25 L91 19 105 24 111 34 126 37 135 50 128 62 115 64 109 77 97 74 91 61 78 58 70 43Z"/>
+            <path d="M91 79 L111 75 126 84 132 101 120 116 111 137 97 128 91 109 82 96Z"/>
+            <path d="M136 20 L151 28 155 42 145 50 135 40Z" class="land-shadow"/>
+          </g>
+        </svg>
+      </div>
+      <span class="explainer-globe-label ideas">Ideas</span><span class="explainer-globe-label tech">Technology</span><span class="explainer-globe-label growth">Growth</span>
     </div>
     <div class="explainer-scene" id="explainerScene" aria-live="polite">
       <div class="explainer-kicker" id="explainerKicker">Welcome</div>
