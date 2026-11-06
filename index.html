@@ -12,26 +12,27 @@ a{color:inherit;text-decoration:none}.wrap{width:min(1140px,92%);margin:auto}.na
 @media(max-width:800px){.hero,.about,.contact{grid-template-columns:1fr}.grid{grid-template-columns:1fr 1fr}.links{display:none}.mobile{display:inline-block}.hero{padding:55px 0}.hero h1{letter-spacing:-1.8px}.cta{align-items:flex-start;flex-direction:column}}
 @media(max-width:520px){.grid{grid-template-columns:1fr}.metric{grid-template-columns:1fr 1fr}.section-head h2{font-size:29px}}
 
-/* Welcome assistant chat interface */
-.welcome-chat{position:fixed;right:22px;bottom:88px;width:min(410px,calc(100vw - 32px));height:min(620px,calc(100dvh - 120px));max-height:calc(100dvh - 120px);min-height:0;z-index:1000;background:#0e172b;border:1px solid #4969a8;border-radius:20px;box-shadow:0 22px 70px #000c;overflow:hidden;display:none;flex-direction:column}.welcome-chat.minimized{height:auto;min-height:0;max-height:none}.welcome-chat.minimized .welcome-messages,.welcome-chat.minimized .chat-compose{display:none}
-.welcome-chat.open{display:flex;animation:chatIn .25s ease-out}
-.welcome-head{display:flex;align-items:center;gap:11px;padding:15px 17px;background:linear-gradient(110deg,#2458a6,#57368d);flex-shrink:0}
-.welcome-avatar{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:#ffffff22;font-size:20px}
-.welcome-head strong{display:block;color:#fff}.welcome-head small{color:#dbe7ff}
-.welcome-controls{margin-left:auto;display:flex;gap:8px;align-items:center}.welcome-close,.welcome-minimize{background:#ffffff18;border:1px solid #ffffff35;color:white;width:34px;height:34px;border-radius:9px;font-size:22px;line-height:1;cursor:pointer;display:grid;place-items:center}.welcome-minimize{font-size:21px}
-.welcome-messages{padding:16px;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:12px}
-.chat-bubble{max-width:94%;padding:12px 14px;border-radius:15px;background:#1b2945;color:#e5edff;font-size:14px;line-height:1.5;white-space:pre-line}
-.chat-bubble.user{align-self:flex-end;background:#2458a6;color:#fff;border-bottom-right-radius:5px}
-.chat-bubble.bot{align-self:flex-start;border-bottom-left-radius:5px}
-.chat-bubble strong{color:#fff}.chat-bubble a{color:#a9c7ff;text-decoration:underline}
-.chat-quick{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+/* Simple, responsive welcome assistant */
+.welcome-chat{position:fixed;right:20px;bottom:82px;width:min(380px,calc(100vw - 28px));height:min(570px,calc(100dvh - 110px));z-index:1000;background:#0e172b;border:1px solid #4969a8;border-radius:18px;box-shadow:0 18px 55px #000c;overflow:hidden;display:none;flex-direction:column}
+.welcome-chat.open{display:flex;animation:chatIn .2s ease-out}
+.welcome-head{display:flex;align-items:center;gap:10px;padding:13px 15px;background:linear-gradient(110deg,#2458a6,#57368d);flex-shrink:0}
+.welcome-avatar{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:#ffffff22;font-size:19px}
+.welcome-head strong{display:block;color:#fff;font-size:14px}.welcome-head small{color:#dbe7ff;font-size:12px}
+.welcome-controls{margin-left:auto;display:flex;gap:7px}
+.welcome-close,.welcome-minimize{background:#ffffff18;border:1px solid #ffffff35;color:white;width:32px;height:32px;border-radius:8px;font-size:20px;line-height:1;cursor:pointer;display:grid;place-items:center}
+.welcome-messages{padding:14px;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:10px}
+.chat-bubble{max-width:96%;padding:11px 13px;border-radius:13px;background:#1b2945;color:#e5edff;font-size:13px;line-height:1.5;white-space:pre-line}
+.chat-bubble.user{align-self:flex-end;background:#2458a6;color:#fff}
+.chat-bubble.bot{align-self:flex-start}
+.chat-quick{display:flex;gap:7px;flex-wrap:wrap}
 .chat-quick button{border:1px solid #4969a8;background:#172744;color:#dce7ff;border-radius:18px;padding:7px 10px;font-size:12px;cursor:pointer}
-.chat-compose{display:flex;gap:8px;padding:12px;border-top:1px solid #2b3b5c;background:#111d34;flex-shrink:0}
-.chat-compose input{min-width:0;flex:1;border:1px solid #3a4e75;border-radius:22px;background:#0b1426;color:#fff;padding:12px 14px;font:inherit;outline:none}
-.chat-compose button{border:0;border-radius:50%;width:44px;height:44px;background:#168c59;color:#fff;font-size:19px;cursor:pointer}
-.welcome-launch{position:fixed;right:22px;bottom:20px;z-index:999;border:0;border-radius:30px;padding:13px 18px;background:#168c59;color:#fff;font-weight:800;box-shadow:0 10px 30px #0008;cursor:pointer}
-@keyframes chatIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-@media(max-width:520px){.welcome-chat{right:12px;left:auto;bottom:76px;width:min(390px,calc(100vw - 24px));height:min(560px,calc(100dvh - 120px));max-height:calc(100dvh - 120px);min-height:0;border-radius:18px}.welcome-messages{padding:12px}.welcome-head{padding:11px 12px}.welcome-launch{right:12px;bottom:12px;z-index:1001}.chat-compose{padding:9px}.chat-compose input{padding:10px 12px}}
+.chat-compose{display:flex;gap:8px;padding:10px;border-top:1px solid #2b3b5c;background:#111d34;flex-shrink:0}
+.chat-compose input{min-width:0;flex:1;border:1px solid #3a4e75;border-radius:22px;background:#0b1426;color:#fff;padding:11px 13px;font:inherit}
+.chat-compose button{border:0;border-radius:22px;padding:0 16px;background:#168c59;color:#fff;font-weight:700;cursor:pointer}
+.welcome-launch{position:fixed;right:20px;bottom:18px;z-index:1001;border:0;border-radius:28px;padding:12px 17px;background:#168c59;color:#fff;font-weight:800;box-shadow:0 10px 30px #0008;cursor:pointer}
+.welcome-launch[hidden]{display:none}
+@keyframes chatIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:520px){.welcome-chat{right:10px;bottom:72px;width:calc(100vw - 20px);height:min(560px,calc(100dvh - 90px))}.welcome-launch{right:10px;bottom:10px}}
 </style>
 </head>
 <body>
@@ -56,44 +57,48 @@ a{color:inherit;text-decoration:none}.wrap{width:min(1140px,92%);margin:auto}.na
 <section class="wrap" id="contact"><div class="section-head"><h2>Contact the hub</h2><p>Send an enquiry about training, marketing, products or business services.</p></div><div class="contact"><div><h3>Let's connect</h3><p style="color:var(--muted)">Reach Martin directly about AI training, social media management, trading tools, research writing, products or business consultancy.</p><p style="color:var(--muted)">Martin Tech & Business Hub<br>Kenya</p><div style="margin-top:18px;padding:16px;border:1px solid #34466e;border-radius:14px;background:#101a30;color:#f5f7ff"><strong style="display:block;margin-bottom:8px">Contact Martin</strong><div style="display:flex;flex-wrap:wrap;gap:14px"><a href="mailto:martinwriter13@gmail.com" style="color:#b9ccff">✉ martinwriter13@gmail.com</a><a href="tel:+254715499170" style="color:#b9ccff">☎ +254715499170</a><a href="https://wa.me/254715499170" target="_blank" rel="noopener" style="color:#b9ccff">WhatsApp Martin ↗</a></div></div></div><form id="contactForm"><input name="name" placeholder="Your name" required><input name="email" type="email" placeholder="Your email" required><input name="topic" placeholder="What are you interested in?"><textarea name="message" placeholder="Tell us a little about your enquiry" required></textarea><button class="btn primary" type="submit">Send enquiry to Martin ↗</button><button class="btn secondary" id="whatsappEnquiry" type="button">Send via WhatsApp ↗</button><small id="formStatus" style="color:#b8caff" aria-live="polite"></small></form></div></section>
 </main>
 
-<div class="welcome-chat open" id="welcomeChat" role="dialog" aria-label="Martin Tech and Business Hub chat assistant">
+<div class="welcome-chat" id="welcomeChat" role="dialog" aria-label="Martin Tech and Business Hub welcome assistant" aria-modal="false">
   <div class="welcome-head">
     <div class="welcome-avatar">✦</div>
-    <div><strong>Martin Tech & Business Hub</strong><small>Welcome assistant · Here to help</small></div>
-    <div class="welcome-controls"><button class="welcome-minimize" id="minimizeWelcome" type="button" aria-label="Minimize chat">−</button><button class="welcome-close" id="closeWelcome" type="button" aria-label="Close chat">×</button></div>
+    <div><strong>Welcome to Martin Tech & Business Hub</strong><small>Quick guide · Free to use</small></div>
+    <div class="welcome-controls">
+      <button class="welcome-minimize" id="minimizeWelcome" type="button" aria-label="Minimize chat">−</button>
+      <button class="welcome-close" id="closeWelcome" type="button" aria-label="Close chat">×</button>
+    </div>
   </div>
   <div class="welcome-messages" id="welcomeMessages" aria-live="polite">
-    <div class="chat-bubble bot">Hello and welcome! 👋 I'm the hub's virtual guide. Martin Tech & Business Hub brings learning, digital services and practical business tools together in one place.
+    <div class="chat-bubble bot">Hello! 👋 Welcome. I can help you find the right section of the hub.
 
-Here's what you can explore:
-<strong>✦ AI Academy:</strong> practical AI lessons and prompt skills
-<strong>◈ Social Media:</strong> content planning and page management
-<strong>⌁ Trading Tools:</strong> risk calculator and trading journal
-<strong>▣ Shop & Reviews:</strong> product discovery and reviews
-<strong>◎ Digital Products:</strong> useful templates and resources
-<strong>◉ Business Consultancy:</strong> sales, marketing and growth support
-<strong>✎ Research & Writing:</strong> proposals, editing, reports and referencing
-<strong>▤ Virtual Assistant:</strong> admin, inbox, calendar, research and customer support
+We offer:
+✦ AI Academy and digital skills
+◈ Social media management
+⌁ Trading tools and trade journal
+▣ Online shop and product reviews
+◎ Digital products and templates
+◉ Business consultancy
+✎ Research and writing support
+▤ Virtual assistant and remote support
 
-What would you like to know about?</div>
+Choose a topic below or type your question. I use information from this website, not a live ChatGPT service.</div>
     <div class="chat-quick">
-      <button type="button" data-question="Tell me about all the services">Explore all services</button>
-      <button type="button" data-question="I want to contact Martin">Contact Martin</button>
-      <button type="button" data-question="What trading tools are available?">Trading tools</button>
+      <button type="button" data-question="Tell me about all services">All services</button>
+      <button type="button" data-question="Tell me about research and writing">Research & writing</button>
+      <button type="button" data-question="Tell me about trading tools">Trading tools</button>
+      <button type="button" data-question="How can I contact Martin?">Contact Martin</button>
     </div>
   </div>
   <form class="chat-compose" id="welcomeChatForm">
-    <input id="welcomeChatInput" type="text" placeholder="Type your question…" autocomplete="off" aria-label="Type your question">
-    <button type="submit" aria-label="Send message">➤</button>
+    <input id="welcomeChatInput" type="text" placeholder="Ask about a service…" autocomplete="off" aria-label="Type your question">
+    <button type="submit">Send</button>
   </form>
 </div>
-
-<button class="welcome-launch" id="openWelcome" type="button">💬 Chat with us</button>
+<button class="welcome-launch" id="openWelcome" type="button" aria-controls="welcomeChat" aria-expanded="false">💬 Chat with us</button>
 
 <footer><div class="wrap">© <span id="year"></span> Martin Tech & Business Hub. Built to learn, connect and grow.</div></footer>
 <script>
 document.getElementById('year').textContent=new Date().getFullYear();
 
+// Lightweight, free FAQ assistant for the eight services on this website.
 const welcomeChat=document.getElementById('welcomeChat');
 const openWelcome=document.getElementById('openWelcome');
 const closeWelcome=document.getElementById('closeWelcome');
@@ -101,12 +106,24 @@ const minimizeWelcome=document.getElementById('minimizeWelcome');
 const welcomeMessages=document.getElementById('welcomeMessages');
 const welcomeChatForm=document.getElementById('welcomeChatForm');
 const welcomeChatInput=document.getElementById('welcomeChatInput');
-function showWelcome(){welcomeChat.classList.remove('minimized');if(minimizeWelcome){minimizeWelcome.textContent='−';minimizeWelcome.setAttribute('aria-label','Minimize chat');}welcomeChat.classList.add('open');}
-function hideWelcome(){welcomeChat.classList.remove('open','minimized');if(minimizeWelcome){minimizeWelcome.textContent='−';minimizeWelcome.setAttribute('aria-label','Minimize chat');}}
-if(openWelcome)openWelcome.addEventListener('click',showWelcome);
+
+function showWelcome(){
+  welcomeChat.classList.add('open');
+  openWelcome.hidden=true;
+  openWelcome.setAttribute('aria-expanded','true');
+  setTimeout(()=>welcomeChatInput.focus(),100);
+}
+function hideWelcome(){
+  welcomeChat.classList.remove('open');
+  openWelcome.hidden=false;
+  openWelcome.setAttribute('aria-expanded','false');
+}
+openWelcome.addEventListener('click',showWelcome);
 closeWelcome.addEventListener('click',hideWelcome);
-if(minimizeWelcome)minimizeWelcome.addEventListener('click',function(){const minimized=welcomeChat.classList.toggle('minimized');minimizeWelcome.textContent=minimized?'+':'−';minimizeWelcome.setAttribute('aria-label',minimized?'Restore chat':'Minimize chat');});
-setTimeout(showWelcome,900);
+minimizeWelcome.addEventListener('click',hideWelcome);
+setTimeout(()=>{if(!sessionStorage.getItem('hubWelcomeDismissed'))showWelcome();},1200);
+closeWelcome.addEventListener('click',()=>sessionStorage.setItem('hubWelcomeDismissed','1'));
+minimizeWelcome.addEventListener('click',()=>sessionStorage.setItem('hubWelcomeDismissed','1'));
 
 function addChatBubble(message,kind='bot'){
   const bubble=document.createElement('div');
@@ -116,22 +133,19 @@ function addChatBubble(message,kind='bot'){
   welcomeMessages.scrollTop=welcomeMessages.scrollHeight;
 }
 function hubReply(question){
-  const q=question.toLowerCase().replace(/[^a-z0-9+ ]/g,' ').replace(/\s+/g,' ').trim();
-  if(/^(hi|hello|hey|hiya|howdy|good morning|good afternoon|good evening|good day|helo|hallo)$/.test(q)) return 'Hello! 👋 Welcome to Martin Tech & Business Hub. I can guide you around our services: AI Academy, Social Media Management, Trading Tools, Shop & Reviews, Digital Products, Business Consultancy, Research & Writing, and Virtual Assistant support. What would you like to explore?';
-  if(/^(help|help me|what can i ask|what do you know)$/.test(q)) return 'I can help with information about our services, tools, pricing enquiries and contacting Martin. For example, ask “What trading tools are available?”, “Do you offer research writing?”, or “How do I contact Martin?”';
-  if(/\b(contact|whatsapp|email|phone|martin|talk to someone|human|person|reach you)\b/.test(q)) return 'You can contact Martin directly:\nWhatsApp: +254 715 499 170 (https://wa.me/254715499170)\nEmail: martinwriter13@gmail.com\nYou can also use the enquiry form on the Contact section of this website.';
-  if(/\b(price|pricing|cost|charge|charges|fee|fees|quote|how much)\b/.test(q)) return 'Service pricing depends on the work requested and its scope. Please send Martin a short description of what you need so he can discuss the applicable price before any work begins. Contact: martinwriter13@gmail.com or WhatsApp +254 715 499 170.';
-  if(/\b(ai|academy|learn|training|prompt|chatgpt|artificial intelligence)\b/.test(q)) return 'AI Academy offers beginner-friendly lessons on generative AI, writing effective prompts, content creation and summarising notes. It is designed to help learners apply AI tools in everyday work and business. Explore: ai-academy.html';
-  if(/\b(social|media|instagram|facebook|tiktok|content|page management|campaign)\b/.test(q)) return 'Social Media services include content planning, page management, campaign support and improving a business digital presence. We first discuss your goals and the scope of work. Explore: social-media.html';
-  if(/\b(trad|risk|journal|calculator|stop loss|position size|trading bot|trade records)\b/.test(q)) return 'Trading Management includes a risk calculator and a local trade journal with CSV export. These tools help organise risk and trading records; they do not connect to a broker, execute trades or provide trading signals. Martin’s separate Trading Assistant is listed for purchase on the Trading Tools page. Explore: trading-tools.html';
-  if(/\b(shop|review|product|buy|commerce|compare|shopping)\b/.test(q)) return 'Shop & Reviews is designed for product discovery, comparisons and straightforward product reviews. Product listings are still being developed. Explore: shop-reviews.html';
-  if(/\b(digital|template|planner|resource|download|sales tracker|follow up tracker)\b/.test(q)) return 'Digital Products currently includes practical resources such as a daily sales planner, a 7-day content plan and a customer follow-up tracker. Explore: digital-products.html';
-  if(/\b(consult|business|sales|marketing|growth|customer acquisition|credit operations|business development)\b/.test(q)) return 'Business Consultancy focuses on sales, marketing, customer acquisition, business development, credit operations and operational support. Tell Martin about your business goal to discuss suitable support. Explore: business-consultancy.html';
-  if(/\b(research|writing|proposal|literature|proofread|edit|referencing|citation|report|dissertation|academic|apa|harvard|mla|market research)\b/.test(q)) return 'Research & Writing support includes proposal guidance, literature review support, editing, proofreading, APA/Harvard/MLA referencing, reports, market research, research design and formatting. Support focuses on guidance and improving your own work; sources and findings are not fabricated. Explore: research-writing.html';
-  if(/\b(virtual assistant|\bva\b|admin|inbox|email management|calendar|schedule|remote|crm|spreadsheet|data entry|customer support)\b/.test(q)) return 'Virtual Assistant support includes administrative tasks, inbox organisation, calendar scheduling, online research, customer follow-up, CRM and spreadsheet support, social media assistance and business operations. Explore: virtual-assistant.html';
-  if(/\b(all|everything|services|offer|website|hub|what can you do|what do you provide)\b/.test(q)) return 'Martin Tech & Business Hub brings together eight areas:\n1. AI Academy — practical AI lessons and prompt skills\n2. Social Media Management — content planning and page support\n3. Trading Management — risk calculator and trade journal\n4. Shop & Reviews — product discovery and reviews\n5. Digital Products — planners and useful resources\n6. Business Consultancy — sales, marketing and growth support\n7. Research & Writing — proposals, editing, reports and referencing\n8. Virtual Assistant — admin, inbox, calendar, research and customer support.\nWhich area would you like to explore?';
-  if(/\b(free|payment|pay|account|login|register|sign up)\b/.test(q)) return 'You can explore the public information on this website without creating an account. This chat guide uses built-in answers and does not use a paid AI API. Some services or products may have their own prices; please confirm the cost with Martin before ordering.';
-  return 'Thanks for your question. I can answer common questions about the Hub’s eight areas: AI Academy, Social Media Management, Trading Management, Shop & Reviews, Digital Products, Business Consultancy, Research & Writing, and Virtual Assistant support. Try asking about pricing, how a service works, or how to contact Martin. For a question that needs a personal response, WhatsApp +254 715 499 170.';
+  const q=question.toLowerCase();
+  if(/contact|whatsapp|email|phone|martin|human|person/.test(q)) return 'Contact Martin directly:\nWhatsApp: +254 715 499 170 — https://wa.me/254715499170\nEmail: martinwriter13@gmail.com\nYou can also use the enquiry form on the Contact section.';
+  if(/price|pricing|cost|charge|fee|quote|how much/.test(q)) return 'Pricing depends on the service and the work required. Please contact Martin with your requirements for a quote before ordering. WhatsApp: +254 715 499 170; Email: martinwriter13@gmail.com.';
+  if(/research|writing|proposal|literature|proofread|edit|referenc|citation|report|dissertation|apa|harvard|mla/.test(q)) return 'Research & Writing support includes proposal guidance, literature review support, editing, proofreading, APA/Harvard/MLA referencing, reports, market research, research design and formatting. Sources and findings are not fabricated. Visit research-writing.html.';
+  if(/virtual assistant|\bva\b|admin|inbox|calendar|schedule|remote|crm|spreadsheet|data entry|customer support/.test(q)) return 'Virtual Assistant support includes administrative tasks, inbox and calendar organisation, online research, customer follow-up, CRM, spreadsheets, social media assistance and business operations. Visit virtual-assistant.html.';
+  if(/trad|risk|journal|calculator|stop loss|position size|trading bot|trade records/.test(q)) return 'Trading Management includes a risk calculator and a local trade journal with CSV export. These tools organise risk and trading records; they do not connect to a broker, execute trades or provide trading signals. Martin’s separate Trading Assistant is listed for purchase on trading-tools.html.';
+  if(/social|media|instagram|facebook|tiktok|content|campaign/.test(q)) return 'Social Media Management offers content planning, page management, campaign support and help improving a business’s digital presence. Visit social-media.html.';
+  if(/academy|\bai\b|learn|training|prompt|chatgpt|artificial intelligence/.test(q)) return 'AI Academy offers practical lessons on generative AI, effective prompts, content creation and using digital tools in everyday work and business. Visit ai-academy.html.';
+  if(/shop|review|product|buy|commerce|compare/.test(q)) return 'Shop & Reviews is for product discovery, comparisons and straightforward reviews. Product listings are still being developed. Visit shop-reviews.html.';
+  if(/digital|template|planner|resource|download/.test(q)) return 'Digital Products brings together practical templates, guides, planners and learning resources. Visit digital-products.html.';
+  if(/consult|business|sales|marketing|growth|customer acquisition|business development/.test(q)) return 'Business Consultancy focuses on sales, marketing, customer acquisition, business development and operational support. Visit business-consultancy.html.';
+  if(/all services|everything|services|offer|website|hub|what do you do/.test(q)) return 'The hub has eight areas: AI Academy; Social Media Management; Online Shop & Reviews; Trading Management; Digital Products; Business Consultancy; Research & Writing; and Virtual Assistant & Remote Support. Ask about any one to learn more.';
+  return 'I can answer common questions about our eight services, pricing enquiries and how to contact Martin. Try “research and writing”, “trading tools”, “virtual assistant”, “pricing” or “contact Martin”.';
 }
 function sendHubQuestion(question){
   const clean=question.trim();
@@ -143,6 +157,7 @@ welcomeChatForm.addEventListener('submit',function(e){
   e.preventDefault();
   sendHubQuestion(welcomeChatInput.value);
   welcomeChatInput.value='';
+  welcomeChatInput.focus();
 });
 welcomeMessages.addEventListener('click',function(e){
   const button=e.target.closest('button[data-question]');
