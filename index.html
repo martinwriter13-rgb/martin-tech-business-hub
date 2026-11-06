@@ -328,7 +328,7 @@ welcomeMessages.addEventListener('click',function(e){
    if(preferred)u.voice=preferred;
    window.speechSynthesis.speak(u);
  }
- function showScene(i){
+ function showScene(i,narrate=true){
    const sc=scenes[Math.min(i,scenes.length-1)];
    $("explainerScene").classList.remove("explainer-scene");
    void $("explainerScene").offsetWidth;
@@ -338,11 +338,11 @@ welcomeMessages.addEventListener('click',function(e){
    $("explainerCopy").textContent=sc.s;
    $("explainerVisual").textContent=sc.v;
    $("explainerSubtitle").textContent=sc.s;
-   current=i;voice(sc.n);
+   current=i;if(narrate)voice(sc.n);
  }
  function render(){
    const i=Math.min(Math.floor(elapsed/12),9);
-   if(i!==current)showScene(i);
+   if(i!==current)showScene(i,playing);
    $("explainerBar").style.width=(elapsed/120*100)+"%";
    $("explainerProgress").setAttribute("aria-valuenow",String(elapsed));
    $("explainerTime").textContent=Math.floor(elapsed/60)+":"+String(elapsed%60).padStart(2,"0")+" / 2:00";
