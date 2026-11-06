@@ -11,6 +11,23 @@
 a{color:inherit;text-decoration:none}.wrap{width:min(1140px,92%);margin:auto}.nav{display:flex;align-items:center;justify-content:space-between;padding:22px 0;border-bottom:1px solid var(--line)}.brand{font-weight:800;letter-spacing:-.5px}.brand span{color:#8caeff}.links{display:flex;gap:22px;color:var(--muted);font-size:14px}.links a:hover{color:white}.hero{padding:86px 0 68px;display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center}.eyebrow{display:inline-flex;padding:7px 12px;border:1px solid #344c82;border-radius:30px;color:#b9ccff;background:#17264b;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}.hero h1{font-size:clamp(42px,6vw,70px);line-height:1.04;letter-spacing:-2.8px;margin:22px 0}.gradient{background:linear-gradient(100deg,#70a8ff,#b38aff);-webkit-background-clip:text;background-clip:text;color:transparent}.lead{color:var(--muted);font-size:18px;max-width:640px}.actions{display:flex;gap:14px;flex-wrap:wrap;margin-top:30px}.btn{padding:12px 19px;border-radius:12px;font-weight:700;border:1px solid var(--line);display:inline-block}.primary{background:linear-gradient(100deg,#397dff,#895bff);border:0;color:white}.secondary{background:#121b31}.hero-card{background:linear-gradient(145deg,rgba(35,55,101,.9),rgba(17,24,44,.95));border:1px solid #34466e;border-radius:24px;padding:26px;box-shadow:0 25px 80px #0007}.hero-card h3{margin:0 0 16px}.metric{display:grid;grid-template-columns:1fr 1fr;gap:12px}.metric div{padding:16px;background:#ffffff0a;border:1px solid var(--line);border-radius:14px}.metric strong{display:block;font-size:21px}.metric small{color:var(--muted)}section{padding:54px 0}.section-head{max-width:690px;margin-bottom:26px}.section-head h2{font-size:34px;letter-spacing:-1px;margin:0 0 8px}.section-head p{color:var(--muted);margin:0}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.card{background:linear-gradient(150deg,#121d35,#0d1426);border:1px solid var(--line);border-radius:18px;padding:22px;min-height:190px;transition:transform .2s,border-color .2s}.card:hover{transform:translateY(-4px);border-color:#587ed0}.icon{font-size:25px}.card h3{margin:10px 0 5px}.card p{color:var(--muted);font-size:14px;margin:0}.tag{display:inline-block;color:#b8caff;background:#26365b;border-radius:20px;padding:4px 9px;font-size:11px;margin-top:14px}.about{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:center}.about-box{padding:26px;border:1px solid var(--line);border-radius:20px;background:#111a30}.about-box li{margin:8px 0;color:var(--muted)}.cta{padding:32px;border-radius:22px;background:linear-gradient(110deg,#1a3d7d,#452a78);border:1px solid #5574b5;display:flex;align-items:center;justify-content:space-between;gap:20px}.cta h2{margin:0;font-size:28px}.cta p{margin:5px 0 0;color:#d4dcf4}.contact{display:grid;grid-template-columns:1fr 1fr;gap:24px}.contact form{display:grid;gap:12px}.contact input,.contact textarea{width:100%;padding:13px;border:1px solid var(--line);border-radius:10px;background:#0b1222;color:white;font:inherit}.contact textarea{min-height:110px;resize:vertical}footer{padding:30px 0;border-top:1px solid var(--line);color:var(--muted);font-size:13px;margin-top:40px}.mobile{display:none}
 @media(max-width:800px){.hero,.about,.contact{grid-template-columns:1fr}.grid{grid-template-columns:1fr 1fr}.links{display:none}.mobile{display:inline-block}.hero{padding:55px 0}.hero h1{letter-spacing:-1.8px}.cta{align-items:flex-start;flex-direction:column}}
 @media(max-width:520px){.grid{grid-template-columns:1fr}.metric{grid-template-columns:1fr 1fr}.section-head h2{font-size:29px}}
+
+/* Welcome chat popup */
+.welcome-chat{position:fixed;right:22px;bottom:88px;width:min(360px,calc(100vw - 28px));z-index:1000;background:#101a30;border:1px solid #4969a8;border-radius:18px;box-shadow:0 18px 60px #000b;overflow:hidden;display:none}
+.welcome-chat.open{display:block;animation:chatIn .25s ease-out}
+.welcome-head{display:flex;align-items:center;gap:11px;padding:15px 17px;background:linear-gradient(110deg,#2458a6,#57368d)}
+.welcome-avatar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#ffffff22;font-size:20px}
+.welcome-head strong{display:block;color:#fff}.welcome-head small{color:#dbe7ff}
+.welcome-close{margin-left:auto;background:transparent;border:0;color:white;font-size:23px;cursor:pointer}
+.welcome-body{padding:18px}.welcome-body p{color:#d5def3;margin:0 0 13px}
+.welcome-options{display:grid;gap:8px;margin:14px 0}
+.welcome-options a{display:block;padding:10px 12px;border:1px solid #34466e;border-radius:10px;color:#dce7ff;background:#ffffff08;font-size:14px}
+.welcome-options a:hover{background:#263b66}
+.welcome-wa{display:block;text-align:center;padding:11px;border-radius:10px;background:#168c59;color:white;font-weight:750}
+.welcome-launch{position:fixed;right:22px;bottom:20px;z-index:999;border:0;border-radius:30px;padding:13px 18px;background:#168c59;color:#fff;font-weight:800;box-shadow:0 10px 30px #0008;cursor:pointer}
+@keyframes chatIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:520px){.welcome-chat{right:14px;bottom:82px}.welcome-launch{right:14px;bottom:14px}}
+
 </style>
 </head>
 <body>
@@ -32,9 +49,43 @@ a{color:inherit;text-decoration:none}.wrap{width:min(1140px,92%);margin:auto}.na
 <section class="wrap"><div class="cta"><div><h2>Have a project or business goal?</h2><p>Tell us what you want to achieve and let's explore the next step.</p></div><a class="btn primary" href="#contact">Get in touch →</a></div></section>
 <section class="wrap" id="contact"><div class="section-head"><h2>Contact the hub</h2><p>Send an enquiry about training, marketing, products or business services.</p></div><div class="contact"><div><h3>Let's connect</h3><p style="color:var(--muted)">Reach Martin directly about AI training, social media management, trading tools, products or business consultancy.</p><p style="color:var(--muted)">Martin Tech & Business Hub<br>Kenya</p><div style="margin-top:18px;padding:16px;border:1px solid #34466e;border-radius:14px;background:#101a30;color:#f5f7ff"><strong style="display:block;margin-bottom:8px">Contact Martin</strong><div style="display:flex;flex-wrap:wrap;gap:14px"><a href="mailto:martinwriter13@gmail.com" style="color:#b9ccff">✉ martinwriter13@gmail.com</a><a href="tel:+254715499170" style="color:#b9ccff">☎ +254715499170</a><a href="https://wa.me/254715499170" target="_blank" rel="noopener" style="color:#b9ccff">WhatsApp Martin ↗</a></div></div></div><form id="contactForm"><input name="name" placeholder="Your name" required><input name="email" type="email" placeholder="Your email" required><input name="topic" placeholder="What are you interested in?"><textarea name="message" placeholder="Tell us a little about your enquiry" required></textarea><button class="btn primary" type="submit">Send enquiry to Martin ↗</button><button class="btn secondary" id="whatsappEnquiry" type="button">Send via WhatsApp ↗</button><small id="formStatus" style="color:#b8caff" aria-live="polite"></small></form></div></section>
 </main>
+
+<div class="welcome-chat" id="welcomeChat" role="dialog" aria-label="Welcome to Martin Tech and Business Hub" aria-live="polite">
+  <div class="welcome-head">
+    <div class="welcome-avatar">✦</div>
+    <div><strong>Martin Tech & Business Hub</strong><small>Welcome — explore what we offer</small></div>
+    <button class="welcome-close" id="closeWelcome" type="button" aria-label="Close welcome message">×</button>
+  </div>
+  <div class="welcome-body">
+    <p>Hi there! 👋 Welcome. We're here to help you learn, grow and manage your ideas. Here's what you can explore:</p>
+    <div class="welcome-options">
+      <a href="ai-academy.html">✦ AI Academy — learn practical AI skills</a>
+      <a href="social-media.html">◈ Social Media — content and page management</a>
+      <a href="trading-tools.html">⌁ Trading Tools — risk calculator and journal</a>
+      <a href="shop-reviews.html">▣ Shop & Reviews — product discovery</a>
+      <a href="digital-products.html">◎ Digital Products — useful templates and resources</a>
+      <a href="business-consultancy.html">◉ Business Consultancy — sales and growth support</a>
+    </div>
+    <a class="welcome-wa" href="https://wa.me/254715499170?text=Hello%20Martin%2C%20I%20am%20visiting%20Martin%20Tech%20%26%20Business%20Hub." target="_blank" rel="noopener">Chat with Martin on WhatsApp ↗</a>
+  </div>
+</div>
+<button class="welcome-launch" id="openWelcome" type="button">💬 Welcome / Chat</button>
+
 <footer><div class="wrap">© <span id="year"></span> Martin Tech & Business Hub. Built to learn, connect and grow.</div></footer>
 <script>
 document.getElementById('year').textContent=new Date().getFullYear();
+
+const welcomeChat=document.getElementById('welcomeChat');
+const openWelcome=document.getElementById('openWelcome');
+const closeWelcome=document.getElementById('closeWelcome');
+function showWelcome(){welcomeChat.classList.add('open');}
+function hideWelcome(){welcomeChat.classList.remove('open');}
+openWelcome.addEventListener('click',showWelcome);
+closeWelcome.addEventListener('click',hideWelcome);
+if(!sessionStorage.getItem('martinHubWelcomeSeen')){
+  setTimeout(()=>{showWelcome();sessionStorage.setItem('martinHubWelcomeSeen','1');},900);
+}
+
 function enquiryText(){const d=new FormData(document.getElementById('contactForm'));return 'Name: '+d.get('name')+'\nEmail: '+d.get('email')+'\nInterest: '+(d.get('topic')||'General enquiry')+'\n\n'+d.get('message')}\ndocument.getElementById('contactForm').addEventListener('submit',async function(e){e.preventDefault();if(!this.reportValidity())return;const status=document.getElementById('formStatus');const submit=this.querySelector('button[type="submit"]');const d=new FormData(this);const payload={name:d.get('name'),email:d.get('email'),topic:d.get('topic')||'General enquiry',message:d.get('message'),_subject:'New website enquiry - Martin Tech & Business Hub',_replyto:d.get('email'),_url:'https://martin-tech-business-hub.onrender.com/'};submit.disabled=true;status.textContent='Sending your enquiry to Martin…';try{await fetch('https://script.google.com/macros/s/AKfycbyvoF-6M_nJHv4X9JfoJptCxfTb_Ao4qrqcqg59a8zCDx2f6zMO2BZ2kGZNVN9LQu9p/exec',{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=UTF-8'},body:JSON.stringify(payload)});status.textContent='Your enquiry request has been sent to Martin’s email service. Please allow a moment for delivery.';this.reset();}catch(error){status.textContent='Could not connect to the email service. Please try again or use WhatsApp.';}finally{submit.disabled=false;}});
 document.getElementById('whatsappEnquiry').addEventListener('click',function(){const form=document.getElementById('contactForm');if(!form.reportValidity())return;const message='Hello Martin, I have an enquiry from Martin Tech & Business Hub.\n\n'+enquiryText();window.open('https://wa.me/254715499170?text='+encodeURIComponent(message),'_blank','noopener');document.getElementById('formStatus').textContent='Opening WhatsApp with your enquiry filled in.';});
 </script>
