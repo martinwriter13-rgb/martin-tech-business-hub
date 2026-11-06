@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Free trading journal and position risk calculator from Martin Tech & Business Hub.">
+<title>Trading Toolkit | Martin Tech & Business Hub</title>
+<style>
+:root{color-scheme:dark;--bg:#070b18;--panel:#111a30;--line:#293653;--muted:#a8b3cc;--blue:#4f8cff;--purple:#9a6bff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 85% 0%,#201947,transparent 35%),var(--bg);color:#f5f7ff;font:16px/1.55 system-ui,Segoe UI,sans-serif}a{color:#a9c3ff;text-decoration:none}.wrap{width:min(1080px,92%);margin:auto}.nav{padding:22px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:16px;align-items:center}.brand{font-weight:800;color:white}.hero{padding:48px 0 24px}.eyebrow{color:#b9ccff;text-transform:uppercase;letter-spacing:.1em;font-size:12px}.hero h1{font-size:clamp(34px,5vw,54px);line-height:1.1;margin:10px 0}.muted{color:var(--muted)}.panel{background:linear-gradient(145deg,#141f38,#0e1629);border:1px solid var(--line);border-radius:18px;padding:22px;margin:18px 0}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}label{display:block;font-size:13px;color:var(--muted);margin-bottom:5px}input,select,textarea{width:100%;padding:12px;border-radius:10px;border:1px solid var(--line);background:#090f1e;color:white;font:inherit}button{border:0;border-radius:10px;padding:12px 17px;background:linear-gradient(100deg,var(--blue),var(--purple));color:white;font-weight:700;cursor:pointer;margin-top:12px}.result{font-size:25px;font-weight:800;color:#b8caff;margin:12px 0 2px}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:650px}th,td{text-align:left;padding:11px;border-bottom:1px solid var(--line);font-size:14px}th{color:#b8caff}small{color:var(--muted)}.notice{font-size:13px;color:var(--muted);border-left:3px solid #8c78ff;padding-left:12px}.actions{display:flex;gap:10px;flex-wrap:wrap}.secondary{background:#263653}footer{padding:28px 0;color:var(--muted);font-size:13px}@media(max-width:720px){.grid{grid-template-columns:1fr}.fields{grid-template-columns:1fr}}
+</style></head>
+<body>
+<header class="wrap nav"><a class="brand" href="index.html">MARTIN TECH & BUSINESS HUB</a><a href="index.html">← Back to home</a></header>
+<main class="wrap">
+<div class="hero"><span class="eyebrow">Free practical tool</span><h1>Trading management toolkit</h1><p class="muted">Estimate position risk, record trades and review your discipline. Your journal entries are stored in this browser on this device.</p></div>
+<div class="grid">
+<section class="panel"><h2>Position risk calculator</h2><p class="muted">Estimate the amount at risk from your planned entry and stop level.</p>
+<div class="fields">
+<div><label for="balance">Account balance</label><input id="balance" type="number" min="0" step="any" value="1000"></div>
+<div><label for="risk">Risk per trade (%)</label><input id="risk" type="number" min="0" max="100" step="any" value="1"></div>
+<div><label for="entry">Entry price</label><input id="entry" type="number" min="0" step="any" value="100"></div>
+<div><label for="stop">Stop-loss price</label><input id="stop" type="number" min="0" step="any" value="98"></div>
+</div><button id="calculate">Calculate risk</button><div class="result" id="riskAmount">10.00</div><small id="riskDetails">Risk budget and estimated position size will appear here.</small>
+</section>
+<section class="panel"><h2>Trade journal</h2><p class="muted">Record the plan and outcome of each trade. Keep notes factual and review patterns.</p>
+<form id="tradeForm"><div class="fields">
+<div><label for="date">Date</label><input id="date" type="date" required></div>
+<div><label for="market">Market / symbol</label><input id="market" placeholder="e.g. Volatility 100" required></div>
+<div><label for="direction">Direction</label><select id="direction"><option>Buy / Long</option><option>Sell / Short</option></select></div>
+<div><label for="outcome">Outcome (account currency)</label><input id="outcome" type="number" step="any" placeholder="e.g. 12.50" required></div>
+</div><label for="notes" style="margin-top:12px">Plan, execution and lesson</label><textarea id="notes" rows="3" placeholder="Why did you enter? Did you follow your plan?"></textarea><button type="submit">Save trade</button></form>
+</section></div>
+<section class="panel"><div class="actions" style="justify-content:space-between;align-items:center"><div><h2 style="margin:0">Your trade history</h2><small id="summary">No trades recorded yet.</small></div><button class="secondary" id="export">Export CSV</button></div><div class="table-wrap"><table><thead><tr><th>Date</th><th>Market</th><th>Direction</th><th>Outcome</th><th>Notes</th><th></th></tr></thead><tbody id="trades"><tr><td colspan="6" class="muted">Your saved trades will appear here.</td></tr></tbody></table></div></section>
+<p class="notice">Important: This is an educational record-keeping and estimation tool, not a broker connection, signal service or financial advice. It does not place trades. Position-size estimates assume a simple linear price relationship and may not apply to leveraged, options, multipliers or other contract types. Confirm contract specifications with your broker.</p>
+</main><footer class="wrap">© <span id="year"></span> Martin Tech & Business Hub</footer>
+<script>
+const $=id=>document.getElementById(id);$('year').textContent=new Date().getFullYear();$('date').value=new Date().toISOString().slice(0,10);
+function calc(){const bal=Number($('balance').value),pct=Number($('risk').value),entry=Number($('entry').value),stop=Number($('stop').value),distance=Math.abs(entry-stop),budget=bal*pct/100;$('riskAmount').textContent=Number.isFinite(budget)?budget.toFixed(2):'—';$('riskDetails').textContent=distance>0&&entry>0?'Risk budget: '+budget.toFixed(2)+' • Approx. units: '+(budget/distance).toFixed(4)+' • Stop distance: '+distance.toFixed(4):'Enter a positive entry price and a different stop-loss price.'}
+$('calculate').addEventListener('click',calc);['balance','risk','entry','stop'].forEach(id=>$(id).addEventListener('input',calc));calc();
+const KEY='mthb_trade_journal_v1';let trades=[];try{trades=JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){trades=[]}
+function render(){const body=$('trades');body.innerHTML='';if(!trades.length)body.innerHTML='<tr><td colspan="6" class="muted">Your saved trades will appear here.</td></tr>';trades.forEach((t,i)=>{const tr=document.createElement('tr');[t.date,t.market,t.direction,Number(t.outcome).toFixed(2),t.notes].forEach(v=>{const td=document.createElement('td');td.textContent=v;tr.appendChild(td)});const td=document.createElement('td');const b=document.createElement('button');b.className='secondary';b.textContent='Delete';b.addEventListener('click',()=>{trades.splice(i,1);save()});td.appendChild(b);tr.appendChild(td);body.appendChild(tr)});const total=trades.reduce((s,t)=>s+Number(t.outcome),0);$('summary').textContent=trades.length+' trade(s) • Net recorded outcome: '+total.toFixed(2)}
+function save(){localStorage.setItem(KEY,JSON.stringify(trades));render()}
+$('tradeForm').addEventListener('submit',e=>{e.preventDefault();trades.unshift({date:$('date').value,market:$('market').value.trim(),direction:$('direction').value,outcome:Number($('outcome').value),notes:$('notes').value.trim()});save();e.target.reset();$('date').value=new Date().toISOString().slice(0,10)});
+$('export').addEventListener('click',()=>{if(!trades.length){alert('No trades to export yet.');return}const rows=[['Date','Market','Direction','Outcome','Notes'],...trades.map(t=>[t.date,t.market,t.direction,t.outcome,t.notes])];const csv=rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n');const blob=new Blob([csv],{type:'text/csv'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='martin-tech-trade-journal.csv';a.click();URL.revokeObjectURL(url)});render();
+</script></body></html>
