@@ -69,6 +69,32 @@ a{color:inherit;text-decoration:none}.wrap{width:min(1140px,92%);margin:auto}.na
 @media(max-width:800px){#testimonials,#contact{width:94%;padding:26px 18px;border-radius:20px}#contact .contact>div,#contact .contact form{padding:17px}}
 @media(prefers-reduced-motion:reduce){#testimonials:before,#contact:before{transform:none}}
 
+
+/* Two-minute animated hub explainer */
+.explainer{margin:34px auto 20px;padding:clamp(18px,3vw,30px);border:1px solid rgba(137,174,255,.28);border-radius:26px;background:linear-gradient(145deg,#111d38,#0a1122);box-shadow:0 22px 60px #0007}
+.explainer-head{max-width:760px;margin:0 auto 20px;text-align:center}
+.explainer-head p{color:var(--muted);margin:8px 0}
+.explainer-player{position:relative;min-height:330px;overflow:hidden;border-radius:20px;border:1px solid #344b7a;background:radial-gradient(circle at 75% 25%,#3d4e94 0,transparent 34%),linear-gradient(120deg,#101e3d,#24194c 65%,#101a34);display:grid;grid-template-columns:180px 1fr;align-items:center;gap:20px;padding:28px}
+.explainer-character{width:160px;height:220px;position:relative;display:flex;align-items:center;justify-content:center;animation:presenterBob 2.4s ease-in-out infinite}
+.explainer-character svg{width:100%;height:100%;filter:drop-shadow(0 15px 20px #0008)}
+@keyframes presenterBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+.explainer-scene{animation:sceneIn .45s ease-out}
+@keyframes sceneIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.explainer-kicker{color:#a9c6ff;text-transform:uppercase;font-size:12px;font-weight:800;letter-spacing:.12em}
+.explainer-scene h3{font-size:clamp(25px,4vw,38px);line-height:1.1;margin:9px 0}
+.explainer-scene p{color:#e1e8ff;font-size:17px;max-width:650px;margin:0}
+.explainer-visual{font-size:38px;margin-top:16px;letter-spacing:10px}
+.explainer-subtitle{min-height:54px;padding:14px 12px;text-align:center;color:#f2f5ff;font-size:15px}
+.explainer-progress{height:7px;background:#263657;border-radius:9px;overflow:hidden}
+.explainer-progress span{display:block;width:0;height:100%;background:linear-gradient(90deg,#4e9cff,#b18aff);transition:width .2s linear}
+.explainer-controls{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:16px}
+.explainer-controls button{border:1px solid #4969a8;background:#172744;color:#fff;border-radius:12px;padding:11px 17px;font:inherit;font-weight:750;cursor:pointer}
+.explainer-controls button.play{background:linear-gradient(100deg,#397dff,#895bff);border:0}
+.explainer-time{color:var(--muted);font-size:13px;font-variant-numeric:tabular-nums}
+.explainer-note{color:var(--muted);font-size:12px;text-align:center;margin:12px 0 0}
+@media(max-width:620px){.explainer-player{grid-template-columns:1fr;gap:4px;text-align:center;padding:18px;min-height:390px}.explainer-character{width:110px;height:145px;margin:auto}.explainer-scene p{font-size:15px}.explainer-visual{font-size:30px}}
+@media(prefers-reduced-motion:reduce){.explainer-character{animation:none}.explainer-scene{animation:none}}
+
 </style>
 </head>
 <body>
@@ -79,6 +105,49 @@ a{color:inherit;text-decoration:none}.wrap{width:min(1140px,92%);margin:auto}.na
 <div><span class="eyebrow">Technology • Learning • Business</span><h1>Build skills.<br><span class="gradient">Grow smarter.</span><br>Move forward.</h1><p class="lead">A practical hub for AI learning, digital marketing, website design, online commerce, trading management and business growth — bringing useful tools and services together in one place.</p><div class="actions"><a class="btn primary" href="#services">Explore the hub →</a><a class="btn secondary" href="#packages">View packages</a></div></div>
 <aside class="hero-card"><figure class="visual-photo"><img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&amp;fit=crop&amp;w=1200&amp;q=78" alt="A modern laptop workspace representing technology and digital business" loading="lazy" decoding="async"><figcaption>A modern laptop workspace representing technology and digital business</figcaption></figure><h3>Your ideas, connected.</h3><p style="color:var(--muted);margin-top:-8px">One destination for learning, tools and business services.</p><div class="metric"><div><strong>AI</strong><small>Learn & apply</small></div><div><strong>Digital</strong><small>Market & grow</small></div><div><strong>Commerce</strong><small>Discover products</small></div><div><strong>Trading</strong><small>Track & improve</small></div></div></aside>
 </div>
+
+<section class="wrap explainer" id="explainer">
+  <div class="explainer-head">
+    <span class="eyebrow">Meet the hub · 2-minute animated guide</span>
+    <h2 style="font-size:clamp(29px,4vw,40px);margin:14px 0 5px">See what we can help you build.</h2>
+    <p>Meet our cartoon presenter and take a quick tour of the services at Martin Tech & Business Hub.</p>
+  </div>
+  <div class="explainer-player" aria-label="Two-minute animated explainer">
+    <div class="explainer-character" aria-hidden="true">
+      <svg viewBox="0 0 180 240" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="90" cy="225" rx="58" ry="9" fill="#050b19" opacity=".55"/>
+        <path d="M48 215 Q50 153 90 150 Q130 153 132 215Z" fill="#315fbd"/>
+        <path d="M72 153 L90 184 L108 153 L100 145 L80 145Z" fill="#f5f7ff"/>
+        <path d="M81 177 L90 187 L99 177 L95 215 L85 215Z" fill="#8f6bff"/>
+        <rect x="76" y="126" width="28" height="30" rx="10" fill="#8c4f36"/>
+        <ellipse cx="90" cy="83" rx="48" ry="55" fill="#9b5d40"/>
+        <path d="M43 77 Q39 26 89 25 Q137 25 138 77 Q123 51 104 49 Q76 65 43 57Z" fill="#17151a"/>
+        <path d="M48 83 Q48 43 88 42 Q126 42 132 82 L126 111 Q118 135 91 137 Q63 135 53 111Z" fill="#a96748"/>
+        <ellipse cx="72" cy="86" rx="5" ry="7" fill="#17151a"/><ellipse cx="108" cy="86" rx="5" ry="7" fill="#17151a"/>
+        <path d="M79 111 Q90 120 102 110" fill="none" stroke="#542b27" stroke-width="4" stroke-linecap="round"/>
+        <path d="M42 82 Q31 78 34 96 Q37 108 49 103 M132 82 Q145 78 146 96 Q143 108 131 103" fill="#9b5d40"/>
+        <path d="M48 165 L20 192 L31 202 L62 180 M132 165 L158 190 L148 202 L118 180" fill="none" stroke="#9b5d40" stroke-width="13" stroke-linecap="round"/>
+        <circle cx="90" cy="9" r="5" fill="#8fbaff" opacity=".8"/>
+      </svg>
+    </div>
+    <div class="explainer-scene" id="explainerScene" aria-live="polite">
+      <div class="explainer-kicker" id="explainerKicker">Welcome</div>
+      <h3 id="explainerTitle">One hub. Many ways to move forward.</h3>
+      <p id="explainerCopy">Press play to meet the hub and discover how we support learning, digital work and business growth.</p>
+      <div class="explainer-visual" id="explainerVisual" aria-hidden="true">💡 💻 🚀</div>
+    </div>
+  </div>
+  <div class="explainer-subtitle" id="explainerSubtitle" aria-live="polite">Your ideas deserve the right tools, skills and support. Let's explore.</div>
+  <div class="explainer-progress" role="progressbar" aria-label="Video progress" aria-valuemin="0" aria-valuemax="120" aria-valuenow="0" id="explainerProgress"><span id="explainerBar"></span></div>
+  <div class="explainer-controls">
+    <button class="play" id="explainerPlay" type="button">▶ Play 2-minute video</button>
+    <button id="explainerRestart" type="button">↻ Restart</button>
+    <button id="explainerSound" type="button" aria-pressed="true">🔊 Voice: on</button>
+    <span class="explainer-time" id="explainerTime">0:00 / 2:00</span>
+  </div>
+  <p class="explainer-note">The presenter is animated on this page. English narration uses your browser or device's built-in voice when available; captions remain visible if voice playback is unavailable.</p>
+</section>
+
 <section class="wrap" id="services"><div class="section-head"><h2>Explore the hub</h2><p>Choose a space to learn, manage, discover or grow. More tools and member features will be added as the platform develops.</p></div><div class="grid">
 <article class="card"><img class="card-photo" src="https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&amp;fit=crop&amp;w=720&amp;q=72" alt="Professional service visual" loading="lazy" decoding="async"><div class="icon">✦</div><h3>AI Academy</h3><p>Practical AI lessons, guided tutorials and digital skills training for everyday work and business.</p><a class="tag" href="ai-academy.html">Start learning →</a></article>
 <article class="card"><img class="card-photo" src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&amp;fit=crop&amp;w=720&amp;q=72" alt="Professional service visual" loading="lazy" decoding="async"><div class="icon">◈</div><h3>Social Media Management</h3><p>Content planning, page management, campaign support and digital presence services for businesses.</p><a class="tag" href="social-media.html">Explore services →</a></article>
@@ -230,6 +299,76 @@ welcomeMessages.addEventListener('click',function(e){
   const button=e.target.closest('button[data-question]');
   if(button)sendHubQuestion(button.dataset.question);
 });
+
+
+/* Two-minute animated explainer: timed scenes with optional device narration */
+(function(){
+ const scenes=[
+  {k:"Welcome to the hub",t:"Your ideas deserve a place to grow.",v:"💡 🌍 🚀",s:"Welcome to Martin Tech and Business Hub. One destination bringing together practical technology, learning and business support.",n:"Welcome to Martin Tech and Business Hub. One destination bringing together practical technology, learning and business support."},
+  {k:"Learn with confidence",t:"Make artificial intelligence practical.",v:"🤖 📚 ✨",s:"Explore our AI Academy for practical lessons, useful prompts and digital skills you can apply in everyday work and business.",n:"Explore our AI Academy for practical lessons, useful prompts and digital skills you can apply in everyday work and business."},
+  {k:"Build your presence",t:"Help your business get noticed.",v:"📱 📣 📈",s:"Our social media support helps businesses plan content, manage pages and strengthen their presence across digital platforms.",n:"Our social media support helps businesses plan content, manage pages and strengthen their presence across digital platforms."},
+  {k:"Discover and create",t:"Find useful products and resources.",v:"🛍️ ⭐ 📦",s:"Explore product reviews, comparisons, digital guides and templates designed to make online discovery and everyday tasks easier.",n:"Explore product reviews, comparisons, digital guides and templates designed to make online discovery and everyday tasks easier."},
+  {k:"Trading tools",t:"Organise your trading journey.",v:"📊 📉 🧭",s:"Use trading management resources to organise records and review risk. You can also visit the separate Martin's Trading Assistant website to learn about the bot.",n:"Use trading management resources to organise records and review risk. You can also visit the separate Martin's Trading Assistant website to learn about the bot."},
+  {k:"Business growth",t:"Turn plans into practical next steps.",v:"🤝 🎯 💼",s:"Get support with sales, marketing, customer acquisition and business development, shaped around your goals and requirements.",n:"Get support with sales, marketing, customer acquisition and business development, shaped around your goals and requirements."},
+  {k:"Research and writing",t:"Give your ideas a clear structure.",v:"✍️ 📖 🎓",s:"Explore research and academic writing guidance, editing, proofreading, referencing and support with reports and proposals, while keeping your work your own.",n:"Explore research and academic writing guidance, editing, proofreading, referencing and support with reports and proposals, while keeping your work your own."},
+  {k:"Remote support",t:"Make room for the work that matters.",v:"🗓️ 💻 ☎️",s:"Our virtual assistant services can help with administration, inboxes, calendars, online research, customer follow-up and CRM tasks.",n:"Our virtual assistant services can help with administration, inboxes, calendars, online research, customer follow-up and CRM tasks."},
+  {k:"Websites that work",t:"Give your business a professional home online.",v:"🌐 🖥️ 📲",s:"We design mobile-friendly business websites, portfolio pages and landing pages to help you present your work and reach customers.",n:"We design mobile-friendly business websites, portfolio pages and landing pages to help you present your work and reach customers."},
+  {k:"Let's get started",t:"Tell us what you want to achieve.",v:"✉️ 📞 🚀",s:"Choose a service, explore the packages, then contact Martin for a conversation and a clear quote. Thank you for visiting Martin Tech and Business Hub.",n:"Choose a service, explore the packages, then contact Martin for a conversation and a clear quote. Thank you for visiting Martin Tech and Business Hub."}
+ ];
+ const $=id=>document.getElementById(id);
+ const play=$("explainerPlay"),restart=$("explainerRestart"),sound=$("explainerSound");
+ if(!play||!restart||!sound)return;
+ let elapsed=0,playing=false,voiceOn=true,timer=null,current=-1;
+ function voice(text){
+   if(!voiceOn||!("speechSynthesis" in window))return;
+   window.speechSynthesis.cancel();
+   const u=new SpeechSynthesisUtterance(text);u.lang="en-GB";u.rate=.96;u.pitch=1;
+   const voices=window.speechSynthesis.getVoices();
+   const preferred=voices.find(x=>/^en-GB/i.test(x.lang))||voices.find(x=>/^en/i.test(x.lang));
+   if(preferred)u.voice=preferred;
+   window.speechSynthesis.speak(u);
+ }
+ function showScene(i){
+   const sc=scenes[Math.min(i,scenes.length-1)];
+   $("explainerScene").classList.remove("explainer-scene");
+   void $("explainerScene").offsetWidth;
+   $("explainerScene").classList.add("explainer-scene");
+   $("explainerKicker").textContent=sc.k;
+   $("explainerTitle").textContent=sc.t;
+   $("explainerCopy").textContent=sc.s;
+   $("explainerVisual").textContent=sc.v;
+   $("explainerSubtitle").textContent=sc.s;
+   current=i;voice(sc.n);
+ }
+ function render(){
+   const i=Math.min(Math.floor(elapsed/12),9);
+   if(i!==current)showScene(i);
+   $("explainerBar").style.width=(elapsed/120*100)+"%";
+   $("explainerProgress").setAttribute("aria-valuenow",String(elapsed));
+   $("explainerTime").textContent=Math.floor(elapsed/60)+":"+String(elapsed%60).padStart(2,"0")+" / 2:00";
+ }
+ function stop(){
+   playing=false;clearInterval(timer);timer=null;
+   play.textContent=elapsed>=120?"↻ Play again":"▶ Resume video";
+   if("speechSynthesis" in window)window.speechSynthesis.cancel();
+ }
+ function tick(){
+   if(elapsed>=120){elapsed=120;render();stop();$("explainerSubtitle").textContent="Thank you for watching. Explore the services or contact Martin to get started.";return;}
+   elapsed++;render();
+ }
+ function start(){
+   if(elapsed>=120)elapsed=0;
+   if(playing)return;
+   playing=true;play.textContent="Ⅱ Pause";
+   if(current!==Math.min(Math.floor(elapsed/12),9))render();
+   else if(elapsed%12===0)voice(scenes[Math.min(Math.floor(elapsed/12),9)].n);
+   timer=setInterval(tick,1000);
+ }
+ play.addEventListener("click",()=>playing?stop():start());
+ restart.addEventListener("click",()=>{stop();elapsed=0;current=-1;render();start();});
+ sound.addEventListener("click",()=>{voiceOn=!voiceOn;sound.textContent=voiceOn?"🔊 Voice: on":"🔇 Voice: off";sound.setAttribute("aria-pressed",String(voiceOn));if(!voiceOn&&"speechSynthesis" in window)window.speechSynthesis.cancel();else if(playing)voice(scenes[Math.min(Math.floor(elapsed/12),9)].n);});
+ render();
+})();
 
 function enquiryText(){const d=new FormData(document.getElementById('contactForm'));return 'Name: '+d.get('name')+'\nEmail: '+d.get('email')+'\nInterest: '+(d.get('topic')||'General enquiry')+'\n\n'+d.get('message')}
 document.getElementById('contactForm').addEventListener('submit',async function(e){
