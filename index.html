@@ -140,7 +140,35 @@ welcomeMessages.addEventListener('click',function(e){
   if(button)sendHubQuestion(button.dataset.question);
 });
 
-function enquiryText(){const d=new FormData(document.getElementById('contactForm'));return 'Name: '+d.get('name')+'\nEmail: '+d.get('email')+'\nInterest: '+(d.get('topic')||'General enquiry')+'\n\n'+d.get('message')}\ndocument.getElementById('contactForm').addEventListener('submit',async function(e){e.preventDefault();if(!this.reportValidity())return;const status=document.getElementById('formStatus');const submit=this.querySelector('button[type="submit"]');const d=new FormData(this);const payload={name:d.get('name'),email:d.get('email'),topic:d.get('topic')||'General enquiry',message:d.get('message'),_subject:'New website enquiry - Martin Tech & Business Hub',_replyto:d.get('email'),_url:'https://martin-tech-business-hub.onrender.com/'};submit.disabled=true;status.textContent='Sending your enquiry to Martin…';try{await fetch('https://script.google.com/macros/s/AKfycbyvoF-6M_nJHv4X9JfoJptCxfTb_Ao4qrqcqg59a8zCDx2f6zMO2BZ2kGZNVN9LQu9p/exec',{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=UTF-8'},body:JSON.stringify(payload)});status.textContent='Your enquiry request has been sent to Martin’s email service. Please allow a moment for delivery.';this.reset();}catch(error){status.textContent='Could not connect to the email service. Please try again or use WhatsApp.';}finally{submit.disabled=false;}});
+function enquiryText(){const d=new FormData(document.getElementById('contactForm'));return 'Name: '+d.get('name')+'\nEmail: '+d.get('email')+'\nInterest: '+(d.get('topic')||'General enquiry')+'\n\n'+d.get('message')}\ndocument.getElementById('contactForm').addEventListener('submit',async function(e){
+  e.preventDefault();
+  if(!this.reportValidity())return;
+  const status=document.getElementById('formStatus');
+  const submit=this.querySelector('button[type="submit"]');
+  const d=new FormData(this);
+  const payload={
+    name:d.get('name'),
+    email:d.get('email'),
+    topic:d.get('topic')||'General enquiry',
+    message:d.get('message')
+  };
+  submit.disabled=true;
+  status.textContent='Submitting your enquiry…';
+  try{
+    await fetch('https://script.google.com/macros/s/AKfycbyvoF-6M_nJHv4X9JfoJptCxfTb_Ao4qrqcqg59a8zCDx2f6zMO2BZ2kGZNVN9LQu9p/exec',{
+      method:'POST',
+      mode:'no-cors',
+      headers:{'Content-Type':'text/plain;charset=UTF-8'},
+      body:JSON.stringify(payload)
+    });
+    status.textContent='Your enquiry request was submitted to the email service. Email delivery cannot be confirmed by this page. Please check your inbox shortly; if it does not arrive, contact Martin on WhatsApp.';
+    this.reset();
+  }catch(error){
+    status.textContent='The enquiry could not be submitted. Please try again or send it directly through WhatsApp.';
+  }finally{
+    submit.disabled=false;
+  }
+});
 document.getElementById('whatsappEnquiry').addEventListener('click',function(){const form=document.getElementById('contactForm');if(!form.reportValidity())return;const message='Hello Martin, I have an enquiry from Martin Tech & Business Hub.\n\n'+enquiryText();window.open('https://wa.me/254715499170?text='+encodeURIComponent(message),'_blank','noopener');document.getElementById('formStatus').textContent='Opening WhatsApp with your enquiry filled in.';});
 </script>
 </body></html>
