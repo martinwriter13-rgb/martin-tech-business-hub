@@ -64,7 +64,9 @@ a{color:inherit;text-decoration:none}.wrap{width:min(1140px,92%);margin:auto}.na
       <a href="trading-tools.html">⌁ Trading Tools — risk calculator and journal</a>
       <a href="shop-reviews.html">▣ Shop & Reviews — product discovery</a>
       <a href="digital-products.html">◎ Digital Products — useful templates and resources</a>
-      <a href="business-consultancy.html">◉ Business Consultancy — sales and growth support</a>\n      <a href="research-writing.html">✎ Research & Writing — proposals, editing and reports</a>\n      <a href="virtual-assistant.html">▤ Virtual Assistant — remote admin and business support</a>
+      <a href="business-consultancy.html">◉ Business Consultancy — sales and growth support</a>
+      <a href="research-writing.html">✎ Research & Writing — proposals, editing and reports</a>
+      <a href="virtual-assistant.html">▤ Virtual Assistant — remote admin and business support</a>
     </div>
     <a class="welcome-wa" href="https://wa.me/254715499170?text=Hello%20Martin%2C%20I%20am%20visiting%20Martin%20Tech%20%26%20Business%20Hub." target="_blank" rel="noopener">Chat with Martin on WhatsApp ↗</a>
   </div>
@@ -82,9 +84,8 @@ function showWelcome(){welcomeChat.classList.add('open');}
 function hideWelcome(){welcomeChat.classList.remove('open');}
 openWelcome.addEventListener('click',showWelcome);
 closeWelcome.addEventListener('click',hideWelcome);
-if(!sessionStorage.getItem('martinHubWelcomeSeen')){
-  setTimeout(()=>{showWelcome();sessionStorage.setItem('martinHubWelcomeSeen','1');},900);
-}
+// Show the welcome popup on every homepage visit.
+setTimeout(showWelcome, 900);
 
 function enquiryText(){const d=new FormData(document.getElementById('contactForm'));return 'Name: '+d.get('name')+'\nEmail: '+d.get('email')+'\nInterest: '+(d.get('topic')||'General enquiry')+'\n\n'+d.get('message')}\ndocument.getElementById('contactForm').addEventListener('submit',async function(e){e.preventDefault();if(!this.reportValidity())return;const status=document.getElementById('formStatus');const submit=this.querySelector('button[type="submit"]');const d=new FormData(this);const payload={name:d.get('name'),email:d.get('email'),topic:d.get('topic')||'General enquiry',message:d.get('message'),_subject:'New website enquiry - Martin Tech & Business Hub',_replyto:d.get('email'),_url:'https://martin-tech-business-hub.onrender.com/'};submit.disabled=true;status.textContent='Sending your enquiry to Martin…';try{await fetch('https://script.google.com/macros/s/AKfycbyvoF-6M_nJHv4X9JfoJptCxfTb_Ao4qrqcqg59a8zCDx2f6zMO2BZ2kGZNVN9LQu9p/exec',{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=UTF-8'},body:JSON.stringify(payload)});status.textContent='Your enquiry request has been sent to Martin’s email service. Please allow a moment for delivery.';this.reset();}catch(error){status.textContent='Could not connect to the email service. Please try again or use WhatsApp.';}finally{submit.disabled=false;}});
 document.getElementById('whatsappEnquiry').addEventListener('click',function(){const form=document.getElementById('contactForm');if(!form.reportValidity())return;const message='Hello Martin, I have an enquiry from Martin Tech & Business Hub.\n\n'+enquiryText();window.open('https://wa.me/254715499170?text='+encodeURIComponent(message),'_blank','noopener');document.getElementById('formStatus').textContent='Opening WhatsApp with your enquiry filled in.';});
