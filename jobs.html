@@ -108,6 +108,18 @@ body.portal-member-mode #portal-app>.portal-app{margin:0;padding:24px;border-col
 @media(max-width:760px){.cartoon-guide{grid-template-columns:1fr;padding:17px;gap:18px}.cartoon-stage{min-height:260px}.cartoon-copy h3{font-size:22px}}
 @media(prefers-reduced-motion:reduce){.cartoon-person,.cartoon-bubble{animation:none!important}}
 
+/* Jobs portal photos */
+.jobs-photo-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:22px}
+.jobs-photo-card{position:relative;min-height:190px;border-radius:18px;overflow:hidden;border:1px solid #ffffff25;background:#14213b}
+.jobs-photo-card img{width:100%;height:210px;object-fit:cover;display:block;transition:transform .35s ease}
+.jobs-photo-card:hover img{transform:scale(1.04)}
+.jobs-photo-card:after{content:"";position:absolute;inset:35% 0 0;background:linear-gradient(transparent,#07101feF)}
+.jobs-photo-card span{position:absolute;z-index:1;left:16px;bottom:13px;font-weight:850;font-size:17px;color:#fff;text-shadow:0 2px 8px #000}
+.job-visual{height:142px;position:relative;margin:-1px -1px 15px;overflow:hidden;border-radius:13px;background:#1b2e4f}
+.job-visual img{width:100%;height:100%;object-fit:cover;display:block}
+.company-mark{position:absolute;left:13px;bottom:12px;width:48px;height:48px;border-radius:13px;border:2px solid #ffffffc9;background:linear-gradient(135deg,#397dff,#895bff);display:grid;place-items:center;color:#fff;font-weight:950;font-size:17px;box-shadow:0 5px 18px #0007}
+.portal-job .job-visual{height:120px}.market-job .job-visual{height:155px;margin:0 0 16px}
+@media(max-width:650px){.jobs-photo-strip{grid-template-columns:1fr}.jobs-photo-card img{height:180px}.job-visual{height:125px}}
 </style>
 </head>
 <body>
@@ -115,6 +127,13 @@ body.portal-member-mode #portal-app>.portal-app{margin:0;padding:24px;border-col
 <main>
 <section class="wrap hero"><div><span class="eyebrow">Global online work community</span><h1>Find work.<br><span class="gradient">Discover talent.</span><br>Work anywhere.</h1><p class="lead">A dedicated space for remote jobs, freelance projects and digital opportunities — connecting employers with capable people across the world.</p><div class="actions"><a class="btn primary" href="#register">Join as a job seeker</a><a class="btn secondary" href="#register">Hire talent</a></div><div class="stats"><div class="stat"><b>Worldwide</b><small>Open to all countries</small></div><div class="stat"><b>Remote-first</b><small>Online opportunities</small></div><div class="stat"><b>Safety-led</b><small>Listings reviewed</small></div></div></div><div class="hero-art"><strong>Talent has no borders.</strong><p>Bring skills, projects and opportunity together in one trusted digital space.</p></div></section>
 
+<section class="wrap" aria-label="Remote work photography">
+<div class="heading"><h2>Work from anywhere</h2><p>Explore opportunities and connect with employers through our online jobs community.</p></div>
+<div class="jobs-photo-strip">
+<div class="jobs-photo-card"><img src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=900&q=85" alt="Team collaborating around a laptop" loading="lazy"><span>Connect with global teams</span></div>
+<div class="jobs-photo-card"><img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=85" alt="Laptop and workspace for digital work" loading="lazy"><span>Build your digital career</span></div>
+<div class="jobs-photo-card"><img src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=900&q=85" alt="Bright modern remote work desk" loading="lazy"><span>Find work that fits your life</span></div>
+</div></section>
 <section class="wrap" id="mt-cartoon-guide" aria-labelledby="mt-cartoon-title">
   <div class="cartoon-guide">
     <div class="cartoon-stage" aria-label="Animated cartoon guide sitting at a laptop">
@@ -278,10 +297,21 @@ body.portal-member-mode #portal-app>.portal-app{margin:0;padding:24px;border-col
     if(readError) throw readError;
     currentProfile=data;
   }
+  function jobArtwork(j){
+    const c=String(j.category||"").toLowerCase();
+    let photo="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1000&q=80";
+    if(/virtual|admin|assistant|support|customer/.test(c)) photo="https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1000&q=80";
+    else if(/writ|research|content/.test(c)) photo="https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=1000&q=80";
+    else if(/market|sales|social/.test(c)) photo="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1000&q=80";
+    else if(/design|creative|video/.test(c)) photo="https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&w=1000&q=80";
+    else if(/data|ai|tech|develop/.test(c)) photo="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1000&q=80";
+    const initials=String(j.company_name||"Employer").trim().split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0].toUpperCase()).join("")||"CO";
+    return '<div class="job-visual"><img src="'+photo+'" alt="'+escapeHtml(j.category||"Remote work")+' job image" loading="lazy"><span class="company-mark" aria-label="'+escapeHtml(j.company_name||"Employer")+' brand mark">'+escapeHtml(initials)+'</span></div>';
+  }
   function renderJobs() {
     const list=$("mt-jobs-list"), select=$("mt-apply-job");
     if(!jobs.length){list.innerHTML='<p class="portal-muted">No approved jobs are listed yet. Check again soon.</p>';select.innerHTML='<option value="">No active jobs yet</option>';return;}
-    list.innerHTML=jobs.map(j=>'<article class="portal-job"><h3>'+escapeHtml(j.title)+'</h3><small>'+escapeHtml(j.company_name)+' · '+escapeHtml(j.category)+' · '+escapeHtml(j.employment_type)+' · '+escapeHtml(j.location)+'</small><p>'+escapeHtml(j.description)+'</p>'+(j.salary_range?'<p><strong>Pay:</strong> '+escapeHtml(j.salary_range)+'</p>':'')+(currentProfile?.account_type==="employer"?'<p class="portal-muted"><strong>Employer view:</strong> Your job listing.</p><button type="button" class="btn primary mt-manage-job" data-job-id="'+escapeHtml(j.id)+'">View applicants / Manage job</button>':'<button type="button" class="btn primary mt-choose-job" data-job-id="'+escapeHtml(j.id)+'">Apply for this job</button>')+'</article>').join("");
+    list.innerHTML=jobs.map(j=>'<article class="portal-job">'+jobArtwork(j)+'<h3>'+escapeHtml(j.title)+'</h3><small>'+escapeHtml(j.company_name)+' · '+escapeHtml(j.category)+' · '+escapeHtml(j.employment_type)+' · '+escapeHtml(j.location)+'</small><p>'+escapeHtml(j.description)+'</p>'+(j.salary_range?'<p><strong>Pay:</strong> '+escapeHtml(j.salary_range)+'</p>':'')+(currentProfile?.account_type==="employer"?'<p class="portal-muted"><strong>Employer view:</strong> Your job listing.</p><button type="button" class="btn primary mt-manage-job" data-job-id="'+escapeHtml(j.id)+'">View applicants / Manage job</button>':'<button type="button" class="btn primary mt-choose-job" data-job-id="'+escapeHtml(j.id)+'">Apply for this job</button>')+'</article>').join("");
     select.innerHTML='<option value="">Choose a job</option>'+jobs.map(j=>'<option value="'+j.id+'">'+escapeHtml(j.title)+' — '+escapeHtml(j.company_name)+'</option>').join("");
   }
   $("mt-jobs-list").addEventListener("click",e=>{
@@ -312,7 +342,7 @@ body.portal-member-mode #portal-app>.portal-app{margin:0;padding:24px;border-col
       const saved=savedJobIds().includes(j.id),application=myApplicationByJob.get(j.id);
       const posted=j.created_at?new Date(j.created_at).toLocaleDateString():"Recently";
       const statusText=application?(({submitted:"Application submitted",reviewing:"Under review",shortlisted:"Shortlisted",interview:"Interview invited",hired:"Hired",rejected:"Not selected"})[application.status]||"Applied"):"";
-      return '<article class="market-job"><h3>'+escapeHtml(j.title)+'</h3><div class="meta">'+escapeHtml(j.company_name||"Client")+' · '+escapeHtml(j.location||"Remote")+' · Posted '+escapeHtml(posted)+'</div><div class="market-tags"><span class="market-tag">'+escapeHtml(j.employment_type||"Remote")+'</span><span class="market-tag">'+escapeHtml(j.category||"Online work")+'</span></div>'+(j.salary_range?'<p><strong>Budget / pay:</strong> '+escapeHtml(j.salary_range)+'</p>':'')+'<div class="job-desc">'+escapeHtml((j.description||"").slice(0,650))+(j.description?.length>650?"…":"")+'</div>'+(application?'<p class="market-tag">'+escapeHtml(statusText)+'</p>':'<div class="market-card-actions"><button type="button" class="btn primary mt-choose-job" data-job-id="'+escapeHtml(j.id)+'">Apply now</button></div>')+'<div class="market-card-actions"><button type="button" class="market-save mt-save-job" data-job-id="'+escapeHtml(j.id)+'">'+(saved?"♥ Saved":"♡ Save job")+'</button></div></article>';
+      return '<article class="market-job">'+jobArtwork(j)+'<h3>'+escapeHtml(j.title)+'</h3><div class="meta">'+escapeHtml(j.company_name||"Client")+' · '+escapeHtml(j.location||"Remote")+' · Posted '+escapeHtml(posted)+'</div><div class="market-tags"><span class="market-tag">'+escapeHtml(j.employment_type||"Remote")+'</span><span class="market-tag">'+escapeHtml(j.category||"Online work")+'</span></div>'+(j.salary_range?'<p><strong>Budget / pay:</strong> '+escapeHtml(j.salary_range)+'</p>':'')+'<div class="job-desc">'+escapeHtml((j.description||"").slice(0,650))+(j.description?.length>650?"…":"")+'</div>'+(application?'<p class="market-tag">'+escapeHtml(statusText)+'</p>':'<div class="market-card-actions"><button type="button" class="btn primary mt-choose-job" data-job-id="'+escapeHtml(j.id)+'">Apply now</button></div>')+'<div class="market-card-actions"><button type="button" class="market-save mt-save-job" data-job-id="'+escapeHtml(j.id)+'">'+(saved?"♥ Saved":"♡ Save job")+'</button></div></article>';
     }).join("");
   }
   $("mt-jobseeker-market").addEventListener("click",e=>{const tab=e.target.closest("[data-market-tab]");if(tab){marketTab=tab.dataset.marketTab;document.querySelectorAll("[data-market-tab]").forEach(b=>b.classList.toggle("active",b===tab));renderMarket();return;}const save=e.target.closest(".mt-save-job");if(save){const ids=savedJobIds();const next=ids.includes(save.dataset.jobId)?ids.filter(x=>x!==save.dataset.jobId):[...ids,save.dataset.jobId];try{localStorage.setItem("mt_saved_jobs_"+currentUser.id,JSON.stringify(next));}catch(err){}renderMarket();}});
