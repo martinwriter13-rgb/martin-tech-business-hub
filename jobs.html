@@ -188,7 +188,7 @@
           const {data,error}=await client.storage.from("job-cvs").createSignedUrl(a.cv_path,300);
           if(!error&&data?.signedUrl)cvLink='<p><a class="btn secondary" href="'+escapeHtml(data.signedUrl)+'" target="_blank" rel="noopener">Open CV (5-minute link)</a></p>';
         }
-        return '<article class="portal-job"><h3>'+escapeHtml(p.full_name||"Applicant")+'</h3><small>Applied for: '+escapeHtml(jobTitle.get(a.job_id)||"Your job")+' · '+escapeHtml(p.country||"Country not provided")+'</small>'+(p.headline?'<p><strong>Profile:</strong> '+escapeHtml(p.headline)+'</p>':'')+'<p><strong>Application:</strong><br>'+escapeHtml(a.cover_message||"No message supplied")+'</p>'+cvLink+'<p><strong>Status:</strong> '+escapeHtml(a.status)+'</p><div class="portal-actions"><button type="button" class="btn secondary" data-app-status="reviewing" data-app-id="'+escapeHtml(a.id)+'">Mark reviewing</button><button type="button" class="btn primary" data-app-status="shortlisted" data-app-id="'+escapeHtml(a.id)+'">Shortlist</button><button type="button" class="btn secondary" data-app-status="rejected" data-app-id="'+escapeHtml(a.id)+'">Reject</button></div></article>';
+        return '<article class="portal-job"><h3>'+escapeHtml(p.full_name||"Applicant")+'</h3><small>Applied for: '+escapeHtml(jobTitle.get(a.job_id)||"Your job")+' · '+escapeHtml(p.country||"Country not provided")+'</small>'+(p.headline?'<p><strong>Profile:</strong> '+escapeHtml(p.headline)+'</p>':'')+'<p><strong>Application:</strong><br>'+escapeHtml(a.cover_message||"No message supplied")+'</p>'+cvLink+'<p><strong>Status:</strong> '+escapeHtml(({submitted:"Pending employer review",reviewing:"Under review",shortlisted:"Shortlisted",interview:"Interview",hired:"Hired",rejected:"Not selected"})[a.status]||a.status)+'</p><div class="portal-actions"><button type="button" class="btn secondary" data-app-status="reviewing" data-app-id="'+escapeHtml(a.id)+'">Mark reviewing</button><button type="button" class="btn primary" data-app-status="shortlisted" data-app-id="'+escapeHtml(a.id)+'">Shortlist</button><button type="button" class="btn secondary" data-app-status="interview" data-app-id="'+escapeHtml(a.id)+'">Invite to interview</button><button type="button" class="btn primary" data-app-status="hired" data-app-id="'+escapeHtml(a.id)+'">Mark hired</button><button type="button" class="btn secondary" data-app-status="rejected" data-app-id="'+escapeHtml(a.id)+'">Reject</button></div></article>';
       }));
       activity.innerHTML=cards.join("");
     } else {
@@ -204,7 +204,7 @@
         appliedJobs=jobData||[];
       }
       const appliedJobById=new Map(appliedJobs.map(j=>[j.id,j]));
-      const statusLabels={submitted:"Pending employer review",reviewing:"Under review",shortlisted:"Shortlisted",rejected:"Not selected"};
+      const statusLabels={submitted:"Pending employer review",reviewing:"Under review",shortlisted:"Shortlisted",interview:"Interview",hired:"Hired",rejected:"Not selected"};
       activity.innerHTML=data?.length?data.map(a=>{
         const job=appliedJobById.get(a.job_id)||{};
         const label=statusLabels[a.status]||a.status;
