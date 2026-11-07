@@ -25,6 +25,8 @@
 .portal-hidden{display:none!important}
 @media(max-width:650px){.portal-grid{grid-template-columns:1fr}.portal-app{padding:20px 15px}}
 
+
+.chat-bubble{padding:10px 13px;border-radius:12px;margin:8px 0;background:#172744;border:1px solid var(--line);max-width:90%}.chat-bubble.mine{margin-left:auto;background:#253b68}.chat-meta{font-size:12px;color:#b7c6e2}.chat-compose{display:grid;gap:9px;margin-top:12px}.chat-compose textarea{width:100%;min-height:78px;padding:12px;border:1px solid #435779;border-radius:10px;background:#091326;color:#fff;font:inherit}.chat-thread{padding:14px;border:1px solid var(--line);border-radius:14px;margin:12px 0;background:#101d35}
 </style>
 </head>
 <body>
@@ -105,6 +107,7 @@
     </div>
     <div class="portal-panel"><h3>Available remote jobs</h3><div id="mt-jobs-list"><p class="portal-muted">Loading opportunities…</p></div></div>
     <div class="portal-panel"><h3 id="mt-activity-heading">Your activity</h3><p class="portal-muted" id="mt-activity-help">Your job posts and applications will appear here.</p><div id="mt-activity"><p class="portal-muted">Sign in to see your jobs or applications.</p></div></div>
+    <div class="portal-panel" id="mt-messaging"><h3>Messages / Inbox</h3><p class="portal-muted">Chat privately with employers or applicants about a specific job application. Sign in to view and reply to messages.</p><div id="mt-inbox"><p class="portal-muted">Your conversations will appear here.</p></div><form id="mt-chat-form" class="chat-compose portal-hidden"><input type="hidden" id="mt-chat-application"><input type="hidden" id="mt-chat-recipient"><p class="portal-muted" id="mt-chat-with"></p><textarea id="mt-chat-body" maxlength="4000" required placeholder="Write your message…"></textarea><div class="portal-actions"><button class="btn primary" type="submit">Send message</button><button class="btn secondary" id="mt-chat-cancel" type="button">Close reply</button></div></form></div>
   </div>
 </div>
 </section>
@@ -188,7 +191,7 @@
           const {data,error}=await client.storage.from("job-cvs").createSignedUrl(a.cv_path,300);
           if(!error&&data?.signedUrl)cvLink='<p><a class="btn secondary" href="'+escapeHtml(data.signedUrl)+'" target="_blank" rel="noopener">Open CV (5-minute link)</a></p>';
         }
-        return '<article class="portal-job"><h3>'+escapeHtml(p.full_name||"Applicant")+'</h3><small>Applied for: '+escapeHtml(jobTitle.get(a.job_id)||"Your job")+' · '+escapeHtml(p.country||"Country not provided")+'</small>'+(p.headline?'<p><strong>Profile:</strong> '+escapeHtml(p.headline)+'</p>':'')+'<p><strong>Application:</strong><br>'+escapeHtml(a.cover_message||"No message supplied")+'</p>'+cvLink+'<p><strong>Status:</strong> '+escapeHtml(({submitted:"Pending employer review",reviewing:"Under review",shortlisted:"Shortlisted",interview:"Interview",hired:"Hired",rejected:"Not selected"})[a.status]||a.status)+'</p><div class="portal-actions"><button type="button" class="btn secondary" data-app-status="reviewing" data-app-id="'+escapeHtml(a.id)+'">Mark reviewing</button><button type="button" class="btn primary" data-app-status="shortlisted" data-app-id="'+escapeHtml(a.id)+'">Shortlist</button><button type="button" class="btn secondary" data-app-status="interview" data-app-id="'+escapeHtml(a.id)+'">Invite to interview</button><button type="button" class="btn primary" data-app-status="hired" data-app-id="'+escapeHtml(a.id)+'">Mark hired</button><button type="button" class="btn secondary" data-app-status="rejected" data-app-id="'+escapeHtml(a.id)+'">Reject</button></div></article>';
+        return '<article class="portal-job"><h3>'+escapeHtml(p.full_name||"Applicant")+'</h3><small>Applied for: '+escapeHtml(jobTitle.get(a.job_id)||"Your job")+' · '+escapeHtml(p.country||"Country not provided")+'</small>'+(p.headline?'<p><strong>Profile:</strong> '+escapeHtml(p.headline)+'</p>':'')+'<p><strong>Application:</strong><br>'+escapeHtml(a.cover_message||"No message supplied")+'</p>'+cvLink+'<p><strong>Status:</strong> '+escapeHtml(({submitted:"Pending employer review",reviewing:"Under review",shortlisted:"Shortlisted",interview:"Interview",hired:"Hired",rejected:"Not selected"})[a.status]||a.status)+'</p><div class="portal-actions"><button type="button" class="btn secondary" data-app-status="reviewing" data-app-id="'+escapeHtml(a.id)+'">Mark reviewing</button><button type="button" class="btn primary" data-app-status="shortlisted" data-app-id="'+escapeHtml(a.id)+'">Shortlist</button><button type="button" class="btn secondary" data-app-status="interview" data-app-id="'+escapeHtml(a.id)+'">Invite to interview</button><button type="button" class="btn primary" data-app-status="hired" data-app-id="'+escapeHtml(a.id)+'">Mark hired</button><button type="button" class="btn secondary" data-app-status="rejected" data-app-id="'+escapeHtml(a.id)+'">Reject</button></div><button type="button" class="btn secondary mt-start-chat" data-chat-app="'+escapeHtml(a.id)+'" data-chat-recipient="'+escapeHtml(a.applicant_id)+'" data-chat-label="'+escapeHtml(p.full_name||"Applicant")+'">Message applicant</button></article>';
       }));
       activity.innerHTML=cards.join("");
     } else {
@@ -199,7 +202,7 @@
       const appliedJobIds=[...new Set((data||[]).map(a=>a.job_id))];
       let appliedJobs=[];
       if(appliedJobIds.length){
-        const {data:jobData,error:jobError}=await client.from("jobs").select("id,title,company_name").in("id",appliedJobIds);
+        const {data:jobData,error:jobError}=await client.from("jobs").select("id,title,company_name,employer_id").in("id",appliedJobIds);
         if(jobError) throw jobError;
         appliedJobs=jobData||[];
       }
@@ -209,7 +212,7 @@
         const job=appliedJobById.get(a.job_id)||{};
         const label=statusLabels[a.status]||a.status;
         const date=a.created_at?new Date(a.created_at).toLocaleDateString():"";
-        return '<article class="portal-job"><h3>'+escapeHtml(job.title||"Job application")+'</h3><small>'+escapeHtml(job.company_name||"Company")+(date?' · Applied on '+escapeHtml(date):'')+'</small><p><strong>Application status:</strong> '+escapeHtml(label)+'</p></article>';
+        return '<article class="portal-job"><h3>'+escapeHtml(job.title||"Job application")+'</h3><small>'+escapeHtml(job.company_name||"Company")+(date?' · Applied on '+escapeHtml(date):'')+'</small><p><strong>Application status:</strong> '+escapeHtml(label)+'</p><button type="button" class="btn secondary mt-start-chat" data-chat-app="'+escapeHtml(a.id)+'" data-chat-recipient="'+escapeHtml(job.employer_id||"")+'" data-chat-label="Employer">Message employer</button></article>';
       }).join(""):'<p class="portal-muted">You have not applied for any jobs yet.</p>';
     }
   }
@@ -223,6 +226,60 @@
       await loadActivity();say("Application status updated.","ok");
     }catch(err){button.disabled=false;say(err.message||"Could not update application status.","error");}
   });
+
+  async function openChat(applicationId,recipientId,label){
+    if(!recipientId){say("The other account could not be identified for this application.","error");return;}
+    $("mt-chat-application").value=applicationId;$("mt-chat-recipient").value=recipientId;
+    $("mt-chat-with").textContent="Replying to: "+label;
+    show("mt-chat-form",true);$("mt-chat-body").focus();
+    $("mt-messaging").scrollIntoView({behavior:"smooth",block:"start"});
+    await loadMessages();
+  }
+  async function loadMessages(){
+    if(!currentUser)return;
+    const inbox=$("mt-inbox");
+    const {data:messages,error}=await client.from("job_messages").select("id,application_id,sender_id,recipient_id,body,created_at,read_at").or("sender_id.eq."+currentUser.id+",recipient_id.eq."+currentUser.id).order("created_at",{ascending:true}).limit(300);
+    if(error)throw error;
+    const appIds=[...new Set((messages||[]).map(m=>m.application_id))];
+    if(!appIds.length){inbox.innerHTML='<p class="portal-muted">No messages yet. Use “Message employer” or “Message applicant” on an application to start a conversation.</p>';return;}
+    const {data:apps,error:appError}=await client.from("applications").select("id,job_id,applicant_id").in("id",appIds);
+    if(appError)throw appError;
+    const jobIds=[...new Set((apps||[]).map(a=>a.job_id))];
+    const {data:jobRows,error:jobError}=await client.from("jobs").select("id,title,company_name,employer_id").in("id",jobIds);
+    if(jobError)throw jobError;
+    const appById=new Map((apps||[]).map(a=>[a.id,a])),jobById=new Map((jobRows||[]).map(j=>[j.id,j]));
+    const otherIds=[...new Set((apps||[]).map(a=>a.applicant_id===currentUser.id?jobById.get(a.job_id)?.employer_id:a.applicant_id).filter(Boolean))];
+    let otherProfiles=[];
+    if(otherIds.length){const {data,error:profileError}=await client.from("profiles").select("id,full_name").in("id",otherIds);if(profileError)throw profileError;otherProfiles=data||[];}
+    const names=new Map(otherProfiles.map(p=>[p.id,p.full_name]));
+    const groups=new Map();
+    for(const m of messages||[]){if(!groups.has(m.application_id))groups.set(m.application_id,[]);groups.get(m.application_id).push(m);}
+    inbox.innerHTML=[...groups.entries()].map(([appId,items])=>{
+      const app=appById.get(appId),job=app&&jobById.get(app.job_id);if(!app||!job)return "";
+      const otherId=app.applicant_id===currentUser.id?job.employer_id:app.applicant_id;
+      const otherName=names.get(otherId)||(app.applicant_id===currentUser.id?"Employer":"Applicant");
+      const bubbles=items.map(m=>'<div class="chat-bubble '+(m.sender_id===currentUser.id?'mine':'')+'"><div class="chat-meta">'+(m.sender_id===currentUser.id?'You':escapeHtml(otherName))+' · '+escapeHtml(new Date(m.created_at).toLocaleString())+'</div><div>'+escapeHtml(m.body)+'</div></div>').join("");
+      return '<article class="chat-thread"><h3>'+escapeHtml(job.title)+'</h3><p class="portal-muted">Conversation with '+escapeHtml(otherName)+' · '+escapeHtml(job.company_name)+'</p>'+bubbles+'<button type="button" class="btn secondary mt-start-chat" data-chat-app="'+escapeHtml(appId)+'" data-chat-recipient="'+escapeHtml(otherId)+'" data-chat-label="'+escapeHtml(otherName)+'">Reply</button></article>';
+    }).join("")||'<p class="portal-muted">No conversations available yet.</p>';
+    const unread=(messages||[]).filter(m=>m.recipient_id===currentUser.id&&!m.read_at).map(m=>m.id);
+    if(unread.length){const {error:updateError}=await client.from("job_messages").update({read_at:new Date().toISOString()}).in("id",unread);if(updateError)console.warn("Could not mark messages read:",updateError.message);}
+  }
+  $("mt-inbox").addEventListener("click",async e=>{
+    const b=e.target.closest(".mt-start-chat");if(!b)return;
+    try{await openChat(b.dataset.chatApp,b.dataset.chatRecipient,b.dataset.chatLabel||"Contact");}catch(err){say(err.message||"Could not open conversation.","error");}
+  });
+  $("mt-chat-form").addEventListener("submit",async e=>{
+    e.preventDefault();const body=$("mt-chat-body").value.trim();if(!body)return;
+    const application_id=$("mt-chat-application").value,recipient_id=$("mt-chat-recipient").value;
+    say("Sending your message…");
+    try{
+      const {error}=await client.from("job_messages").insert({application_id,sender_id:currentUser.id,recipient_id,body});
+      if(error)throw error;
+      $("mt-chat-body").value="";await loadMessages();say("Message sent.","ok");
+    }catch(err){say(err.message||"Could not send your message.","error");}
+  });
+  $("mt-chat-cancel").addEventListener("click",()=>{show("mt-chat-form",false);$("mt-chat-body").value="";});
+
   async function setSession(user) {
     currentUser=user||null;
     if(!user){currentProfile=null;show("mt-member-area",false);$("mt-account-state").textContent="You are not signed in.";return;}
@@ -233,7 +290,7 @@
     $("mt-dashboard-copy").textContent=currentProfile.account_type==="employer"?"Submit remote opportunities for review and manage your listings.":"Browse approved jobs, apply and track your applications.";
     show("mt-job-form",currentProfile.account_type==="employer");
     show("mt-apply-form",currentProfile.account_type==="job_seeker");
-    await loadJobs(); await loadActivity();
+    await loadJobs(); await loadActivity(); await loadMessages();
   }
   async function start() {
     try{const savedEmail=localStorage.getItem("mt_jobs_last_email");const savedRole=localStorage.getItem("mt_jobs_last_role");if(savedEmail)$("mt-login-email").value=savedEmail;if(savedRole)$("mt-login-role").value=savedRole;if(savedEmail)$("mt-last-account").textContent="Last used account: "+(savedRole==="employer"?"Employer / Recruiter":"Job seeker")+" · "+savedEmail+". Password not saved.";}catch(e){}
@@ -290,7 +347,7 @@
       e.target.reset();await loadActivity();say("Your application has been submitted successfully.","ok");
     }catch(err){say(err.message||"Could not submit your application.","error");}
   });
-  $("mt-refresh").addEventListener("click",async()=>{try{await loadJobs();await loadActivity();say("Portal information refreshed.","ok");}catch(e){say(e.message||"Refresh failed.","error");}});
+  $("mt-refresh").addEventListener("click",async()=>{try{await loadJobs();await loadActivity();await loadMessages();say("Portal information refreshed.","ok");}catch(e){say(e.message||"Refresh failed.","error");}});
   start();
 })();
 </script>
