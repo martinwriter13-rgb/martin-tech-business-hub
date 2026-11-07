@@ -67,11 +67,12 @@
       <h3>Sign in</h3>
       <form id="mt-login">
         <div class="portal-field"><label for="mt-login-email">Email address</label><input id="mt-login-email" type="email" required autocomplete="email"></div>
+        <div class="portal-field"><label for="mt-login-role">I am signing in as</label><select id="mt-login-role"><option value="employer">Employer / Recruiter</option><option value="job_seeker">Job seeker</option></select></div>
         <div class="portal-field"><label for="mt-login-password">Password</label><input id="mt-login-password" type="password" required autocomplete="current-password"></div>
         <button class="btn secondary" type="submit">Sign in</button>
       </form>
       <div class="portal-actions"><button class="btn secondary" id="mt-reset" type="button">Forgot password?</button><button class="btn secondary" id="mt-logout" type="button">Sign out</button></div>
-      <p class="portal-muted" id="mt-account-state">You are not signed in.</p>
+      <p class="portal-muted" id="mt-account-state">You are not signed in.</p><p class="portal-muted" id="mt-last-account">This browser will remember the last email and account type you used — never your password.</p>
     </div>
   </div>
   <div id="mt-message" class="portal-status" role="status" aria-live="polite">Ready when you are.</div>
@@ -153,7 +154,7 @@
       $("mt-activity-help").textContent="Review applicants for your vacancies, open their CVs and update application progress.";
       const {data:ownJobs,error:jobsError}=await client.from("jobs").select("id,title,status,created_at").eq("employer_id",currentUser.id).order("created_at",{ascending:false}).limit(50);
       if(jobsError) throw jobsError;
-      if(!ownJobs?.length){activity.innerHTML='<p class="portal-muted">You have not submitted any jobs yet.</p>';return;}
+      if(!ownJobs?.length){activity.innerHTML='<p class="portal-muted">No jobs are attached to this employer account: <strong>'+escapeHtml(currentUser.email||"")+'</strong>.</p><p class="portal-muted">If you posted the job using another employer email, sign out and sign in with that exact email. Your employer and job-seeker accounts are separate.</p>';return;}
       const jobTitle=new Map(ownJobs.map(j=>[j.id,j.title]));
       const jobIds=ownJobs.map(j=>j.id);
       const {data:apps,error:appsError}=await client.from("applications").select("id,job_id,applicant_id,cover_message,cv_path,status,created_at").in("job_id",jobIds).order("created_at",{ascending:false}).limit(100);
@@ -203,7 +204,7 @@
     if(!user){currentProfile=null;show("mt-member-area",false);$("mt-account-state").textContent="You are not signed in.";return;}
     await ensureProfile(user);
     show("mt-member-area",true);
-    $("mt-account-state").textContent="Signed in as "+user.email;
+    const roleLabel=currentProfile.account_type==="employer"?"Employer / Recruiter":"Job seeker";$("mt-account-state").textContent="Signed in as "+user.email+" · "+roleLabel;$("mt-last-account").textContent="Current account: "+roleLabel+" ("+user.email+"). Passwords are never saved here.";
     $("mt-dashboard-title").textContent=currentProfile.account_type==="employer"?"Employer dashboard":"Job seeker dashboard";
     $("mt-dashboard-copy").textContent=currentProfile.account_type==="employer"?"Submit remote opportunities for review and manage your listings.":"Browse approved jobs, apply and track your applications.";
     show("mt-job-form",currentProfile.account_type==="employer");
@@ -211,6 +212,7 @@
     await loadJobs(); await loadActivity();
   }
   async function start() {
+    try{const savedEmail=localStorage.getItem("mt_jobs_last_email");const savedRole=localStorage.getItem("mt_jobs_last_role");if(savedEmail)$("mt-login-email").value=savedEmail;if(savedRole)$("mt-login-role").value=savedRole;if(savedEmail)$("mt-last-account").textContent="Last used account: "+savedRole==="employer"?"Employer / Recruiter":"Job seeker"+" · "+savedEmail+". Password not saved.";}catch(e){}
     if(!window.supabase?.createClient){say("The secure sign-in library did not load. Refresh this page and try again.","error");return;}
     client=window.supabase.createClient(PROJECT_URL,PUBLISHABLE_KEY);
     const {data:{session}}=await client.auth.getSession();
@@ -230,7 +232,7 @@
   });
   $("mt-login").addEventListener("submit",async e=>{
     e.preventDefault();say("Signing you in…");
-    try{const {data,error}=await client.auth.signInWithPassword({email:$("mt-login-email").value.trim(),password:$("mt-login-password").value});if(error)throw error;await setSession(data.user);say("You are signed in.","ok");}
+    try{const email=$("mt-login-email").value.trim(),expectedRole=$("mt-login-role").value;const {data,error}=await client.auth.signInWithPassword({email,password:$("mt-login-password").value});if(error)throw error;try{localStorage.setItem("mt_jobs_last_email",email);localStorage.setItem("mt_jobs_last_role",expectedRole);}catch(e){}await setSession(data.user);if(currentProfile.account_type!==expectedRole){say("You signed in successfully, but this is a "+(currentProfile.account_type==="employer"?"Employer":"Job seeker")+" account. Choose the matching account type next time.","error");}else say("You are signed in as "+(expectedRole==="employer"?"Employer / Recruiter":"Job seeker")+".","ok");}
     catch(err){say(err.message||"Sign-in failed.","error");}
   });
   $("mt-logout").addEventListener("click",async()=>{const {error}=await client.auth.signOut();if(error)say(error.message,"error");else{await setSession(null);say("You have signed out.","ok");}});
