@@ -82,12 +82,64 @@ body.portal-member-mode #portal-app>.portal-app{margin:0;padding:24px;border-col
   .btn, button { white-space:normal; }
   .cta { padding:20px; }
 }
+
+/* Animated cartoon explainer for the Online Jobs portal */
+.cartoon-guide{padding:28px;border:1px solid #526b9e;border-radius:24px;background:radial-gradient(circle at 12% 12%,#263e70 0,transparent 38%),linear-gradient(145deg,#142747,#10162c);display:grid;grid-template-columns:minmax(220px,.75fr) 1.25fr;gap:26px;align-items:center;overflow:hidden;box-shadow:0 20px 55px #0005}
+.cartoon-stage{min-height:270px;display:grid;place-items:center;position:relative;border-radius:20px;background:linear-gradient(160deg,#213c69,#182342);border:1px solid #ffffff20;overflow:hidden}
+.cartoon-stage:before,.cartoon-stage:after{content:"";position:absolute;border-radius:50%;background:#ffffff0b}.cartoon-stage:before{width:210px;height:210px;left:-65px;bottom:-110px}.cartoon-stage:after{width:130px;height:130px;right:-35px;top:-45px}
+.cartoon-person{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;animation:mt-cartoon-float 3s ease-in-out infinite}
+.cartoon-head{width:106px;height:112px;border-radius:48% 48% 44% 44%;background:#b96f48;border:5px solid #f2c6a5;position:relative;box-shadow:inset 0 -8px #00000012}
+.cartoon-hair{position:absolute;left:-5px;top:-9px;width:106px;height:45px;border-radius:55% 55% 20% 20%;background:#202033;border:4px solid #111827}
+.cartoon-eye{position:absolute;top:51px;width:7px;height:9px;border-radius:50%;background:#202033}.cartoon-eye.left{left:29px}.cartoon-eye.right{right:29px}
+.cartoon-smile{position:absolute;left:39px;top:73px;width:27px;height:12px;border-bottom:3px solid #642f32;border-radius:0 0 50% 50%}
+.cartoon-body{width:132px;height:83px;margin-top:7px;border-radius:35px 35px 12px 12px;background:linear-gradient(120deg,#4d83e8,#8060d9);border:4px solid #b7ceff;position:relative}
+.cartoon-body:before,.cartoon-body:after{content:"";position:absolute;top:18px;width:22px;height:66px;border-radius:15px;background:#b96f48}.cartoon-body:before{left:-16px;transform:rotate(17deg)}.cartoon-body:after{right:-16px;transform:rotate(-17deg)}
+.cartoon-laptop{position:absolute;bottom:-13px;left:17px;width:98px;height:43px;border:5px solid #c5d7ff;border-bottom-width:9px;border-radius:8px 8px 4px 4px;background:#13213b;z-index:2;display:grid;place-items:center;color:#8fbaff;font-size:17px;font-weight:900}
+.cartoon-bubble{position:absolute;z-index:3;top:15px;left:14px;right:14px;padding:10px 13px;border-radius:14px 14px 14px 4px;background:#fff;color:#1a2740;font-size:13px;font-weight:800;line-height:1.35;box-shadow:0 8px 24px #0004;animation:mt-bubble-pop .45s ease both}
+.cartoon-bubble:after{content:"";position:absolute;left:20px;bottom:-9px;border-width:10px 10px 0 0;border-style:solid;border-color:#fff transparent transparent transparent}
+.cartoon-copy h3{font-size:25px;line-height:1.2;margin:0 0 9px}.cartoon-copy p{color:#d4def2;margin:0 0 14px}
+.cartoon-caption{min-height:66px;padding:14px 16px;border:1px solid #ffffff22;border-radius:13px;background:#ffffff0b;color:#f5f7ff;font-weight:700}
+.cartoon-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:14px}
+.cartoon-controls button{border:1px solid #6682b5;background:#172b4c;color:#fff;border-radius:10px;padding:9px 13px;font-weight:800;cursor:pointer}
+.cartoon-controls button:hover{background:#284a7d}.cartoon-dots{display:flex;gap:7px}.cartoon-dot{width:9px;height:9px;border-radius:50%;background:#7185a9}.cartoon-dot.active{background:#9fc1ff;transform:scale(1.25)}
+.cartoon-footnote{font-size:12px;color:#aebbd5;margin-top:10px}
+@keyframes mt-cartoon-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes mt-bubble-pop{from{opacity:0;transform:translateY(5px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(max-width:760px){.cartoon-guide{grid-template-columns:1fr;padding:17px;gap:18px}.cartoon-stage{min-height:260px}.cartoon-copy h3{font-size:22px}}
+@media(prefers-reduced-motion:reduce){.cartoon-person,.cartoon-bubble{animation:none!important}}
+
 </style>
 </head>
 <body>
 <header class="wrap top"><a class="brand" href="index.html">MARTIN <span>TECH</span> & BUSINESS HUB</a><nav class="nav"><a href="index.html">Home</a><a href="#opportunities">Career areas</a><a href="#how">How it works</a><a href="#register">Join the portal</a></nav><a class="btn secondary" href="index.html">Back to hub</a></header>
 <main>
 <section class="wrap hero"><div><span class="eyebrow">Global online work community</span><h1>Find work.<br><span class="gradient">Discover talent.</span><br>Work anywhere.</h1><p class="lead">A dedicated space for remote jobs, freelance projects and digital opportunities — connecting employers with capable people across the world.</p><div class="actions"><a class="btn primary" href="#register">Join as a job seeker</a><a class="btn secondary" href="#register">Hire talent</a></div><div class="stats"><div class="stat"><b>Worldwide</b><small>Open to all countries</small></div><div class="stat"><b>Remote-first</b><small>Online opportunities</small></div><div class="stat"><b>Safety-led</b><small>Listings reviewed</small></div></div></div><div class="hero-art"><strong>Talent has no borders.</strong><p>Bring skills, projects and opportunity together in one trusted digital space.</p></div></section>
+
+<section class="wrap" id="mt-cartoon-guide" aria-labelledby="mt-cartoon-title">
+  <div class="cartoon-guide">
+    <div class="cartoon-stage" aria-label="Animated cartoon guide sitting at a laptop">
+      <div class="cartoon-bubble" id="mt-cartoon-bubble" aria-live="polite">Hi! I'm your guide. Let me show you how this jobs portal works.</div>
+      <div class="cartoon-person" aria-hidden="true">
+        <div class="cartoon-head"><div class="cartoon-hair"></div><i class="cartoon-eye left"></i><i class="cartoon-eye right"></i><i class="cartoon-smile"></i></div>
+        <div class="cartoon-body"><div class="cartoon-laptop">MT</div></div>
+      </div>
+    </div>
+    <div class="cartoon-copy">
+      <span class="eyebrow">A quick cartoon tour</span>
+      <h3 id="mt-cartoon-title">Your guide to the Online Jobs Portal</h3>
+      <p>Watch the guide explain how job seekers and employers use this portal, step by step.</p>
+      <div class="cartoon-caption" id="mt-cartoon-caption" aria-live="polite">Job seekers: create an account, build your profile and add your skills and CV.</div>
+      <div class="cartoon-controls">
+        <button type="button" id="mt-cartoon-prev" aria-label="Previous explanation">← Back</button>
+        <button type="button" id="mt-cartoon-play" aria-pressed="true">Pause animation</button>
+        <button type="button" id="mt-cartoon-next">Next →</button>
+        <span class="cartoon-dots" id="mt-cartoon-dots" aria-label="Tour progress"><i class="cartoon-dot active"></i><i class="cartoon-dot"></i><i class="cartoon-dot"></i><i class="cartoon-dot"></i><i class="cartoon-dot"></i></span>
+      </div>
+      <div class="cartoon-footnote">Animated on-screen guide with captions. No sound is required.</div>
+    </div>
+  </div>
+</section>
+
 <section class="wrap" id="opportunities"><div class="heading"><h2>Explore online career areas</h2><p>Discover the kinds of opportunities the portal is being built to support.</p></div><div class="grid">
 <article class="card"><div class="ico">🌍</div><h3>Remote employment</h3><p>Full-time and part-time roles that can be performed online from different locations.</p></article>
 <article class="card"><div class="ico">🧑‍💻</div><h3>Virtual assistance</h3><p>Administrative support, scheduling, customer care and online operations.</p></article>
@@ -539,6 +591,46 @@ body.portal-member-mode #portal-app>.portal-app{margin:0;padding:24px;border-col
   });
   $("mt-refresh").addEventListener("click",async()=>{try{await loadJobs();await loadActivity();await loadMessages();say("Portal information refreshed.","ok");}catch(e){say(e.message||"Refresh failed.","error");}});
   start();
+})();
+</script>
+
+
+<script>
+(() => {
+  const bubble=document.getElementById("mt-cartoon-bubble");
+  const caption=document.getElementById("mt-cartoon-caption");
+  const dots=[...document.querySelectorAll("#mt-cartoon-dots .cartoon-dot")];
+  const prev=document.getElementById("mt-cartoon-prev");
+  const next=document.getElementById("mt-cartoon-next");
+  const play=document.getElementById("mt-cartoon-play");
+  if(!bubble||!caption||!prev||!next||!play)return;
+  const scenes=[
+    {say:"Hi! I'm your guide. Let's find the right opportunity for you.",text:"Welcome! This portal brings job seekers and employers together for remote work and online projects."},
+    {say:"Job seeker? Create your account and introduce yourself.",text:"Job seekers: register, build your professional profile, add your skills and upload a CV."},
+    {say:"Explore opportunities, choose a role and send your application.",text:"Browse approved jobs, search by title or skill, save interesting roles and apply online."},
+    {say:"Employer? Create your account and post a vacancy.",text:"Employers: create a company profile and submit remote job opportunities for review and approval."},
+    {say:"Track progress and chat privately about an application.",text:"Both sides: employers review applicants and update application status; job seekers track progress and message employers through the portal."}
+  ];
+  let index=0,playing=!window.matchMedia("(prefers-reduced-motion: reduce)").matches,timer=null;
+  function render(){
+    bubble.textContent=scenes[index].say;
+    caption.textContent=scenes[index].text;
+    dots.forEach((dot,i)=>dot.classList.toggle("active",i===index));
+    bubble.style.animation="none";void bubble.offsetWidth;bubble.style.animation="";
+  }
+  function stop(){if(timer){clearInterval(timer);timer=null;}}
+  function start(){stop();if(playing)timer=setInterval(()=>{index=(index+1)%scenes.length;render();},6500);}
+  function move(step){index=(index+step+scenes.length)%scenes.length;render();start();}
+  prev.addEventListener("click",()=>move(-1));
+  next.addEventListener("click",()=>move(1));
+  play.addEventListener("click",()=>{
+    playing=!playing;
+    play.textContent=playing?"Pause animation":"Play animation";
+    play.setAttribute("aria-pressed",String(playing));
+    start();
+  });
+  document.addEventListener("visibilitychange",()=>{if(document.hidden)stop();else start();});
+  render();start();
 })();
 </script>
 
