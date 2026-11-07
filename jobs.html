@@ -26,7 +26,7 @@
 @media(max-width:650px){.portal-grid{grid-template-columns:1fr}.portal-app{padding:20px 15px}}
 
 
-.chat-bubble{padding:10px 13px;border-radius:12px;margin:8px 0;background:#172744;border:1px solid var(--line);max-width:90%}.chat-bubble.mine{margin-left:auto;background:#253b68}.chat-meta{font-size:12px;color:#b7c6e2}.chat-compose{display:grid;gap:9px;margin-top:12px}.chat-compose textarea{width:100%;min-height:78px;padding:12px;border:1px solid #435779;border-radius:10px;background:#091326;color:#fff;font:inherit}.chat-thread{padding:14px;border:1px solid var(--line);border-radius:14px;margin:12px 0;background:#101d35}
+.chat-bubble{padding:10px 13px;border-radius:12px;margin:8px 0;background:#172744;border:1px solid var(--line);max-width:90%}.chat-bubble.mine{margin-left:auto;background:#253b68}.chat-meta{font-size:12px;color:#b7c6e2}.chat-compose{display:grid;gap:9px;margin-top:12px}.chat-compose textarea{width:100%;min-height:78px;padding:12px;border:1px solid #435779;border-radius:10px;background:#091326;color:#fff;font:inherit}.chat-thread{padding:14px;border:1px solid var(--line);border-radius:14px;margin:12px 0;background:#101d35}.portal-count-badge{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;padding:0 7px;margin-left:7px;border-radius:20px;background:#e05268;color:#fff;font-size:12px;font-weight:900;vertical-align:middle}.portal-notice-line{padding:10px 13px;border:1px solid #46649b;border-radius:10px;background:#142443;color:#dce7ff;margin:10px 0}
 </style>
 </head>
 <body>
@@ -107,7 +107,7 @@
     </div>
     <div class="portal-panel"><h3>Available remote jobs</h3><div id="mt-jobs-list"><p class="portal-muted">Loading opportunities…</p></div></div>
     <div class="portal-panel"><h3 id="mt-activity-heading">Your activity</h3><p class="portal-muted" id="mt-activity-help">Your job posts and applications will appear here.</p><div id="mt-activity"><p class="portal-muted">Sign in to see your jobs or applications.</p></div></div>
-    <div class="portal-panel" id="mt-messaging"><h3>Messages / Inbox</h3><p class="portal-muted">Chat privately with employers or applicants about a specific job application. Sign in to view and reply to messages.</p><div class="portal-actions"><button class="btn secondary" id="mt-inbox-refresh" type="button">Refresh inbox</button></div><div id="mt-inbox"><p class="portal-muted">Your conversations will appear here.</p></div><form id="mt-chat-form" class="chat-compose portal-hidden"><input type="hidden" id="mt-chat-application"><input type="hidden" id="mt-chat-recipient"><p class="portal-muted" id="mt-chat-with"></p><textarea id="mt-chat-body" maxlength="4000" required placeholder="Write your message…"></textarea><div class="portal-actions"><button class="btn primary" type="submit">Send message</button><button class="btn secondary" id="mt-chat-cancel" type="button">Close reply</button></div></form></div>
+    <div class="portal-panel" id="mt-messaging"><h3>Messages / Inbox <span id="mt-unread-badge" class="portal-count-badge portal-hidden" aria-label="Unread messages">0</span></h3><p id="mt-inbox-notice" class="portal-notice-line portal-hidden" role="status"></p><p class="portal-muted">Chat privately with employers or applicants about a specific job application. Sign in to view and reply to messages.</p><div class="portal-actions"><button class="btn secondary" id="mt-inbox-refresh" type="button">Refresh inbox</button></div><div id="mt-inbox"><p class="portal-muted">Your conversations will appear here.</p></div><form id="mt-chat-form" class="chat-compose portal-hidden"><input type="hidden" id="mt-chat-application"><input type="hidden" id="mt-chat-recipient"><p class="portal-muted" id="mt-chat-with"></p><textarea id="mt-chat-body" maxlength="4000" required placeholder="Write your message…"></textarea><div class="portal-actions"><button class="btn primary" type="submit">Send message</button><button class="btn secondary" id="mt-chat-cancel" type="button">Close reply</button></div></form></div>
   </div>
 </div>
 </section>
@@ -240,12 +240,20 @@
     show("mt-chat-form",true);$("mt-chat-body").focus();
     $("mt-messaging").scrollIntoView({behavior:"smooth",block:"start"});
     await loadMessages();
+    const {error:readError}=await client.from("job_messages").update({read_at:new Date().toISOString()}).eq("application_id",applicationId).eq("recipient_id",currentUser.id).is("read_at",null);
+    if(readError)console.warn("Could not mark conversation read:",readError.message);
+    await loadMessages();
   }
   async function loadMessages(){
     if(!currentUser)return;
     const inbox=$("mt-inbox");
     const {data:messages,error}=await client.from("job_messages").select("id,application_id,sender_id,recipient_id,body,created_at,read_at").or("sender_id.eq."+currentUser.id+",recipient_id.eq."+currentUser.id).order("created_at",{ascending:true}).limit(300);
     if(error)throw error;
+    const unreadCount=(messages||[]).filter(m=>m.recipient_id===currentUser.id&&!m.read_at).length;
+    const badge=$("mt-unread-badge"),notice=$("mt-inbox-notice");
+    badge.textContent=String(unreadCount);show("mt-unread-badge",unreadCount>0);
+    notice.textContent=unreadCount===1?"You have 1 unread message.":unreadCount>1?"You have "+unreadCount+" unread messages.":"You are all caught up.";
+    show("mt-inbox-notice",unreadCount>0);
     const appIds=[...new Set((messages||[]).map(m=>m.application_id))];
     if(!appIds.length){inbox.innerHTML='<p class="portal-muted">No messages yet. Use “Message employer” or “Message applicant” on an application to start a conversation.</p>';return;}
     const {data:apps,error:appError}=await client.from("applications").select("id,job_id,applicant_id").in("id",appIds);
@@ -265,14 +273,16 @@
       const bubbles=items.map(m=>'<div class="chat-bubble '+(m.sender_id===currentUser.id?'mine':'')+'"><div class="chat-meta">'+(m.sender_id===currentUser.id?'You':escapeHtml(otherName))+' · '+escapeHtml(new Date(m.created_at).toLocaleString())+'</div><div>'+escapeHtml(m.body)+'</div></div>').join("");
       return '<article class="chat-thread"><h3>'+escapeHtml(job.title)+'</h3><p class="portal-muted">Conversation with '+escapeHtml(otherName)+' · '+escapeHtml(job.company_name)+'</p>'+bubbles+'<button type="button" class="btn secondary mt-start-chat" data-chat-app="'+escapeHtml(appId)+'" data-chat-recipient="'+escapeHtml(otherId)+'" data-chat-label="'+escapeHtml(otherName)+'">Reply</button></article>';
     }).join("")||'<p class="portal-muted">No conversations available yet.</p>';
-    const unread=(messages||[]).filter(m=>m.recipient_id===currentUser.id&&!m.read_at).map(m=>m.id);
-    if(unread.length){const {error:updateError}=await client.from("job_messages").update({read_at:new Date().toISOString()}).in("id",unread);if(updateError)console.warn("Could not mark messages read:",updateError.message);}
   }
   $("mt-inbox").addEventListener("click",async e=>{
     const b=e.target.closest(".mt-start-chat");if(!b)return;
     try{await openChat(b.dataset.chatApp,b.dataset.chatRecipient,b.dataset.chatLabel||"Contact");}catch(err){say(err.message||"Could not open conversation.","error");}
   });
   $("mt-inbox-refresh").addEventListener("click",async()=>{try{await loadMessages();say("Inbox refreshed.","ok");}catch(err){say(err.message||"Could not refresh inbox.","error");}});
+  // Refresh inbox and employer application counts while the member portal is open.
+  let portalRefreshTimer=null;
+  function startPortalRefresh(){if(portalRefreshTimer)clearInterval(portalRefreshTimer);portalRefreshTimer=setInterval(async()=>{if(!currentUser||document.hidden)return;try{await loadMessages();if(currentProfile?.account_type==="employer")await loadActivity();}catch(err){console.warn("Background portal refresh failed:",err.message);}},30000);}
+  document.addEventListener("visibilitychange",()=>{if(!document.hidden&&currentUser){loadMessages().catch(()=>{});if(currentProfile?.account_type==="employer")loadActivity().catch(()=>{});}});
   $("mt-chat-form").addEventListener("submit",async e=>{
     e.preventDefault();const body=$("mt-chat-body").value.trim();if(!body)return;
     const application_id=$("mt-chat-application").value,recipient_id=$("mt-chat-recipient").value;
@@ -287,7 +297,7 @@
 
   async function setSession(user) {
     currentUser=user||null;
-    if(!user){currentProfile=null;show("mt-member-area",false);$("mt-account-state").textContent="You are not signed in.";return;}
+    if(!user){currentProfile=null;if(portalRefreshTimer){clearInterval(portalRefreshTimer);portalRefreshTimer=null;}show("mt-member-area",false);$("mt-account-state").textContent="You are not signed in.";return;}
     await ensureProfile(user);
     show("mt-member-area",true);
     const roleLabel=currentProfile.account_type==="employer"?"Employer / Recruiter":"Job seeker";$("mt-account-state").textContent="Signed in as "+user.email+" · "+roleLabel;$("mt-last-account").textContent="Current account: "+roleLabel+" ("+user.email+"). Passwords are never saved here.";
@@ -295,7 +305,7 @@
     $("mt-dashboard-copy").textContent=currentProfile.account_type==="employer"?"Submit remote opportunities for review and manage your listings.":"Browse approved jobs, apply and track your applications.";
     show("mt-job-form",currentProfile.account_type==="employer");
     show("mt-apply-form",currentProfile.account_type==="job_seeker");
-    await loadJobs(); await loadActivity(); await loadMessages();
+    await loadJobs(); await loadActivity(); await loadMessages(); startPortalRefresh();
   }
   async function start() {
     try{const savedEmail=localStorage.getItem("mt_jobs_last_email");const savedRole=localStorage.getItem("mt_jobs_last_role");if(savedEmail)$("mt-login-email").value=savedEmail;if(savedRole)$("mt-login-role").value=savedRole;if(savedEmail)$("mt-last-account").textContent="Last used account: "+(savedRole==="employer"?"Employer / Recruiter":"Job seeker")+" · "+savedEmail+". Password not saved.";}catch(e){}
