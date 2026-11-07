@@ -186,7 +186,21 @@
       $("mt-activity-help").textContent="Track the progress of jobs you have applied for.";
       const {data,error}=await client.from("applications").select("id,status,created_at,job_id").eq("applicant_id",currentUser.id).order("created_at",{ascending:false}).limit(30);
       if(error) throw error;
-      activity.innerHTML=data?.length?data.map(a=>'<div class="portal-job"><strong>Application submitted</strong><p>Status: '+escapeHtml(a.status)+'</p></div>').join(""):'<p class="portal-muted">You have not applied for any jobs yet.</p>';
+      const appliedJobIds=[...new Set((data||[]).map(a=>a.job_id))];
+      let appliedJobs=[];
+      if(appliedJobIds.length){
+        const {data:jobData,error:jobError}=await client.from("jobs").select("id,title,company_name").in("id",appliedJobIds);
+        if(jobError) throw jobError;
+        appliedJobs=jobData||[];
+      }
+      const appliedJobById=new Map(appliedJobs.map(j=>[j.id,j]));
+      const statusLabels={submitted:"Pending employer review",reviewing:"Under review",shortlisted:"Shortlisted",rejected:"Not selected"};
+      activity.innerHTML=data?.length?data.map(a=>{
+        const job=appliedJobById.get(a.job_id)||{};
+        const label=statusLabels[a.status]||a.status;
+        const date=a.created_at?new Date(a.created_at).toLocaleDateString():"";
+        return '<article class="portal-job"><h3>'+escapeHtml(job.title||"Job application")+'</h3><small>'+escapeHtml(job.company_name||"Company")+(date?' · Applied on '+escapeHtml(date):'')+'</small><p><strong>Application status:</strong> '+escapeHtml(label)+'</p></article>';
+      }).join(""):'<p class="portal-muted">You have not applied for any jobs yet.</p>';
     }
   }
   $("mt-activity").addEventListener("click",async e=>{
