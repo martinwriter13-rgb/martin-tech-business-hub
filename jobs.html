@@ -137,6 +137,22 @@ body.portal-member-mode #portal-app>.portal-app{margin:0;padding:24px;border-col
 .hero-art{background:linear-gradient(145deg,#172e59c9,#171533d9),url('https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1100&q=85') center/cover}
 @media(max-width:760px){.hero{padding:34px 20px;margin-top:14px;border-radius:18px}}
 
+
+/* Individual photographic backgrounds for the six career-area cards */
+#opportunities .career-card{position:relative;isolation:isolate;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;min-height:220px;padding:22px;background-size:cover;background-position:center;border:1px solid #ffffff45;box-shadow:0 12px 30px #0005}
+#opportunities .career-card:before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(0deg,rgba(3,8,20,.96) 0%,rgba(3,8,20,.72) 48%,rgba(3,8,20,.20) 100%)}
+#opportunities .career-card .ico,#opportunities .career-card h3,#opportunities .career-card p{position:relative;color:#fff;text-shadow:0 2px 8px #000}
+#opportunities .career-card .ico{font-size:30px;margin-bottom:5px}
+#opportunities .career-card h3{font-size:20px;margin:4px 0 6px}
+#opportunities .career-card p{font-size:14px;color:#f0f4ff}
+#opportunities .career-card:nth-child(1){background-image:url('https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=900&q=85')}
+#opportunities .career-card:nth-child(2){background-image:url('https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?auto=format&fit=crop&w=900&q=85')}
+#opportunities .career-card:nth-child(3){background-image:url('https://images.unsplash.com/photo-1455390582262-044c87d277a4?auto=format&fit=crop&w=900&q=85')}
+#opportunities .career-card:nth-child(4){background-image:url('https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=900&q=85')}
+#opportunities .career-card:nth-child(5){background-image:url('https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=900&q=85')}
+#opportunities .career-card:nth-child(6){background-image:url('https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=85')}
+@media(max-width:520px){#opportunities .career-card{min-height:205px}}
+
 </style>
 </head>
 <body>
@@ -178,12 +194,12 @@ body.portal-member-mode #portal-app>.portal-app{margin:0;padding:24px;border-col
 </section>
 
 <section class="wrap" id="opportunities"><div class="heading"><h2>Explore online career areas</h2><p>Discover the kinds of opportunities the portal is being built to support.</p></div><div class="grid">
-<article class="card"><div class="ico">🌍</div><h3>Remote employment</h3><p>Full-time and part-time roles that can be performed online from different locations.</p></article>
-<article class="card"><div class="ico">🧑‍💻</div><h3>Virtual assistance</h3><p>Administrative support, scheduling, customer care and online operations.</p></article>
-<article class="card"><div class="ico">✍️</div><h3>Writing & research</h3><p>Content writing, editing, research support and documentation projects.</p></article>
-<article class="card"><div class="ico">🤖</div><h3>AI tasks & data</h3><p>AI evaluation, data annotation, transcription and digital task projects.</p></article>
-<article class="card"><div class="ico">📣</div><h3>Marketing & sales</h3><p>Social media, lead generation, online sales and digital marketing roles.</p></article>
-<article class="card"><div class="ico">🎨</div><h3>Creative & tech</h3><p>Graphic design, video editing, web development and other digital services.</p></article>
+<article class="card career-card"><div class="ico">🌍</div><h3>Remote employment</h3><p>Full-time and part-time roles that can be performed online from different locations.</p></article>
+<article class="card career-card"><div class="ico">🧑‍💻</div><h3>Virtual assistance</h3><p>Administrative support, scheduling, customer care and online operations.</p></article>
+<article class="card career-card"><div class="ico">✍️</div><h3>Writing & research</h3><p>Content writing, editing, research support and documentation projects.</p></article>
+<article class="card career-card"><div class="ico">🤖</div><h3>AI tasks & data</h3><p>AI evaluation, data annotation, transcription and digital task projects.</p></article>
+<article class="card career-card"><div class="ico">📣</div><h3>Marketing & sales</h3><p>Social media, lead generation, online sales and digital marketing roles.</p></article>
+<article class="card career-card"><div class="ico">🎨</div><h3>Creative & tech</h3><p>Graphic design, video editing, web development and other digital services.</p></article>
 </div></section>
 <section class="wrap"><div class="heading"><h2>Two account types. One global community.</h2><p>Separate workspaces will be provided for people hiring and people looking for work.</p></div><div class="roles">
 <article class="role"><div class="ico">🏢</div><h3>For employers</h3><p class="lead">Find the right people for your remote team or project.</p><ul><li>Create a company or client profile</li><li>Publish jobs and freelance projects</li><li>Review applications and shortlist candidates</li><li>Manage job posts from an employer dashboard</li></ul><a class="btn secondary" href="#register">Employer registration</a></article>
