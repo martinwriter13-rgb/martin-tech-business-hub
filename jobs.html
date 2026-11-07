@@ -137,9 +137,10 @@
   function renderJobs() {
     const list=$("mt-jobs-list"), select=$("mt-apply-job");
     if(!jobs.length){list.innerHTML='<p class="portal-muted">No approved jobs are listed yet. Check again soon.</p>';select.innerHTML='<option value="">No active jobs yet</option>';return;}
-    list.innerHTML=jobs.map(j=>'<article class="portal-job"><h3>'+escapeHtml(j.title)+'</h3><small>'+escapeHtml(j.company_name)+' · '+escapeHtml(j.category)+' · '+escapeHtml(j.employment_type)+' · '+escapeHtml(j.location)+'</small><p>'+escapeHtml(j.description)+'</p>'+(j.salary_range?'<p><strong>Pay:</strong> '+escapeHtml(j.salary_range)+'</p>':'')+'</article>').join("");
+    list.innerHTML=jobs.map(j=>'<article class="portal-job"><h3>'+escapeHtml(j.title)+'</h3><small>'+escapeHtml(j.company_name)+' · '+escapeHtml(j.category)+' · '+escapeHtml(j.employment_type)+' · '+escapeHtml(j.location)+'</small><p>'+escapeHtml(j.description)+'</p>'+(j.salary_range?'<p><strong>Pay:</strong> '+escapeHtml(j.salary_range)+'</p>':'')+'<button type="button" class="btn primary mt-choose-job" data-job-id="'+escapeHtml(j.id)+'">Apply for this job</button></article>').join("");
     select.innerHTML='<option value="">Choose a job</option>'+jobs.map(j=>'<option value="'+j.id+'">'+escapeHtml(j.title)+' — '+escapeHtml(j.company_name)+'</option>').join("");
   }
+  $("mt-jobs-list").addEventListener("click",e=>{const button=e.target.closest(".mt-choose-job");if(!button)return;const select=$("mt-apply-job");select.value=button.dataset.jobId;show("mt-apply-form",true);$("mt-apply-form").scrollIntoView({behavior:"smooth",block:"center"});$("mt-cover").focus();say("Job selected. Write your application message below.","ok");});
   async function loadJobs() {
     const {data,error}=await client.from("jobs").select("id,title,company_name,category,employment_type,location,description,salary_range").eq("status","active").order("created_at",{ascending:false}).limit(50);
     if(error) throw error; jobs=data||[]; renderJobs();
