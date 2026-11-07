@@ -107,7 +107,7 @@
     </div>
     <div class="portal-panel"><h3>Available remote jobs</h3><div id="mt-jobs-list"><p class="portal-muted">Loading opportunities…</p></div></div>
     <div class="portal-panel"><h3 id="mt-activity-heading">Your activity</h3><p class="portal-muted" id="mt-activity-help">Your job posts and applications will appear here.</p><div id="mt-activity"><p class="portal-muted">Sign in to see your jobs or applications.</p></div></div>
-    <div class="portal-panel" id="mt-messaging"><h3>Messages / Inbox</h3><p class="portal-muted">Chat privately with employers or applicants about a specific job application. Sign in to view and reply to messages.</p><div id="mt-inbox"><p class="portal-muted">Your conversations will appear here.</p></div><form id="mt-chat-form" class="chat-compose portal-hidden"><input type="hidden" id="mt-chat-application"><input type="hidden" id="mt-chat-recipient"><p class="portal-muted" id="mt-chat-with"></p><textarea id="mt-chat-body" maxlength="4000" required placeholder="Write your message…"></textarea><div class="portal-actions"><button class="btn primary" type="submit">Send message</button><button class="btn secondary" id="mt-chat-cancel" type="button">Close reply</button></div></form></div>
+    <div class="portal-panel" id="mt-messaging"><h3>Messages / Inbox</h3><p class="portal-muted">Chat privately with employers or applicants about a specific job application. Sign in to view and reply to messages.</p><div class="portal-actions"><button class="btn secondary" id="mt-inbox-refresh" type="button">Refresh inbox</button></div><div id="mt-inbox"><p class="portal-muted">Your conversations will appear here.</p></div><form id="mt-chat-form" class="chat-compose portal-hidden"><input type="hidden" id="mt-chat-application"><input type="hidden" id="mt-chat-recipient"><p class="portal-muted" id="mt-chat-with"></p><textarea id="mt-chat-body" maxlength="4000" required placeholder="Write your message…"></textarea><div class="portal-actions"><button class="btn primary" type="submit">Send message</button><button class="btn secondary" id="mt-chat-cancel" type="button">Close reply</button></div></form></div>
   </div>
 </div>
 </section>
@@ -268,6 +268,7 @@
     const b=e.target.closest(".mt-start-chat");if(!b)return;
     try{await openChat(b.dataset.chatApp,b.dataset.chatRecipient,b.dataset.chatLabel||"Contact");}catch(err){say(err.message||"Could not open conversation.","error");}
   });
+  $("mt-inbox-refresh").addEventListener("click",async()=>{try{await loadMessages();say("Inbox refreshed.","ok");}catch(err){say(err.message||"Could not refresh inbox.","error");}});
   $("mt-chat-form").addEventListener("submit",async e=>{
     e.preventDefault();const body=$("mt-chat-body").value.trim();if(!body)return;
     const application_id=$("mt-chat-application").value,recipient_id=$("mt-chat-recipient").value;
