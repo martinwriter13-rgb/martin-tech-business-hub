@@ -132,10 +132,11 @@ body.portal-member-mode #portal-app>.portal-app{margin:0;padding:24px;border-col
       <div class="cartoon-controls">
         <button type="button" id="mt-cartoon-prev" aria-label="Previous explanation">← Back</button>
         <button type="button" id="mt-cartoon-play" aria-pressed="true">Pause animation</button>
+        <button type="button" id="mt-cartoon-sound" aria-pressed="false">🔊 Turn sound on</button>
         <button type="button" id="mt-cartoon-next">Next →</button>
         <span class="cartoon-dots" id="mt-cartoon-dots" aria-label="Tour progress"><i class="cartoon-dot active"></i><i class="cartoon-dot"></i><i class="cartoon-dot"></i><i class="cartoon-dot"></i><i class="cartoon-dot"></i></span>
       </div>
-      <div class="cartoon-footnote">Animated on-screen guide with captions. No sound is required.</div>
+      <div class="cartoon-footnote">Turn on sound to hear the guide narrate each step. You can switch sound off at any time.</div>
     </div>
   </div>
 </section>
@@ -603,7 +604,8 @@ body.portal-member-mode #portal-app>.portal-app{margin:0;padding:24px;border-col
   const prev=document.getElementById("mt-cartoon-prev");
   const next=document.getElementById("mt-cartoon-next");
   const play=document.getElementById("mt-cartoon-play");
-  if(!bubble||!caption||!prev||!next||!play)return;
+  const sound=document.getElementById("mt-cartoon-sound");
+  if(!bubble||!caption||!prev||!next||!play||!sound)return;
   const scenes=[
     {say:"Hi! I'm your guide. Let's find the right opportunity for you.",text:"Welcome! This portal brings job seekers and employers together for remote work and online projects."},
     {say:"Job seeker? Create your account and introduce yourself.",text:"Job seekers: register, build your professional profile, add your skills and upload a CV."},
@@ -611,12 +613,23 @@ body.portal-member-mode #portal-app>.portal-app{margin:0;padding:24px;border-col
     {say:"Employer? Create your account and post a vacancy.",text:"Employers: create a company profile and submit remote job opportunities for review and approval."},
     {say:"Track progress and chat privately about an application.",text:"Both sides: employers review applicants and update application status; job seekers track progress and message employers through the portal."}
   ];
-  let index=0,playing=!window.matchMedia("(prefers-reduced-motion: reduce)").matches,timer=null;
+  let index=0,playing=!window.matchMedia("(prefers-reduced-motion: reduce)").matches,timer=null,soundOn=false;
+  const voice=window.speechSynthesis;
+  function speak(){
+    if(!soundOn||!voice||!window.SpeechSynthesisUtterance)return;
+    voice.cancel();
+    const line=new SpeechSynthesisUtterance(scenes[index].say+" "+scenes[index].text);
+    line.rate=0.96;line.pitch=1.04;line.volume=1;
+    const voices=voice.getVoices();
+    line.voice=voices.find(v=>/^en[-_](KE|GB|US)/i.test(v.lang))||voices.find(v=>/^en/i.test(v.lang))||null;
+    voice.speak(line);
+  }
   function render(){
     bubble.textContent=scenes[index].say;
     caption.textContent=scenes[index].text;
     dots.forEach((dot,i)=>dot.classList.toggle("active",i===index));
     bubble.style.animation="none";void bubble.offsetWidth;bubble.style.animation="";
+    speak();
   }
   function stop(){if(timer){clearInterval(timer);timer=null;}}
   function start(){stop();if(playing)timer=setInterval(()=>{index=(index+1)%scenes.length;render();},6500);}
@@ -627,9 +640,17 @@ body.portal-member-mode #portal-app>.portal-app{margin:0;padding:24px;border-col
     playing=!playing;
     play.textContent=playing?"Pause animation":"Play animation";
     play.setAttribute("aria-pressed",String(playing));
+    if(!playing&&voice)voice.cancel();
     start();
   });
-  document.addEventListener("visibilitychange",()=>{if(document.hidden)stop();else start();});
+  sound.addEventListener("click",()=>{
+    soundOn=!soundOn;
+    sound.textContent=soundOn?"🔇 Turn sound off":"🔊 Turn sound on";
+    sound.setAttribute("aria-pressed",String(soundOn));
+    if(soundOn){if(voice){voice.getVoices();}speak();}
+    else if(voice)voice.cancel();
+  });
+  document.addEventListener("visibilitychange",()=>{if(document.hidden){stop();if(voice)voice.cancel();}else start();});
   render();start();
 })();
 </script>
