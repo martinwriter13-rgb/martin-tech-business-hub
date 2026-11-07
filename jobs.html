@@ -193,17 +193,24 @@ body.portal-member-mode #portal-app>.portal-app{margin:0;padding:24px;border-col
     const select=$("mt-apply-job");select.value=button.dataset.jobId;show("mt-apply-form",true);$("mt-apply-form").scrollIntoView({behavior:"smooth",block:"center"});$("mt-cover").focus();say("Job selected. Write your application message below.","ok");
   });
   let marketTab="best";
+  let myApplicationByJob=new Map();
   function savedJobIds(){try{return JSON.parse(localStorage.getItem("mt_saved_jobs_"+(currentUser?.id||""))||"[]");}catch(e){return [];}}
   function renderMarket(){
     if(!currentUser||currentProfile?.account_type!=="job_seeker")return;
     const q=($("mt-job-search")?.value||"").trim().toLowerCase();let rows=[...jobs];
     if(marketTab==="saved"){const ids=savedJobIds();rows=rows.filter(j=>ids.includes(j.id));}
     if(marketTab==="invites"){rows=[];}
+    if(marketTab==="best"||marketTab==="recent"){rows=rows.filter(j=>!myApplicationByJob.has(j.id));}
     if(q)rows=rows.filter(j=>[j.title,j.company_name,j.category,j.description,j.location,j.employment_type].join(" ").toLowerCase().includes(q));
     $("mt-market-count").textContent=marketTab==="invites"?"Interview invitations and employer requests will appear here.":rows.length+" opportunities found";
-    if(marketTab==="invites"){$("mt-market-jobs").innerHTML='<div class="market-empty">You do not have any interview invitations yet. When an employer invites you to interview, it will appear in your application activity.</div>';return;}
-    if(!rows.length){$("mt-market-jobs").innerHTML='<div class="market-empty">'+(marketTab==="saved"?"You have not saved any jobs yet.":"No matching jobs found. Try another search.")+'</div>';return;}
-    $("mt-market-jobs").innerHTML=rows.map(j=>{const saved=savedJobIds().includes(j.id);const posted=j.created_at?new Date(j.created_at).toLocaleDateString():"Recently";return '<article class="market-job"><h3>'+escapeHtml(j.title)+'</h3><div class="meta">'+escapeHtml(j.company_name||"Client")+' · '+escapeHtml(j.location||"Remote")+' · Posted '+escapeHtml(posted)+'</div><div class="market-tags"><span class="market-tag">'+escapeHtml(j.employment_type||"Remote")+'</span><span class="market-tag">'+escapeHtml(j.category||"Online work")+'</span></div>'+(j.salary_range?'<p><strong>Budget / pay:</strong> '+escapeHtml(j.salary_range)+'</p>':'')+'<div class="job-desc">'+escapeHtml((j.description||"").slice(0,650))+(j.description?.length>650?"…":"")+'</div><div class="market-card-actions"><button type="button" class="btn primary mt-choose-job" data-job-id="'+escapeHtml(j.id)+'">Apply now</button><button type="button" class="market-save mt-save-job" data-job-id="'+escapeHtml(j.id)+'">'+(saved?"♥ Saved":"♡ Save job")+'</button></div></article>';}).join("");
+    if(marketTab==="invites"){$("mt-market-jobs").innerHTML='<div class="market-empty">Interview invitations will appear in your application activity.</div>';return;}
+    if(!rows.length){$("mt-market-jobs").innerHTML='<div class="market-empty">'+(marketTab==="saved"?"You have not saved any jobs yet.":"No matching new jobs found.")+'</div>';return;}
+    $("mt-market-jobs").innerHTML=rows.map(j=>{
+      const saved=savedJobIds().includes(j.id),application=myApplicationByJob.get(j.id);
+      const posted=j.created_at?new Date(j.created_at).toLocaleDateString():"Recently";
+      const statusText=application?(({submitted:"Application submitted",reviewing:"Under review",shortlisted:"Shortlisted",interview:"Interview invited",hired:"Hired",rejected:"Not selected"})[application.status]||"Applied"):"";
+      return '<article class="market-job"><h3>'+escapeHtml(j.title)+'</h3><div class="meta">'+escapeHtml(j.company_name||"Client")+' · '+escapeHtml(j.location||"Remote")+' · Posted '+escapeHtml(posted)+'</div><div class="market-tags"><span class="market-tag">'+escapeHtml(j.employment_type||"Remote")+'</span><span class="market-tag">'+escapeHtml(j.category||"Online work")+'</span></div>'+(j.salary_range?'<p><strong>Budget / pay:</strong> '+escapeHtml(j.salary_range)+'</p>':'')+'<div class="job-desc">'+escapeHtml((j.description||"").slice(0,650))+(j.description?.length>650?"…":"")+'</div>'+(application?'<p class="market-tag">'+escapeHtml(statusText)+'</p>':'<div class="market-card-actions"><button type="button" class="btn primary mt-choose-job" data-job-id="'+escapeHtml(j.id)+'">Apply now</button></div>')+'<div class="market-card-actions"><button type="button" class="market-save mt-save-job" data-job-id="'+escapeHtml(j.id)+'">'+(saved?"♥ Saved":"♡ Save job")+'</button></div></article>';
+    }).join("");
   }
   $("mt-jobseeker-market").addEventListener("click",e=>{const tab=e.target.closest("[data-market-tab]");if(tab){marketTab=tab.dataset.marketTab;document.querySelectorAll("[data-market-tab]").forEach(b=>b.classList.toggle("active",b===tab));renderMarket();return;}const save=e.target.closest(".mt-save-job");if(save){const ids=savedJobIds();const next=ids.includes(save.dataset.jobId)?ids.filter(x=>x!==save.dataset.jobId):[...ids,save.dataset.jobId];try{localStorage.setItem("mt_saved_jobs_"+currentUser.id,JSON.stringify(next));}catch(err){}renderMarket();}});
   $("mt-search-button").addEventListener("click",renderMarket);$("mt-job-search").addEventListener("input",renderMarket);
@@ -251,6 +258,8 @@ body.portal-member-mode #portal-app>.portal-app{margin:0;padding:24px;border-col
       $("mt-activity-help").textContent="Track the progress of jobs you have applied for.";
       const {data,error}=await client.from("applications").select("id,status,created_at,job_id").eq("applicant_id",currentUser.id).order("created_at",{ascending:false}).limit(30);
       if(error) throw error;
+      myApplicationByJob=new Map((data||[]).map(a=>[a.job_id,{id:a.id,status:a.status}]));
+      renderMarket();
       const appliedJobIds=[...new Set((data||[]).map(a=>a.job_id))];
       let appliedJobs=[];
       if(appliedJobIds.length){
