@@ -317,6 +317,7 @@ body.portal-member-mode #portal-app>.portal-app{margin:0;padding:24px;border-col
   async function openChat(applicationId,recipientId,label){
     if(!recipientId){say("The other account could not be identified for this application.","error");return;}
     selectedChatApplicationId=applicationId;
+    show("mt-profile-panel",false);show("mt-job-form",false);show("mt-activity-panel",false);show("mt-messaging",true);
     $("mt-chat-application").value=applicationId;$("mt-chat-recipient").value=recipientId;
     $("mt-chat-with").textContent="Replying to: "+label;
     show("mt-inbox",false);show("mt-inbox-actions",false);show("mt-chat-room",true);
