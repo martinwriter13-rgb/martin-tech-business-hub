@@ -103,7 +103,7 @@
       <div class="portal-actions"><button id="mt-refresh" class="btn secondary" type="button">Refresh jobs</button></div>
     </div>
     <div class="portal-panel"><h3>Available remote jobs</h3><div id="mt-jobs-list"><p class="portal-muted">Loading opportunities…</p></div></div>
-    <div class="portal-panel"><h3>Your activity</h3><div id="mt-activity"><p class="portal-muted">Sign in to see your jobs or applications.</p></div></div>
+    <div class="portal-panel"><h3 id="mt-activity-heading">Your activity</h3><p class="portal-muted" id="mt-activity-help">Your job posts and applications will appear here.</p><div id="mt-activity"><p class="portal-muted">Sign in to see your jobs or applications.</p></div></div>
   </div>
 </div>
 </section>
@@ -147,16 +147,57 @@
   }
   async function loadActivity() {
     if(!currentUser)return;
+    const activity=$("mt-activity");
     if(currentProfile.account_type==="employer"){
-      const {data,error}=await client.from("jobs").select("id,title,status,created_at").eq("employer_id",currentUser.id).order("created_at",{ascending:false}).limit(30);
-      if(error) throw error;
-      $("mt-activity").innerHTML=data?.length?data.map(j=>'<div class="portal-job"><strong>'+escapeHtml(j.title)+'</strong><p>Status: '+escapeHtml(j.status)+'</p></div>').join(""):'<p class="portal-muted">You have not submitted any jobs yet.</p>';
+      $("mt-activity-heading").textContent="Applicants and job management";
+      $("mt-activity-help").textContent="Review applicants for your vacancies, open their CVs and update application progress.";
+      const {data:ownJobs,error:jobsError}=await client.from("jobs").select("id,title,status,created_at").eq("employer_id",currentUser.id).order("created_at",{ascending:false}).limit(50);
+      if(jobsError) throw jobsError;
+      if(!ownJobs?.length){activity.innerHTML='<p class="portal-muted">You have not submitted any jobs yet.</p>';return;}
+      const jobTitle=new Map(ownJobs.map(j=>[j.id,j.title]));
+      const jobIds=ownJobs.map(j=>j.id);
+      const {data:apps,error:appsError}=await client.from("applications").select("id,job_id,applicant_id,cover_message,cv_path,status,created_at").in("job_id",jobIds).order("created_at",{ascending:false}).limit(100);
+      if(appsError) throw appsError;
+      let profiles=[];
+      const applicantIds=[...new Set((apps||[]).map(a=>a.applicant_id))];
+      if(applicantIds.length){
+        const {data,error}=await client.from("profiles").select("id,full_name,country,headline,bio").in("id",applicantIds);
+        if(error) throw error;
+        profiles=data||[];
+      }
+      const profileById=new Map(profiles.map(p=>[p.id,p]));
+      if(!apps?.length){
+        activity.innerHTML=ownJobs.map(j=>'<div class="portal-job"><strong>'+escapeHtml(j.title)+'</strong><p>Listing status: '+escapeHtml(j.status)+'</p><p class="portal-muted">No applications received yet.</p></div>').join("");
+        return;
+      }
+      const cards=await Promise.all(apps.map(async a=>{
+        const p=profileById.get(a.applicant_id)||{};
+        let cvLink="";
+        if(a.cv_path){
+          const {data,error}=await client.storage.from("job-cvs").createSignedUrl(a.cv_path,300);
+          if(!error&&data?.signedUrl)cvLink='<p><a class="btn secondary" href="'+escapeHtml(data.signedUrl)+'" target="_blank" rel="noopener">Open CV (5-minute link)</a></p>';
+        }
+        return '<article class="portal-job"><h3>'+escapeHtml(p.full_name||"Applicant")+'</h3><small>Applied for: '+escapeHtml(jobTitle.get(a.job_id)||"Your job")+' · '+escapeHtml(p.country||"Country not provided")+'</small>'+(p.headline?'<p><strong>Profile:</strong> '+escapeHtml(p.headline)+'</p>':'')+'<p><strong>Application:</strong><br>'+escapeHtml(a.cover_message||"No message supplied")+'</p>'+cvLink+'<p><strong>Status:</strong> '+escapeHtml(a.status)+'</p><div class="portal-actions"><button type="button" class="btn secondary" data-app-status="reviewing" data-app-id="'+escapeHtml(a.id)+'">Mark reviewing</button><button type="button" class="btn primary" data-app-status="shortlisted" data-app-id="'+escapeHtml(a.id)+'">Shortlist</button><button type="button" class="btn secondary" data-app-status="rejected" data-app-id="'+escapeHtml(a.id)+'">Reject</button></div></article>';
+      }));
+      activity.innerHTML=cards.join("");
     } else {
+      $("mt-activity-heading").textContent="Your applications";
+      $("mt-activity-help").textContent="Track the progress of jobs you have applied for.";
       const {data,error}=await client.from("applications").select("id,status,created_at,job_id").eq("applicant_id",currentUser.id).order("created_at",{ascending:false}).limit(30);
       if(error) throw error;
-      $("mt-activity").innerHTML=data?.length?data.map(a=>'<div class="portal-job"><strong>Application submitted</strong><p>Status: '+escapeHtml(a.status)+'</p></div>').join(""):'<p class="portal-muted">You have not applied for any jobs yet.</p>';
+      activity.innerHTML=data?.length?data.map(a=>'<div class="portal-job"><strong>Application submitted</strong><p>Status: '+escapeHtml(a.status)+'</p></div>').join(""):'<p class="portal-muted">You have not applied for any jobs yet.</p>';
     }
   }
+  $("mt-activity").addEventListener("click",async e=>{
+    const button=e.target.closest("[data-app-status]");
+    if(!button)return;
+    button.disabled=true;say("Updating application status…");
+    try{
+      const {error}=await client.from("applications").update({status:button.dataset.appStatus}).eq("id",button.dataset.appId);
+      if(error)throw error;
+      await loadActivity();say("Application status updated.","ok");
+    }catch(err){button.disabled=false;say(err.message||"Could not update application status.","error");}
+  });
   async function setSession(user) {
     currentUser=user||null;
     if(!user){currentProfile=null;show("mt-member-area",false);$("mt-account-state").textContent="You are not signed in.";return;}
