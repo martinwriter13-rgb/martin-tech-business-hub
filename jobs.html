@@ -217,6 +217,12 @@
     }
   }
   $("mt-activity").addEventListener("click",async e=>{
+    const chatButton=e.target.closest(".mt-start-chat");
+    if(chatButton){
+      try{await openChat(chatButton.dataset.chatApp,chatButton.dataset.chatRecipient,chatButton.dataset.chatLabel||"Contact");}
+      catch(err){say(err.message||"Could not open conversation.","error");}
+      return;
+    }
     const button=e.target.closest("[data-app-status]");
     if(!button)return;
     button.disabled=true;say("Updating application status…");
@@ -248,16 +254,14 @@
     const {data:jobRows,error:jobError}=await client.from("jobs").select("id,title,company_name,employer_id").in("id",jobIds);
     if(jobError)throw jobError;
     const appById=new Map((apps||[]).map(a=>[a.id,a])),jobById=new Map((jobRows||[]).map(j=>[j.id,j]));
-    const otherIds=[...new Set((apps||[]).map(a=>a.applicant_id===currentUser.id?jobById.get(a.job_id)?.employer_id:a.applicant_id).filter(Boolean))];
-    let otherProfiles=[];
-    if(otherIds.length){const {data,error:profileError}=await client.from("profiles").select("id,full_name").in("id",otherIds);if(profileError)throw profileError;otherProfiles=data||[];}
-    const names=new Map(otherProfiles.map(p=>[p.id,p.full_name]));
+    // Do not request another member's profile from the inbox: profile visibility
+    // is intentionally restricted. The job/company and role label are sufficient here.
     const groups=new Map();
     for(const m of messages||[]){if(!groups.has(m.application_id))groups.set(m.application_id,[]);groups.get(m.application_id).push(m);}
     inbox.innerHTML=[...groups.entries()].map(([appId,items])=>{
       const app=appById.get(appId),job=app&&jobById.get(app.job_id);if(!app||!job)return "";
       const otherId=app.applicant_id===currentUser.id?job.employer_id:app.applicant_id;
-      const otherName=names.get(otherId)||(app.applicant_id===currentUser.id?"Employer":"Applicant");
+      const otherName=app.applicant_id===currentUser.id?"Employer":"Applicant";
       const bubbles=items.map(m=>'<div class="chat-bubble '+(m.sender_id===currentUser.id?'mine':'')+'"><div class="chat-meta">'+(m.sender_id===currentUser.id?'You':escapeHtml(otherName))+' · '+escapeHtml(new Date(m.created_at).toLocaleString())+'</div><div>'+escapeHtml(m.body)+'</div></div>').join("");
       return '<article class="chat-thread"><h3>'+escapeHtml(job.title)+'</h3><p class="portal-muted">Conversation with '+escapeHtml(otherName)+' · '+escapeHtml(job.company_name)+'</p>'+bubbles+'<button type="button" class="btn secondary mt-start-chat" data-chat-app="'+escapeHtml(appId)+'" data-chat-recipient="'+escapeHtml(otherId)+'" data-chat-label="'+escapeHtml(otherName)+'">Reply</button></article>';
     }).join("")||'<p class="portal-muted">No conversations available yet.</p>';
