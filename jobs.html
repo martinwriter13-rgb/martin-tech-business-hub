@@ -52,6 +52,36 @@ body.portal-member-mode #portal-app>.portal-app{margin:0;padding:24px;border-col
 .market-save{background:transparent;border:1px solid #526b9e;color:#dce7ff;border-radius:10px;padding:10px 14px;cursor:pointer;font-weight:800}
 .market-empty{padding:28px;text-align:center;border:1px dashed #405779;border-radius:14px;color:var(--muted)}
 @media(max-width:600px){.market-search{grid-template-columns:1fr}.market-title{font-size:23px}}
+
+/* Site-wide phone layout guard: prevent narrow screens from squeezing or overflowing content. */
+@media (max-width: 760px) {
+  html, body { width:100%; max-width:100%; overflow-x:hidden; }
+  *, *::before, *::after { box-sizing:border-box; }
+  img, video, iframe, canvas, svg { max-width:100%; }
+  main, header, footer, section, article, aside, nav, form, .wrap, .container, .content, .panel, .card { min-width:0; }
+  .wrap, .container, .content { width:calc(100% - 28px); max-width:100%; margin-left:auto; margin-right:auto; }
+  .nav, header nav, .navbar { flex-wrap:wrap; gap:12px; }
+  .brand, .logo { min-width:0; max-width:100%; overflow-wrap:anywhere; }
+  .links, .nav-links, .actions { min-width:0; max-width:100%; flex-wrap:wrap; }
+  .hero, .about, .contact, .two-column, .two-col, .split-layout { grid-template-columns:minmax(0,1fr) !important; }
+  .hero > *, .about > *, .contact > *, .grid > *, .cards > *, .panel > * { min-width:0; }
+  .card, .panel, .hero-card, .about-box, .cta { max-width:100%; }
+  h1, h2, h3, p, a, button, label { overflow-wrap:anywhere; }
+  input, select, textarea, button { max-width:100%; min-width:0; }
+  input, select, textarea { width:100%; }
+  table { display:block; max-width:100%; overflow-x:auto; }
+  pre, code { max-width:100%; overflow-wrap:anywhere; }
+}
+@media (max-width: 520px) {
+  .wrap, .container, .content { width:calc(100% - 24px); }
+  .grid, .cards, .services-grid, .feature-grid { grid-template-columns:minmax(0,1fr) !important; }
+  .nav { padding-top:14px; padding-bottom:14px; }
+  .hero { gap:22px; padding-top:34px; padding-bottom:34px; }
+  .hero h1, h1 { font-size:clamp(30px,9vw,42px); line-height:1.12; letter-spacing:-.8px; }
+  h2 { font-size:clamp(23px,7vw,30px); }
+  .btn, button { white-space:normal; }
+  .cta { padding:20px; }
+}
 </style>
 </head>
 <body>
