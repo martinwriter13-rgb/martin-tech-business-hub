@@ -8,6 +8,23 @@
 :root{--bg:#070b18;--panel:#111b31;--panel2:#172440;--text:#f5f7ff;--muted:#aebbd5;--blue:#4f8cff;--purple:#9a6bff;--line:#ffffff1c}
 *{box-sizing:border-box}body{margin:0;color:var(--text);font:16px/1.65 Inter,system-ui,Segoe UI,sans-serif;background:radial-gradient(circle at 80% 0,#21194b 0,transparent 34%),radial-gradient(circle at 0 35%,#10254b 0,transparent 30%),var(--bg)}a{color:inherit;text-decoration:none}.wrap{width:min(1120px,92%);margin:auto}.top{display:flex;align-items:center;justify-content:space-between;padding:20px 0;border-bottom:1px solid var(--line);gap:18px}.brand{font-weight:900;letter-spacing:-.4px}.brand span{color:#8caeff}.nav{display:flex;gap:20px;color:var(--muted);font-size:14px}.btn{display:inline-flex;align-items:center;justify-content:center;padding:12px 18px;border-radius:12px;font-weight:800;border:1px solid var(--line);cursor:pointer}.primary{background:linear-gradient(100deg,#397dff,#895bff);border:0;color:white}.secondary{background:#121d34}.hero{padding:76px 0 52px;display:grid;grid-template-columns:1.1fr .9fr;gap:35px;align-items:center}.eyebrow{display:inline-block;padding:6px 12px;border:1px solid #46649b;border-radius:30px;background:#17264b;color:#c5d7ff;font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}.hero h1{font-size:clamp(42px,6vw,68px);line-height:1.04;letter-spacing:-2.5px;margin:20px 0}.gradient{background:linear-gradient(100deg,#72b4ff,#c1a0ff);color:transparent;background-clip:text}.lead{font-size:18px;color:var(--muted);max-width:650px}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:25px}.hero-art{min-height:310px;border:1px solid #5876b5;border-radius:25px;padding:25px;background:linear-gradient(145deg,#172e59d9,#171533eF),url('https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1100&q=85') center/cover;display:flex;flex-direction:column;justify-content:end;box-shadow:0 25px 70px #0008}.hero-art strong{font-size:25px}.hero-art p{color:#dce7ff;margin:6px 0 0}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px}.stat{padding:14px;border:1px solid var(--line);border-radius:14px;background:#ffffff0b}.stat b{display:block;font-size:20px}.stat small{color:var(--muted)}section{padding:38px 0}.heading{max-width:720px;margin-bottom:22px}.heading h2{font-size:32px;line-height:1.2;margin:0 0 8px}.heading p{margin:0;color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.card{padding:21px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(150deg,#14213b,#0c1426);min-height:165px}.ico{font-size:28px}.card h3{margin:8px 0 5px}.card p{color:var(--muted);font-size:14px;margin:0}.roles{display:grid;grid-template-columns:1fr 1fr;gap:18px}.role{padding:26px;border:1px solid #526b9e;border-radius:20px;background:linear-gradient(145deg,#17294a,#11182d)}.role h3{font-size:24px;margin:5px 0}.role ul{padding-left:20px;color:var(--muted)}.notice{padding:22px;border:1px solid #6c5c9d;border-radius:18px;background:linear-gradient(110deg,#211b42,#121d36)}.notice strong{color:#e0d2ff}.notice p{color:#d6dcef;margin:7px 0 0}.steps{counter-reset:step;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.step{padding:18px;border-radius:16px;background:#ffffff09;border:1px solid var(--line)}.step:before{counter-increment:step;content:counter(step);display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:#315ca8;font-weight:900;margin-bottom:10px}footer{padding:28px 0;border-top:1px solid var(--line);color:var(--muted);font-size:13px;margin-top:35px}
 @media(max-width:760px){.nav{display:none}.hero{grid-template-columns:1fr;padding:48px 0 30px}.grid{grid-template-columns:1fr 1fr}.roles{grid-template-columns:1fr}.steps{grid-template-columns:1fr}.hero-art{min-height:240px}}@media(max-width:520px){.grid{grid-template-columns:1fr}.hero h1{letter-spacing:-1.5px}.stats{grid-template-columns:1fr 1fr 1fr}.stat{padding:10px}.stat b{font-size:17px}}
+
+/* Secure Supabase-powered jobs portal */
+.portal-app{padding:30px 22px;border:1px solid #526b9e;border-radius:22px;background:linear-gradient(145deg,#111d35,#0a1224);margin:22px auto}
+.portal-app h2{margin:0 0 8px;font-size:30px}.portal-muted{color:var(--muted)}
+.portal-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.portal-field{display:grid;gap:6px;margin:10px 0}.portal-field label{font-size:13px;color:#dce7ff;font-weight:700}
+.portal-field input,.portal-field select,.portal-field textarea{width:100%;padding:12px;border:1px solid #435779;border-radius:10px;background:#091326;color:#fff;font:inherit}
+.portal-field textarea{min-height:105px;resize:vertical}
+.portal-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.portal-status{margin:12px 0;padding:11px 13px;border-radius:10px;background:#172744;color:#dce7ff;min-height:20px}
+.portal-status.error{background:#49212b;color:#ffdce2}.portal-status.ok{background:#123b32;color:#d5ffed}
+.portal-panel{padding:18px;border:1px solid var(--line);border-radius:16px;background:#ffffff08;margin-top:15px}
+.portal-job{padding:17px;border:1px solid var(--line);border-radius:14px;background:#101d35;margin:12px 0}
+.portal-job h3{margin:0 0 5px}.portal-job small{color:#b7c6e2}
+.portal-hidden{display:none!important}
+@media(max-width:650px){.portal-grid{grid-template-columns:1fr}.portal-app{padding:20px 15px}}
+
 </style>
 </head>
 <body>
@@ -28,7 +45,186 @@
 </div></section>
 <section class="wrap" id="how"><div class="heading"><h2>Designed for a clear, simple journey</h2><p>The full portal will support these steps once secure accounts and database services are connected.</p></div><div class="steps"><div class="step"><strong>Create an account</strong><p>Choose employer or job seeker and verify your email.</p></div><div class="step"><strong>Connect with opportunity</strong><p>Employers publish roles; candidates discover and apply.</p></div><div class="step"><strong>Manage progress</strong><p>Use dashboards to review listings, applications and updates.</p></div></div></section>
 <section class="wrap" id="register"><div class="notice"><strong>Portal launch preparation is underway</strong><p>This page introduces the global jobs portal. Secure sign-up, login, CV uploads, job posting, applications and dashboards are not active yet. They require a connected authentication service and database; we will not collect passwords or CVs until those protections are in place.</p><div class="actions"><a class="btn primary" href="mailto:martinwriter13@gmail.com?subject=Global%20Jobs%20Portal%20Launch">Contact Martin about the portal</a><a class="btn secondary" href="index.html">Explore Martin Tech & Business Hub</a></div></div></section>
+
+<section class="wrap" id="portal-app">
+<div class="portal-app">
+  <span class="eyebrow">Member access</span>
+  <h2>Join the Online Jobs Portal</h2>
+  <p class="portal-muted">Create a secure account as an employer or job seeker. Email verification may be required before you can sign in.</p>
+  <div class="portal-grid">
+    <div class="portal-panel">
+      <h3>Create your account</h3>
+      <form id="mt-register">
+        <div class="portal-field"><label for="mt-name">Full name</label><input id="mt-name" required maxlength="100" autocomplete="name"></div>
+        <div class="portal-field"><label for="mt-email">Email address</label><input id="mt-email" type="email" required autocomplete="email"></div>
+        <div class="portal-field"><label for="mt-password">Password (minimum 8 characters)</label><input id="mt-password" type="password" minlength="8" required autocomplete="new-password"></div>
+        <div class="portal-field"><label for="mt-role">I am joining as</label><select id="mt-role" required><option value="job_seeker">Job seeker</option><option value="employer">Employer / Recruiter</option></select></div>
+        <div class="portal-field"><label for="mt-country">Country</label><input id="mt-country" placeholder="e.g. Kenya" maxlength="80"></div>
+        <button class="btn primary" type="submit">Create account</button>
+      </form>
+    </div>
+    <div class="portal-panel">
+      <h3>Sign in</h3>
+      <form id="mt-login">
+        <div class="portal-field"><label for="mt-login-email">Email address</label><input id="mt-login-email" type="email" required autocomplete="email"></div>
+        <div class="portal-field"><label for="mt-login-password">Password</label><input id="mt-login-password" type="password" required autocomplete="current-password"></div>
+        <button class="btn secondary" type="submit">Sign in</button>
+      </form>
+      <div class="portal-actions"><button class="btn secondary" id="mt-reset" type="button">Forgot password?</button><button class="btn secondary" id="mt-logout" type="button">Sign out</button></div>
+      <p class="portal-muted" id="mt-account-state">You are not signed in.</p>
+    </div>
+  </div>
+  <div id="mt-message" class="portal-status" role="status" aria-live="polite">Ready when you are.</div>
+  <div id="mt-member-area" class="portal-hidden">
+    <div class="portal-panel">
+      <h3 id="mt-dashboard-title">Your dashboard</h3>
+      <p class="portal-muted" id="mt-dashboard-copy"></p>
+      <form id="mt-job-form" class="portal-hidden">
+        <h3>Post a remote opportunity</h3>
+        <div class="portal-grid">
+          <div class="portal-field"><label for="mt-job-title">Job title</label><input id="mt-job-title" required maxlength="140"></div>
+          <div class="portal-field"><label for="mt-company">Company / client name</label><input id="mt-company" required maxlength="140"></div>
+          <div class="portal-field"><label for="mt-category">Category</label><select id="mt-category"><option>Virtual assistance</option><option>Writing & research</option><option>AI tasks & data</option><option>Marketing & sales</option><option>Creative & technology</option><option>Customer support</option><option>Other remote work</option></select></div>
+          <div class="portal-field"><label for="mt-type">Work type</label><select id="mt-type"><option>Remote</option><option>Freelance</option><option>Full-time</option><option>Part-time</option><option>Contract</option><option>Internship</option></select></div>
+          <div class="portal-field"><label for="mt-location">Eligible location</label><input id="mt-location" value="Worldwide" maxlength="120"></div>
+          <div class="portal-field"><label for="mt-salary">Pay / budget (optional)</label><input id="mt-salary" maxlength="100" placeholder="e.g. USD 500–700/month"></div>
+        </div>
+        <div class="portal-field"><label for="mt-description">Job description</label><textarea id="mt-description" required maxlength="12000"></textarea></div>
+        <div class="portal-field"><label for="mt-requirements">Requirements</label><textarea id="mt-requirements" maxlength="6000"></textarea></div>
+        <button class="btn primary" type="submit">Submit job for review</button>
+      </form>
+      <form id="mt-apply-form" class="portal-hidden">
+        <h3>Apply for a job</h3>
+        <div class="portal-field"><label for="mt-apply-job">Select a job</label><select id="mt-apply-job" required></select></div>
+        <div class="portal-field"><label for="mt-cover">Short application message</label><textarea id="mt-cover" maxlength="4000" required></textarea></div>
+        <div class="portal-field"><label for="mt-cv">CV (PDF, DOC or DOCX; max 10 MB)</label><input id="mt-cv" type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"></div>
+        <button class="btn primary" type="submit">Submit application</button>
+      </form>
+      <div class="portal-actions"><button id="mt-refresh" class="btn secondary" type="button">Refresh jobs</button></div>
+    </div>
+    <div class="portal-panel"><h3>Available remote jobs</h3><div id="mt-jobs-list"><p class="portal-muted">Loading opportunities…</p></div></div>
+    <div class="portal-panel"><h3>Your activity</h3><div id="mt-activity"><p class="portal-muted">Sign in to see your jobs or applications.</p></div></div>
+  </div>
+</div>
+</section>
+
 </main>
 <footer><div class="wrap">© <span id="year"></span> Martin Tech & Business Hub · Global Online Jobs Portal · <a href="index.html">Main website</a></div></footer>
 <script>document.getElementById('year').textContent=new Date().getFullYear();</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// MARTIN_SUPABASE_AUTH_V1
+(() => {
+  const PROJECT_URL = "https://zvepoycrqjzuptccdffv.supabase.co";
+  const PUBLISHABLE_KEY = "sb_publishable_oqLCl-FRoz_u7Yw3IUANow_4SBJTXqT";
+  const $ = (id) => document.getElementById(id);
+  const msg = $("mt-message");
+  let client, currentUser = null, currentProfile = null, jobs = [];
+  const say = (text, type="") => { msg.textContent=text; msg.className="portal-status"+(type?" "+type:""); };
+  const show = (id, visible=true) => $(id).classList.toggle("portal-hidden",!visible);
+  const escapeHtml = (s="") => String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const fileSafeName = (s) => String(s).replace(/[^a-zA-Z0-9._-]/g,"_").slice(-100);
+  async function ensureProfile(user) {
+    const role = user.user_metadata?.account_type === "employer" ? "employer" : "job_seeker";
+    const payload = {id:user.id, account_type:role, full_name:user.user_metadata?.full_name || "", country:user.user_metadata?.country || ""};
+    const {error}=await client.from("profiles").upsert(payload,{onConflict:"id"});
+    if(error) throw error;
+    const {data,error:readError}=await client.from("profiles").select("id,account_type,full_name,country").eq("id",user.id).single();
+    if(readError) throw readError;
+    currentProfile=data;
+  }
+  function renderJobs() {
+    const list=$("mt-jobs-list"), select=$("mt-apply-job");
+    if(!jobs.length){list.innerHTML='<p class="portal-muted">No approved jobs are listed yet. Check again soon.</p>';select.innerHTML='<option value="">No active jobs yet</option>';return;}
+    list.innerHTML=jobs.map(j=>'<article class="portal-job"><h3>'+escapeHtml(j.title)+'</h3><small>'+escapeHtml(j.company_name)+' · '+escapeHtml(j.category)+' · '+escapeHtml(j.employment_type)+' · '+escapeHtml(j.location)+'</small><p>'+escapeHtml(j.description)+'</p>'+(j.salary_range?'<p><strong>Pay:</strong> '+escapeHtml(j.salary_range)+'</p>':'')+'</article>').join("");
+    select.innerHTML='<option value="">Choose a job</option>'+jobs.map(j=>'<option value="'+j.id+'">'+escapeHtml(j.title)+' — '+escapeHtml(j.company_name)+'</option>').join("");
+  }
+  async function loadJobs() {
+    const {data,error}=await client.from("jobs").select("id,title,company_name,category,employment_type,location,description,salary_range").eq("status","active").order("created_at",{ascending:false}).limit(50);
+    if(error) throw error; jobs=data||[]; renderJobs();
+  }
+  async function loadActivity() {
+    if(!currentUser)return;
+    if(currentProfile.account_type==="employer"){
+      const {data,error}=await client.from("jobs").select("id,title,status,created_at").eq("employer_id",currentUser.id).order("created_at",{ascending:false}).limit(30);
+      if(error) throw error;
+      $("mt-activity").innerHTML=data?.length?data.map(j=>'<div class="portal-job"><strong>'+escapeHtml(j.title)+'</strong><p>Status: '+escapeHtml(j.status)+'</p></div>').join(""):'<p class="portal-muted">You have not submitted any jobs yet.</p>';
+    } else {
+      const {data,error}=await client.from("applications").select("id,status,created_at,job_id").eq("applicant_id",currentUser.id).order("created_at",{ascending:false}).limit(30);
+      if(error) throw error;
+      $("mt-activity").innerHTML=data?.length?data.map(a=>'<div class="portal-job"><strong>Application submitted</strong><p>Status: '+escapeHtml(a.status)+'</p></div>').join(""):'<p class="portal-muted">You have not applied for any jobs yet.</p>';
+    }
+  }
+  async function setSession(user) {
+    currentUser=user||null;
+    if(!user){currentProfile=null;show("mt-member-area",false);$("mt-account-state").textContent="You are not signed in.";return;}
+    await ensureProfile(user);
+    show("mt-member-area",true);
+    $("mt-account-state").textContent="Signed in as "+user.email;
+    $("mt-dashboard-title").textContent=currentProfile.account_type==="employer"?"Employer dashboard":"Job seeker dashboard";
+    $("mt-dashboard-copy").textContent=currentProfile.account_type==="employer"?"Submit remote opportunities for review and manage your listings.":"Browse approved jobs, apply and track your applications.";
+    show("mt-job-form",currentProfile.account_type==="employer");
+    show("mt-apply-form",currentProfile.account_type==="job_seeker");
+    await loadJobs(); await loadActivity();
+  }
+  async function start() {
+    if(!window.supabase?.createClient){say("The secure sign-in library did not load. Refresh this page and try again.","error");return;}
+    client=window.supabase.createClient(PROJECT_URL,PUBLISHABLE_KEY);
+    const {data:{session}}=await client.auth.getSession();
+    if(session?.user){try{await setSession(session.user);}catch(e){say(e.message||"Could not load your profile.","error");}}
+    else {await loadJobs().catch(e=>say(e.message||"Could not load jobs.","error"));}
+    client.auth.onAuthStateChange((_event,session)=>{setTimeout(()=>setSession(session?.user||null).catch(e=>say(e.message||"Account setup failed.","error")),0);});
+  }
+  $("mt-register").addEventListener("submit",async e=>{
+    e.preventDefault();say("Creating your account…");
+    const full_name=$("mt-name").value.trim(),email=$("mt-email").value.trim(),password=$("mt-password").value,account_type=$("mt-role").value,country=$("mt-country").value.trim();
+    try{
+      const {data,error}=await client.auth.signUp({email,password,options:{data:{full_name,account_type,country}}});
+      if(error)throw error;
+      if(data.session&&data.user){await setSession(data.user);say("Account created. Welcome to the portal!","ok");}
+      else say("Account created. Check your email for the verification link, then return here and sign in.","ok");
+    }catch(err){say(err.message||"Could not create account.","error");}
+  });
+  $("mt-login").addEventListener("submit",async e=>{
+    e.preventDefault();say("Signing you in…");
+    try{const {data,error}=await client.auth.signInWithPassword({email:$("mt-login-email").value.trim(),password:$("mt-login-password").value});if(error)throw error;await setSession(data.user);say("You are signed in.","ok");}
+    catch(err){say(err.message||"Sign-in failed.","error");}
+  });
+  $("mt-logout").addEventListener("click",async()=>{const {error}=await client.auth.signOut();if(error)say(error.message,"error");else{await setSession(null);say("You have signed out.","ok");}});
+  $("mt-reset").addEventListener("click",async()=>{
+    const email=$("mt-login-email").value.trim();if(!email){say("Enter your email in the sign-in box first.","error");return;}
+    const {error}=await client.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});
+    say(error?error.message:"If the address is registered, a password reset email will be sent.","ok");
+  });
+  $("mt-job-form").addEventListener("submit",async e=>{
+    e.preventDefault();say("Submitting your job for review…");
+    try{
+      const row={employer_id:currentUser.id,title:$("mt-job-title").value.trim(),company_name:$("mt-company").value.trim(),category:$("mt-category").value,employment_type:$("mt-type").value,location:$("mt-location").value.trim()||"Worldwide",salary_range:$("mt-salary").value.trim()||null,description:$("mt-description").value.trim(),requirements:$("mt-requirements").value.trim()||null,status:"pending"};
+      const {error}=await client.from("jobs").insert(row);if(error)throw error;
+      e.target.reset();$("mt-location").value="Worldwide";await loadActivity();say("Your job was submitted. It will appear publicly after it is reviewed and approved.","ok");
+    }catch(err){say(err.message||"Could not submit this job.","error");}
+  });
+  $("mt-apply-form").addEventListener("submit",async e=>{
+    e.preventDefault();say("Submitting your application…");
+    try{
+      const job_id=$("mt-apply-job").value;if(!job_id)throw new Error("Choose an active job first.");
+      let cv_path=null;const file=$("mt-cv").files[0];
+      if(file){
+        if(file.size>10*1024*1024)throw new Error("Your CV must be 10 MB or smaller.");
+        const ext=(file.name.split(".").pop()||"").toLowerCase();if(!["pdf","doc","docx"].includes(ext))throw new Error("Upload a PDF, DOC or DOCX CV.");
+        cv_path=currentUser.id+"/"+crypto.randomUUID()+"-"+fileSafeName(file.name);
+        const {error:uploadError}=await client.storage.from("job-cvs").upload(cv_path,file,{upsert:false,contentType:file.type||"application/octet-stream"});
+        if(uploadError)throw uploadError;
+      }
+      const {error}=await client.from("applications").insert({job_id,applicant_id:currentUser.id,cover_message:$("mt-cover").value.trim(),cv_path});
+      if(error){if(cv_path)await client.storage.from("job-cvs").remove([cv_path]);throw error;}
+      e.target.reset();await loadActivity();say("Your application has been submitted successfully.","ok");
+    }catch(err){say(err.message||"Could not submit your application.","error");}
+  });
+  $("mt-refresh").addEventListener("click",async()=>{try{await loadJobs();await loadActivity();say("Portal information refreshed.","ok");}catch(e){say(e.message||"Refresh failed.","error");}});
+  start();
+})();
+</script>
+
 </body></html>
