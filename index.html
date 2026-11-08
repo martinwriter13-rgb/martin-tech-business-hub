@@ -4,7 +4,18 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="Martin Tech & Business Hub offers website design, virtual assistance, social media support, research and business services for clients in Kenya and worldwide.">
-<title>Martin Tech & Business Hub</title>
+<link rel="canonical" href="https://martin-tech-business-hub.onrender.com/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Martin Tech & Business Hub | Digital & Business Support">
+<meta property="og:description" content="Website design, virtual assistance, social media, research and practical business support. Remote project enquiries welcome worldwide.">
+<meta property="og:url" content="https://martin-tech-business-hub.onrender.com/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Martin Tech & Business Hub">
+<meta name="twitter:description" content="Digital services and practical business support for clients in Kenya and worldwide.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"ProfessionalService","name":"Martin Tech & Business Hub","url":"https://martin-tech-business-hub.onrender.com/","email":"martinwriter13@gmail.com","telephone":"+254715499170","areaServed":[{"@type":"Country","name":"Kenya"},{"@type":"Place","name":"Worldwide"}],"availableLanguage":["English"],"description":"Website design, virtual assistance, social media support, research and writing, and practical business support for remote clients."}
+</script>
+<title>Martin Tech & Business Hub | Digital & Business Support</title>
 <style>
 :root{--bg:#070b18;--panel:#10182b;--panel2:#141f38;--text:#f5f7ff;--muted:#a8b3cc;--blue:#4f8cff;--purple:#9a6bff;--line:rgba(255,255,255,.1)}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 80% 0%,#1a1741 0,transparent 34%),radial-gradient(circle at 0% 35%,#10254b 0,transparent 30%),var(--bg);color:var(--text);font:16px/1.6 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}
@@ -409,7 +420,7 @@ function hideWelcome(){
 openWelcome.addEventListener('click',showWelcome);
 closeWelcome.addEventListener('click',hideWelcome);
 minimizeWelcome.addEventListener('click',hideWelcome);
-setTimeout(()=>{if(!sessionStorage.getItem('hubWelcomeDismissed'))showWelcome();},1200);
+// The welcome assistant opens only when a visitor chooses the chat button.
 closeWelcome.addEventListener('click',()=>sessionStorage.setItem('hubWelcomeDismissed','1'));
 minimizeWelcome.addEventListener('click',()=>sessionStorage.setItem('hubWelcomeDismissed','1'));
 
