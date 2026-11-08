@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://martin-tech-business-hub.onrender.com/sitemap.xml
