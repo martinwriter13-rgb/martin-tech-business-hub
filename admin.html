@@ -33,6 +33,7 @@
 <div class="section-head"><div><h2>Website roles</h2><p class="muted">Create reusable roles and define their permission sets.</p></div><button type="button" id="refresh">Refresh</button></div>
 <div id="role-list" class="role-grid"></div>
 </section>
+<section class="panel" id="role-assign-panel"><h2>Quick role assignment</h2><p class="muted">Choose a registered website account and assign one of the available roles.</p><form id="quick-role-assign-form" class="form-grid"><div class="field"><label for="quick-role-user">Registered account</label><select id="quick-role-user" required><option value="">Select an account</option></select></div><div class="field"><label for="quick-role-key">Website role</label><select id="quick-role-key" required><option value="">Select a role</option></select></div><div class="field" style="align-self:end"><button class="primary" type="submit">Assign selected role</button></div></form></section>
 <section class="panel" id="role-create-panel">
 <h2>Create a new role</h2>
 <form id="role-form"><input type="hidden" id="role-editing-key">
@@ -129,10 +130,12 @@
     if(u.error)throw u.error;if(r.error)throw r.error;if(a.error)throw a.error;
     users=u.data||[];roles=r.data||[];authStatuses=a.data||[];
     $("invite-role").innerHTML='<option value="">Member (no extra access)</option>'+roles.filter(x=>x.role_key!=="super_admin"&&x.role_key!=="member"&&x.is_active).map(x=>'<option value="'+esc(x.role_key)+'">'+esc(x.name)+'</option>').join("");
+    $("quick-role-user").innerHTML='<option value="">Select an account</option>'+users.filter(x=>x.role_key!=="super_admin").map(x=>'<option value="'+esc(x.user_id)+'">'+esc(x.email||x.full_name||x.user_id)+'</option>').join("");
+    $("quick-role-key").innerHTML='<option value="">Select a role</option>'+roles.filter(x=>x.role_key!=="super_admin"&&x.is_active).map(x=>'<option value="'+esc(x.role_key)+'">'+esc(x.name)+'</option>').join("");
     $("account-target").innerHTML='<option value="">Select an account</option>'+users.filter(x=>x.role_key!=="super_admin").map(x=>'<option value="'+esc(x.user_id)+'">'+esc(x.email||x.full_name||x.user_id)+'</option>').join("");
     $("user-count").textContent=users.length;$("role-count").textContent=roles.length;
     $("custom-count").textContent=roles.filter(x=>!x.is_system).length;
-    $("role-list").innerHTML=roles.map(x=>'<article class="role-card"><strong>'+esc(x.name)+'</strong> <span class="pill">'+(x.is_system?"System role":"Custom role")+(x.is_active?"":" · Inactive")+'</span><p class="muted">'+esc(x.description)+'</p><small class="muted">'+esc(x.role_key)+'</small><p>'+((x.permissions||[]).length?x.permissions.map(p=>'<span class="pill">'+esc(p)+'</span>').join(" "):'<span class="pill">No extra permissions</span>')+'</p>'+(!x.is_system?'<div class="actions"><button type="button" data-role-edit="'+esc(x.role_key)+'">Edit role</button><button type="button" data-role-toggle="'+esc(x.role_key)+'">'+(x.is_active?"Deactivate":"Activate")+'</button></div>':"")+'</article>').join("");
+    $("role-list").innerHTML=roles.map(x=>'<article class="role-card"><strong>'+esc(x.name)+'</strong> <span class="pill">'+(x.is_system?"System role":"Custom role")+(x.is_active?"":" · Inactive")+'</span><p class="muted">'+esc(x.description)+'</p><small class="muted">'+esc(x.role_key)+'</small><p>'+((x.permissions||[]).length?x.permissions.map(p=>'<span class="pill">'+esc(p)+'</span>').join(" "):'<span class="pill">No extra permissions</span>')+'</p><div class="actions">'+(x.role_key!=="super_admin"&&x.is_active?'<button type="button" data-role-assign="'+esc(x.role_key)+'">Assign role</button>':"")+(x.is_system?'<button type="button" data-role-view="'+esc(x.role_key)+'">View role details</button>':'<button type="button" data-role-edit="'+esc(x.role_key)+'">Edit role</button><button type="button" data-role-toggle="'+esc(x.role_key)+'">'+(x.is_active?"Deactivate":"Activate")+'</button>')+'</div></article>').join("");
     $("user-list").innerHTML=users.map(u=>{
      const current=u.role_key||"member";
      const options=roles.filter(r=>r.role_key!=="super_admin"&&r.role_key!=="member"&&(r.is_active||r.role_key===current)).map(r=>'<option value="'+esc(r.role_key)+'" '+(current===r.role_key?"selected":"")+'>'+esc(r.name)+(r.is_active?"":" (inactive)")+'</option>').join("");
@@ -253,8 +256,10 @@
  $("reset-password").addEventListener("click",async()=>{const enteredEmail=$("email").value.trim().toLowerCase();if(!enteredEmail){status("Enter your administrator email first.","error");return;}const email=enteredEmail==="martinwriter13@gmail.com"?"martinmgaza85@gmail.com":enteredEmail;const {error}=await client.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});status(error?error.message:"If the account exists, a password reset email has been sent to the address currently registered on the administrator account.","ok");});
  $("refresh").addEventListener("click",()=>load().catch(e=>status(e.message,"error")));
  $("role-list").addEventListener("click",async e=>{
-   const edit=e.target.closest("[data-role-edit]"),toggle=e.target.closest("[data-role-toggle]");
+   const edit=e.target.closest("[data-role-edit]"),toggle=e.target.closest("[data-role-toggle]"),assign=e.target.closest("[data-role-assign]"),view=e.target.closest("[data-role-view]");
    try{
+     if(view){const role=roles.find(r=>r.role_key===view.dataset.roleView);if(!role)throw new Error("Role not found.");status(role.name+" is a protected system role. Its permissions are displayed on its card and cannot be edited here.","ok");}
+     if(assign){const role=roles.find(r=>r.role_key===assign.dataset.roleAssign);if(!role||role.role_key==="super_admin"||!role.is_active)throw new Error("This role cannot be assigned.");$("quick-role-key").value=role.role_key;$("role-assign-panel").scrollIntoView({behavior:"smooth",block:"center"});$("quick-role-user").focus();status("Choose the account for "+role.name+", then press Assign selected role.","ok");}
      if(edit){
        const role=roles.find(r=>r.role_key===edit.dataset.roleEdit);if(!role)throw new Error("Role not found.");
        $("role-editing-key").value=role.role_key;$("role-key").value=role.role_key;$("role-key").readOnly=true;
@@ -269,6 +274,7 @@
      }
    }catch(err){status(err.message||"Role update failed.","error");}
  });
+ $("quick-role-assign-form").addEventListener("submit",async e=>{e.preventDefault();const userId=$("quick-role-user").value,roleKey=$("quick-role-key").value;if(!userId||!roleKey){status("Choose both an account and a role.","error");return;}if(roleKey==="super_admin"){status("Super Admin access cannot be assigned through this form.","error");return;}if(!confirm("Assign this website role to the selected account?"))return;try{const {error}=await client.rpc("admin_assign_site_role",{p_user_id:userId,p_role_key:roleKey});if(error)throw error;await load();status("Role assigned successfully.","ok");}catch(err){status(err.message||"Role assignment failed.","error");}});
  $("role-cancel").addEventListener("click",()=>{
    $("role-form").reset();$("role-editing-key").value="";$("role-key").readOnly=false;$("role-active").checked=true;
    $("role-submit").textContent="Create role";$("role-cancel").classList.add("hidden");
