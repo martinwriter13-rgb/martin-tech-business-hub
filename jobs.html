@@ -742,7 +742,7 @@ body.portal-member-mode #portal-app>.portal-app{margin:0;padding:24px;border-col
   async function start() {
     try{const savedEmail=localStorage.getItem("mt_jobs_last_email");const savedRole=localStorage.getItem("mt_jobs_last_role");if(savedEmail)$("mt-login-email").value=savedEmail;if(savedRole)$("mt-login-role").value=savedRole;if(savedEmail)$("mt-last-account").textContent="Last used account: "+(savedRole==="employer"?"Employer / Recruiter":"Job seeker")+" · "+savedEmail+". Password not saved.";}catch(e){}
     if(!window.supabase?.createClient){say("The secure sign-in library did not load. Refresh this page and try again.","error");return;}
-    client=window.supabase.createClient(PROJECT_URL,PUBLISHABLE_KEY);
+    client=window.supabase.createClient(PROJECT_URL,PUBLISHABLE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
     const {data:{session}}=await client.auth.getSession();
     if(session?.user){try{await setSession(session.user);}catch(e){say(e.message||"Could not load your profile.","error");}}
     else {await loadJobs().catch(e=>say(e.message||"Could not load jobs.","error"));}
