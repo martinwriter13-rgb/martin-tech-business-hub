@@ -142,3 +142,21 @@ drop policy if exists "Authenticated users read open projects and clients read o
 drop policy if exists "Marketplace users read open and assigned projects" on public.writing_projects;
 create policy "Marketplace users read open and assigned projects" on public.writing_projects for select to authenticated using(status='open' or client_id=(select auth.uid()) or assigned_writer_id=(select auth.uid()));
 create unique index if not exists writing_one_accepted_proposal_per_project on public.writing_proposals(project_id) where status='accepted';
+
+-- Administrator read access is restricted to membership provisioned by the site owner.
+drop policy if exists "Writing admins read all profiles" on public.writing_profiles;
+create policy "Writing admins read all profiles" on public.writing_profiles for select to authenticated using(exists(select 1 from public.writing_admins a where a.user_id=(select auth.uid())));
+drop policy if exists "Writing admins read all projects" on public.writing_projects;
+create policy "Writing admins read all projects" on public.writing_projects for select to authenticated using(exists(select 1 from public.writing_admins a where a.user_id=(select auth.uid())));
+drop policy if exists "Writing admins read all proposals" on public.writing_proposals;
+create policy "Writing admins read all proposals" on public.writing_proposals for select to authenticated using(exists(select 1 from public.writing_admins a where a.user_id=(select auth.uid())));
+drop policy if exists "Writing admins update proposals" on public.writing_proposals;
+create policy "Writing admins update proposals" on public.writing_proposals for update to authenticated using(exists(select 1 from public.writing_admins a where a.user_id=(select auth.uid()))) with check(exists(select 1 from public.writing_admins a where a.user_id=(select auth.uid())));
+drop policy if exists "Writing admins read all messages" on public.writing_messages;
+create policy "Writing admins read all messages" on public.writing_messages for select to authenticated using(exists(select 1 from public.writing_admins a where a.user_id=(select auth.uid())));
+drop policy if exists "Writing admins read all milestones" on public.writing_milestones;
+create policy "Writing admins read all milestones" on public.writing_milestones for select to authenticated using(exists(select 1 from public.writing_admins a where a.user_id=(select auth.uid())));
+drop policy if exists "Writing admins read all attachments" on public.writing_attachments;
+create policy "Writing admins read all attachments" on public.writing_attachments for select to authenticated using(exists(select 1 from public.writing_admins a where a.user_id=(select auth.uid())));
+drop policy if exists "Writing admins read all reviews" on public.writing_reviews;
+create policy "Writing admins read all reviews" on public.writing_reviews for select to authenticated using(exists(select 1 from public.writing_admins a where a.user_id=(select auth.uid())));
