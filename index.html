@@ -231,6 +231,19 @@ a{color:inherit;text-decoration:none}.wrap{width:min(1140px,92%);margin:auto}.na
   .nav .links{order:3;display:flex;flex:1 0 100%;width:100%;min-width:0;flex-wrap:wrap;justify-content:flex-start;align-items:center;gap:12px 22px;padding:17px 0 2px;border-top:1px solid var(--line);font-size:14px;line-height:1.5}
   .nav .links a{white-space:nowrap;padding:3px 0}
 }
+
+/* Desktop: place navigation in a clear vertical rail on the left. */
+@media(min-width:801px){
+  header.nav{position:fixed;inset:0 auto 0 0;width:264px;height:100dvh;max-width:264px;margin:0;padding:26px 18px 22px;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:18px;overflow-y:auto;overflow-x:hidden;border-right:1px solid var(--line);border-bottom:0;background:#091226;z-index:1100}
+  header.nav .nav-media{position:absolute;inset:0;width:100%;height:100%;transform:none;opacity:.22}
+  header.nav .brand{position:relative;z-index:1;order:0;display:block;white-space:normal;line-height:1.35;font-size:20px;margin:0;flex:none}
+  header.nav .links{position:relative;z-index:1;order:1;display:flex;flex:1 1 auto;width:100%;min-width:0;flex-direction:column;flex-wrap:nowrap;align-items:stretch;justify-content:flex-start;gap:3px;padding:14px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);font-size:14px}
+  header.nav .links a{display:block;white-space:normal;padding:8px 10px;border-radius:8px;line-height:1.35}
+  header.nav .links a:hover{background:#ffffff12}
+  header.nav>.btn{position:relative;z-index:1;order:2;display:block;width:100%;margin:0;text-align:center;white-space:normal}
+  header.nav>.nav-toggle{display:none}
+  body>main,body>footer{margin-left:264px}
+}
 </style>
 <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-PPLT5Z6J');</script>
