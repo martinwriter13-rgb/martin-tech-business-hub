@@ -23,7 +23,7 @@
 <div class="actions"><button class="primary" type="submit">Sign in securely</button><button type="button" id="reset-password">Reset password</button></div>
 </form>
 </section>
-<section id="dashboard" class="hidden"><div id="module-access" class="panel"><h2>Your website modules</h2><p class="muted">Open the areas covered by your assigned permissions.</p><div class="actions" id="module-links"></div></div>
+<section id="dashboard" class="hidden"><section class="panel" id="trading-access-panel"><div class="section-head"><div><h2>Martin’s Trading Assistant</h2><p class="muted">Open your trading administrator workspace using this verified Super Admin session. Demo and real Deriv accounts are available in the trading app.</p></div><button type="button" class="primary" id="open-trading-admin">Open Trading Admin</button></div><p class="muted">You will still connect your Deriv account in the trading app. Live execution requires its separate explicit confirmation.</p></section><div id="module-access" class="panel"><h2>Your website modules</h2><p class="muted">Open the areas covered by your assigned permissions.</p><div class="actions" id="module-links"></div></div>
 <div class="stats" id="super-stats">
 <div class="stat"><b id="user-count">—</b><span class="muted">Registered accounts</span></div>
 <div class="stat"><b id="role-count">—</b><span class="muted">Available roles</span></div>
@@ -106,6 +106,7 @@
    permissions=permissionCheck.error?[]:(permissionCheck.data||[]);
    if(!superAdmin&&!permissions.length){await client.auth.signOut();showDashboard(false);status("This account has no website management permissions.","error");return false;}
    showDashboard(true);
+   $("trading-access-panel").classList.toggle("hidden",!superAdmin);
    if(superAdmin||permissions.includes("content.manage"))refreshContentSectionIds();
    const moduleLinks=[];
    if(superAdmin||permissions.includes("career.manage"))moduleLinks.push('<a class="btn" href="jobs.html">Career administration</a>');
@@ -254,6 +255,23 @@
  $("toggle-password").addEventListener("click",()=>{const field=$("password"),visible=field.type==="text";field.type=visible?"password":"text";$("toggle-password").textContent=visible?"Show password":"Hide password";$("toggle-password").setAttribute("aria-pressed",String(!visible));});
  $("login-form").addEventListener("submit",async e=>{e.preventDefault();try{status("Signing in…");const enteredEmail=$("email").value.trim().toLowerCase();const authEmail=enteredEmail==="martinwriter13@gmail.com"?"martinmgaza85@gmail.com":enteredEmail;const {error}=await client.auth.signInWithPassword({email:authEmail,password:$("password").value});if(error)throw error;await verify();}catch(err){status(err.message||"Sign-in failed.","error");}});
  $("reset-password").addEventListener("click",async()=>{const enteredEmail=$("email").value.trim().toLowerCase();if(!enteredEmail){status("Enter your administrator email first.","error");return;}const email=enteredEmail==="martinwriter13@gmail.com"?"martinmgaza85@gmail.com":enteredEmail;const {error}=await client.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});status(error?error.message:"If the account exists, a password reset email has been sent to the address currently registered on the administrator account.","ok");});
+ $("open-trading-admin").addEventListener("click",async()=>{
+   if(!superAdmin){status("Verified Super Admin access is required.","error");return;}
+   const popup=window.open("https://martins-trading-assistant.onrender.com/hub-sso.html","martinTradingAdmin","popup=yes,width=1100,height=800");
+   if(!popup){status("Allow pop-ups for this website, then try again.","error");return;}
+   status("Opening your secure Trading Assistant workspace…");
+   const onReady=async event=>{
+     if(event.origin!=="https://martins-trading-assistant.onrender.com"||event.source!==popup||event.data?.type!=="MARTIN_TRADING_SSO_READY")return;
+     try{
+       const {data:{session},error}=await client.auth.getSession();
+       if(error||!session?.access_token)throw new Error("Your Hub session has expired. Sign in again.");
+       popup.postMessage({type:"MARTIN_HUB_SSO_TOKEN",accessToken:session.access_token},"https://martins-trading-assistant.onrender.com");
+       status("Verified Hub sign-in sent securely to the Trading Assistant.","ok");
+       window.removeEventListener("message",onReady);
+     }catch(err){status(err.message||"Could not start secure trading sign-in.","error");}
+   };
+   window.addEventListener("message",onReady);
+ });
  $("refresh").addEventListener("click",()=>load().catch(e=>status(e.message,"error")));
  $("role-list").addEventListener("click",async e=>{
    const edit=e.target.closest("[data-role-edit]"),toggle=e.target.closest("[data-role-toggle]"),assign=e.target.closest("[data-role-assign]"),view=e.target.closest("[data-role-view]");
