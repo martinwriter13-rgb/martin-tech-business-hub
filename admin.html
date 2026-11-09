@@ -111,6 +111,7 @@
    if(superAdmin||permissions.includes("writing.manage"))moduleLinks.push('<a class="btn" href="research-writing.html">Writing Marketplace</a>');
    if(superAdmin||permissions.includes("content.manage"))moduleLinks.push('<a class="btn" href="#content-form">Website content</a>');
    if(superAdmin||permissions.includes("enquiries.manage"))moduleLinks.push('<a class="btn" href="#enquiry-list">Enquiries inbox</a>');
+   if(superAdmin)moduleLinks.push('<a class="btn" href="#all-messages-panel">All website messages</a>');
    if(superAdmin||permissions.includes("settings.manage"))moduleLinks.push('<a class="btn" href="#settings-form">Website settings</a>');
    $("module-links").innerHTML=moduleLinks.join("")||'<span class="muted">No modules assigned.</span>';
    $("role-create-panel").classList.toggle("hidden",!superAdmin);
