@@ -122,6 +122,15 @@ function msg(text,type){$('authMessage').textContent=text;$('authMessage').class
 function money(v,c){return v==null?'Budget open':(c||'KES')+' '+Number(v).toLocaleString('en-KE')}
 async function loadProfile(){
  if(!user)return;
+ const {data:superAdmin,error:superAdminError}=await supabase.rpc('is_martin_hub_super_admin');
+ if(!superAdminError&&superAdmin===true){
+  profile={id:user.id,role:'admin',display_name:user.email||'Super Admin',skills:[]};
+  $('authForms').classList.add('hidden');$('profileSetup').classList.add('hidden');$('workspace').classList.remove('hidden');
+  $('authState').textContent='SUPER ADMIN';$('topAuth').innerHTML='<a class="btn secondary" href="admin.html">Main Admin Dashboard</a><span class="pill">Super Admin session active</span>';
+  $('welcomeTitle').textContent='Martin Hub Super Admin';$('welcomeSub').textContent='You are using your existing Super Admin session. No separate Writing Marketplace login or profile is required.';
+  $('tab-post').classList.add('hidden');$('adminTab').classList.remove('hidden');
+  await checkAdmin();showTab('admin');return;
+ }
  const {data,error}=await supabase.from('writing_profiles').select('*').eq('id',user.id).maybeSingle();
  if(error)throw error;profile=data;
  $('authForms').classList.add('hidden');$('profileSetup').classList.remove('hidden');$('workspace').classList.toggle('hidden',!profile);
