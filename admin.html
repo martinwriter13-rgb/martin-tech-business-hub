@@ -134,7 +134,7 @@
     $("role-list").innerHTML=roles.map(x=>'<article class="role-card"><strong>'+esc(x.name)+'</strong> <span class="pill">'+(x.is_system?"System role":"Custom role")+(x.is_active?"":" · Inactive")+'</span><p class="muted">'+esc(x.description)+'</p><small class="muted">'+esc(x.role_key)+'</small><p>'+((x.permissions||[]).length?x.permissions.map(p=>'<span class="pill">'+esc(p)+'</span>').join(" "):'<span class="pill">No extra permissions</span>')+'</p>'+(!x.is_system?'<div class="actions"><button type="button" data-role-edit="'+esc(x.role_key)+'">Edit role</button><button type="button" data-role-toggle="'+esc(x.role_key)+'">'+(x.is_active?"Deactivate":"Activate")+'</button></div>':"")+'</article>').join("");
     $("user-list").innerHTML=users.map(u=>{
      const current=u.role_key||"member";
-     const options=roles.filter(r=>r.role_key!=="super_admin"&&(r.is_active||r.role_key===current)).map(r=>'<option value="'+esc(r.role_key)+'" '+(current===r.role_key?"selected":"")+'>'+esc(r.name)+(r.is_active?"":" (inactive)")+'</option>').join("");
+     const options=roles.filter(r=>r.role_key!=="super_admin"&&r.role_key!=="member"&&(r.is_active||r.role_key===current)).map(r=>'<option value="'+esc(r.role_key)+'" '+(current===r.role_key?"selected":"")+'>'+esc(r.name)+(r.is_active?"":" (inactive)")+'</option>').join("");
      const protectedUser=u.role_key==="super_admin";
      const authState=authStatuses.find(s=>s.user_id===u.user_id)||{};
      const suspended=!!authState.banned_until&&new Date(authState.banned_until)>new Date();
