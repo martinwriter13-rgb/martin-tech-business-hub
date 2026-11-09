@@ -703,6 +703,9 @@ body.portal-member-mode #portal-app>.portal-app{margin:0;padding:24px;border-col
     const {data:adminFlag,error:adminFlagError}=await client.rpc("is_martin_hub_admin");
     isJobAdmin=!adminFlagError&&adminFlag===true;
     if(adminFlagError)console.warn("Could not verify administrator role:",adminFlagError.message);
+    const accountGrid=$("mt-register").closest(".portal-grid");
+    if(accountGrid)accountGrid.classList.toggle("portal-hidden",isJobAdmin);
+    if(isJobAdmin){$("mt-portal-intro")?.classList.add("portal-hidden");const heading=document.querySelector("#portal-app h2");if(heading)heading.textContent="Career Administration";const intro=document.querySelector("#portal-app > .portal-app > .portal-muted");if(intro)intro.textContent="Your existing Super Admin session is active. No separate Career login is required.";}
     show("mt-member-area",true);
     const roleLabel=isJobAdmin?"Martin Hub Administrator":(currentProfile.account_type==="employer"?"Employer / Recruiter":"Job seeker");$("mt-account-state").textContent="Signed in as "+user.email+" · "+roleLabel;$("mt-last-account").textContent="Current account: "+roleLabel+" ("+user.email+"). Passwords are never saved here.";
     $("mt-dashboard-title").textContent=isJobAdmin?"Martin Hub Admin Dashboard":(currentProfile.account_type==="employer"?"Employer dashboard":"Job seeker dashboard");
