@@ -161,7 +161,26 @@ body.portal-member-mode #portal-app>.portal-app{margin:0;padding:24px;border-col
 #opportunities .career-card:nth-child(6){background-image:url('https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=85')}
 @media(max-width:520px){#opportunities .career-card{min-height:205px}}
 
-\n/* Career portal feature links shown clearly to every visitor */\n.portal-access-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.portal-access-card{display:flex;flex-direction:column;align-items:flex-start;min-height:230px}.portal-access-card p{flex:1}.portal-access-card .btn{margin-top:16px}@media(max-width:760px){.portal-access-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:520px){.portal-access-grid{grid-template-columns:1fr}}\n</style>
+\n/* Career portal feature links shown clearly to every visitor */\n.portal-access-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.portal-access-card{display:flex;flex-direction:column;align-items:flex-start;min-height:230px}.portal-access-card p{flex:1}.portal-access-card .btn{margin-top:16px}@media(max-width:760px){.portal-access-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:520px){.portal-access-grid{grid-template-columns:1fr}}\n
+/* Martin Hub administrator workspace */
+.admin-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:18px 0}
+.admin-stat{padding:16px;border:1px solid #34496d;border-radius:14px;background:linear-gradient(145deg,#17294a,#10182d)}
+.admin-stat b{display:block;font-size:27px;color:#fff;line-height:1.2}.admin-stat span{font-size:12px;color:#b7c6e2}
+.admin-block{margin-top:20px;padding:18px;border:1px solid #34496d;border-radius:16px;background:#ffffff06}
+.admin-block h4{margin:0 0 12px;font-size:18px}
+.admin-list{display:grid;gap:10px}
+.admin-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:10px;padding:13px;border:1px solid #ffffff18;border-radius:12px;background:#0e1a30}
+.admin-row-main{min-width:0}.admin-row-main strong{display:block}.admin-row-main small{display:block;color:#aebbd5;overflow-wrap:anywhere}
+.admin-row select{width:auto;min-width:130px;padding:9px;border:1px solid #435779;border-radius:9px;background:#091326;color:#fff}
+.admin-job-actions,.admin-app-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
+.admin-action{padding:8px 11px;border:1px solid #526b9e;border-radius:9px;background:#172b4c;color:#fff;font-weight:800;cursor:pointer}
+.admin-action.primary{background:#397dff;border-color:#397dff}.admin-action.danger{background:#49212b;border-color:#8d4354}
+.admin-action:disabled{opacity:.55;cursor:wait}
+.admin-empty{padding:18px;border:1px dashed #405779;border-radius:12px;color:#aebbd5}
+.admin-subtitle{color:#aebbd5;font-size:13px;margin:-5px 0 12px}
+@media(max-width:760px){.admin-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.admin-row{grid-template-columns:minmax(0,1fr) auto}.admin-row select{grid-column:1/-1;width:100%}}
+@media(max-width:520px){.admin-block{padding:13px}.admin-stats{gap:8px}.admin-stat{padding:12px}.admin-stat b{font-size:23px}}
+</style>
 </head>
 <body>
 <header class="wrap top"><a class="brand" href="index.html">MARTIN <span>TECH</span> & BUSINESS HUB</a><nav class="nav"><a href="index.html">Home</a><a href="#opportunities">Career areas</a><a href="#how">How it works</a><a href="#register">Join the portal</a></nav><a class="btn secondary" href="index.html">Back to hub</a></header>
@@ -278,7 +297,21 @@ body.portal-member-mode #portal-app>.portal-app{margin:0;padding:24px;border-col
         <button class="btn secondary portal-hidden" type="button" data-account-panel="jobform" id="mt-tool-post">Post a job</button>
         <button class="btn secondary" type="button" data-account-panel="activity" id="mt-tool-activity">My applications / Applicants</button>
         <button class="btn secondary" type="button" data-account-panel="messaging">Messages <span id="mt-tool-unread" class="portal-count-badge portal-hidden">0</span></button>
+        <button class="btn primary portal-hidden" type="button" data-account-panel="admin" id="mt-tool-admin">Admin Dashboard</button>
       </nav>
+      <section class="portal-panel portal-hidden" id="mt-admin-panel">
+        <div class="market-top"><div><div class="market-title">Martin Hub Admin Dashboard</div><div class="market-sub">Private administrator workspace · users, vacancies and applications</div></div><button class="btn secondary" type="button" id="mt-admin-refresh">Refresh dashboard</button></div>
+        <div class="admin-stats">
+          <div class="admin-stat"><b id="mt-admin-user-count">—</b><span>Registered users</span></div>
+          <div class="admin-stat"><b id="mt-admin-job-count">—</b><span>Total vacancies</span></div>
+          <div class="admin-stat"><b id="mt-admin-pending-count">—</b><span>Jobs awaiting review</span></div>
+          <div class="admin-stat"><b id="mt-admin-app-count">—</b><span>Applications received</span></div>
+        </div>
+        <div class="admin-block"><h4>User directory</h4><p class="admin-subtitle">Review registered accounts and correct an account type when necessary.</p><div class="admin-list" id="mt-admin-users"><div class="admin-empty">Loading user directory…</div></div></div>
+        <div class="admin-block"><h4>Vacancy moderation</h4><p class="admin-subtitle">Approve suitable listings, reject unsuitable submissions or close filled vacancies.</p><div class="admin-list" id="mt-admin-jobs"><div class="admin-empty">Loading vacancies…</div></div></div>
+        <div class="admin-block"><h4>Applications overview</h4><p class="admin-subtitle">Review submissions, check applicant profiles and securely open uploaded CVs.</p><div class="admin-list" id="mt-admin-applications"><div class="admin-empty">Loading applications…</div></div></div>
+        <p class="portal-muted" style="font-size:12px;margin-top:16px">Administrator access is verified by the database. Ordinary employers and job seekers cannot open these controls by changing page code.</p>
+      </section>
       <section class="portal-panel portal-hidden" id="mt-profile-panel">
         <div class="market-top"><div><h3 style="margin:0">Professional profile</h3><p class="portal-muted" style="margin:5px 0 0">Build trust by telling employers or candidates who you are.</p></div><span class="market-tag">Your account</span></div>
         <form id="mt-profile-form">
@@ -335,7 +368,7 @@ body.portal-member-mode #portal-app>.portal-app{margin:0;padding:24px;border-col
   const PUBLISHABLE_KEY = "sb_publishable_oqLCl-FRoz_u7Yw3IUANow_4SBJTXqT";
   const $ = (id) => document.getElementById(id);
   const msg = $("mt-message");
-  let client, currentUser = null, currentProfile = null, jobs = [], selectedChatApplicationId = null;
+  let client, currentUser = null, currentProfile = null, jobs = [], selectedChatApplicationId = null, isJobAdmin = false;
   const say = (text, type="") => { msg.textContent=text; msg.className="portal-status"+(type?" "+type:""); };
   const show = (id, visible=true) => $(id).classList.toggle("portal-hidden",!visible);
   const escapeHtml = (s="") => String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -479,6 +512,74 @@ body.portal-member-mode #portal-app>.portal-app{margin:0;padding:24px;border-col
     }catch(err){button.disabled=false;say(err.message||"Could not update application status.","error");}
   });
 
+
+  async function loadAdminDashboard(){
+    if(!isJobAdmin)throw new Error("Administrator access required.");
+    say("Loading administrator overview…");
+    const [usersResult,jobsResult,appsResult]=await Promise.all([
+      client.rpc("admin_list_job_users"),
+      client.from("jobs").select("id,title,company_name,status,created_at,employer_id").order("created_at",{ascending:false}).limit(250),
+      client.from("applications").select("id,job_id,applicant_id,status,created_at,cv_path,cover_message").order("created_at",{ascending:false}).limit(250)
+    ]);
+    if(usersResult.error)throw usersResult.error;
+    if(jobsResult.error)throw jobsResult.error;
+    if(appsResult.error)throw appsResult.error;
+    const users=usersResult.data||[],allJobs=jobsResult.data||[],apps=appsResult.data||[];
+    $("mt-admin-user-count").textContent=String(users.length);
+    $("mt-admin-job-count").textContent=String(allJobs.length);
+    $("mt-admin-pending-count").textContent=String(allJobs.filter(j=>j.status==="pending").length);
+    $("mt-admin-app-count").textContent=String(apps.length);
+    const userById=new Map(users.map(u=>[u.user_id,u]));
+    const jobById=new Map(allJobs.map(j=>[j.id,j]));
+    $("mt-admin-users").innerHTML=users.length?users.map(u=>{
+      const self=u.user_id===currentUser.id;
+      return '<div class="admin-row"><div class="admin-row-main"><strong>'+escapeHtml(u.full_name||"Unnamed user")+(self?' · You':'')+'</strong><small>'+escapeHtml(u.email||"No email")+' · Joined '+escapeHtml(u.created_at?new Date(u.created_at).toLocaleDateString():"")+'</small><small>'+escapeHtml(u.country||"Country not provided")+'</small></div><select aria-label="Account type for '+escapeHtml(u.email||"user")+'" data-admin-user-role="'+escapeHtml(u.user_id)+'" '+(self?'disabled':'')+'><option value="job_seeker" '+(u.account_type==="job_seeker"?'selected':'')+'>Job seeker</option><option value="employer" '+(u.account_type==="employer"?'selected':'')+'>Employer</option></select><button class="admin-action" type="button" data-admin-user-save="'+escapeHtml(u.user_id)+'" '+(self?'disabled':'')+'>Save role</button></div>';
+    }).join(""):'<div class="admin-empty">No registered accounts found.</div>';
+    $("mt-admin-jobs").innerHTML=allJobs.length?allJobs.map(j=>{
+      const employer=userById.get(j.employer_id);
+      return '<article class="portal-job"><div class="market-top"><div><h3>'+escapeHtml(j.title)+'</h3><small>'+escapeHtml(j.company_name||"Employer")+' · '+escapeHtml(employer?.email||"Employer account")+'</small></div><span class="market-tag">'+escapeHtml(j.status.toUpperCase())+'</span></div><small class="portal-muted">Submitted '+escapeHtml(j.created_at?new Date(j.created_at).toLocaleString():"")+'</small><div class="admin-job-actions"><button class="admin-action primary" type="button" data-admin-job-status="active" data-admin-job-id="'+escapeHtml(j.id)+'">Approve / Publish</button><button class="admin-action" type="button" data-admin-job-status="rejected" data-admin-job-id="'+escapeHtml(j.id)+'">Reject</button><button class="admin-action" type="button" data-admin-job-status="closed" data-admin-job-id="'+escapeHtml(j.id)+'">Close vacancy</button></div></article>';
+    }).join(""):'<div class="admin-empty">No vacancies have been posted yet.</div>';
+    const applicantIds=[...new Set(apps.map(a=>a.applicant_id))];
+    const {data:appProfiles,error:profileError}=applicantIds.length?await client.from("profiles").select("id,full_name,country,headline").in("id",applicantIds):{data:[],error:null};
+    if(profileError)throw profileError;
+    const profileById=new Map((appProfiles||[]).map(p=>[p.id,p]));
+    $("mt-admin-applications").innerHTML=apps.length?(await Promise.all(apps.map(async a=>{
+      const job=jobById.get(a.job_id)||{},person=profileById.get(a.applicant_id)||{};
+      let cv="";
+      if(a.cv_path){const {data,error}=await client.storage.from("job-cvs").createSignedUrl(a.cv_path,300);if(!error&&data?.signedUrl)cv='<a class="admin-action" href="'+escapeHtml(data.signedUrl)+'" target="_blank" rel="noopener">Open CV · 5 min</a>';}
+      return '<article class="portal-job"><h3>'+escapeHtml(person.full_name||"Applicant")+'</h3><small>'+escapeHtml(person.country||"Country not provided")+' · '+escapeHtml(person.headline||"No headline")+'</small><p><strong>Vacancy:</strong> '+escapeHtml(job.title||"Deleted or unavailable job")+' · '+escapeHtml(job.company_name||"")+'</p><p><strong>Submitted:</strong> '+escapeHtml(a.created_at?new Date(a.created_at).toLocaleString():"")+'</p><p><strong>Status:</strong> '+escapeHtml(a.status)+'</p><p>'+escapeHtml(a.cover_message||"No cover message supplied")+'</p><div class="admin-app-actions">'+cv+'<button class="admin-action" type="button" data-admin-app-status="reviewing" data-admin-app-id="'+escapeHtml(a.id)+'">Reviewing</button><button class="admin-action primary" type="button" data-admin-app-status="shortlisted" data-admin-app-id="'+escapeHtml(a.id)+'">Shortlist</button><button class="admin-action" type="button" data-admin-app-status="interview" data-admin-app-id="'+escapeHtml(a.id)+'">Interview</button><button class="admin-action primary" type="button" data-admin-app-status="hired" data-admin-app-id="'+escapeHtml(a.id)+'">Hire</button><button class="admin-action danger" type="button" data-admin-app-status="rejected" data-admin-app-id="'+escapeHtml(a.id)+'">Reject</button></div></article>';
+    }))).join(""):'<div class="admin-empty">No applications have been submitted yet.</div>';
+    say("Administrator dashboard is up to date.","ok");
+  }
+  $("mt-admin-refresh").addEventListener("click",()=>loadAdminDashboard().catch(err=>say(err.message||"Could not refresh administrator dashboard.","error")));
+  $("mt-admin-panel").addEventListener("click",async e=>{
+    const roleSave=e.target.closest("[data-admin-user-save]");
+    const jobAction=e.target.closest("[data-admin-job-status]");
+    const appAction=e.target.closest("[data-admin-app-status]");
+    try{
+      if(roleSave){
+        const id=roleSave.dataset.adminUserSave,select=$("mt-admin-panel").querySelector('[data-admin-user-role="'+id+'"]');
+        if(!select||id===currentUser.id)return;
+        roleSave.disabled=true;say("Updating account type…");
+        const {data,error}=await client.from("profiles").update({account_type:select.value,updated_at:new Date().toISOString()}).eq("id",id).select("id").maybeSingle();
+        if(error)throw error;if(!data)throw new Error("No account was updated. Check administrator permissions.");
+        await loadAdminDashboard();say("Account type updated.","ok");return;
+      }
+      if(jobAction){
+        jobAction.disabled=true;say("Updating vacancy…");
+        const {data,error}=await client.from("jobs").update({status:jobAction.dataset.adminJobStatus,updated_at:new Date().toISOString()}).eq("id",jobAction.dataset.adminJobId).select("id").maybeSingle();
+        if(error)throw error;if(!data)throw new Error("Vacancy was not updated. Check administrator permissions.");
+        await loadAdminDashboard();say("Vacancy status updated.","ok");return;
+      }
+      if(appAction){
+        appAction.disabled=true;say("Updating application…");
+        const {data,error}=await client.from("applications").update({status:appAction.dataset.adminAppStatus}).eq("id",appAction.dataset.adminAppId).select("id").maybeSingle();
+        if(error)throw error;if(!data)throw new Error("Application was not updated. Check administrator permissions.");
+        await loadAdminDashboard();say("Application status updated.","ok");
+      }
+    }catch(err){if(roleSave)roleSave.disabled=false;if(jobAction)jobAction.disabled=false;if(appAction)appAction.disabled=false;say(err.message||"Administrator action failed.","error");}
+  });
+
   async function openChat(applicationId,recipientId,label){
     if(!recipientId){say("The other account could not be identified for this application.","error");return;}
     selectedChatApplicationId=applicationId;
@@ -552,13 +653,18 @@ body.portal-member-mode #portal-app>.portal-app{margin:0;padding:24px;border-col
 
   async function setSession(user) {
     currentUser=user||null;
-    if(!user){document.body.classList.remove("portal-member-mode");currentProfile=null;if(portalRefreshTimer){clearInterval(portalRefreshTimer);portalRefreshTimer=null;}show("mt-member-area",false);$("mt-account-state").textContent="You are not signed in.";return;}
+    if(!user){document.body.classList.remove("portal-member-mode");currentProfile=null;isJobAdmin=false;show("mt-tool-admin",false);show("mt-admin-panel",false);if(portalRefreshTimer){clearInterval(portalRefreshTimer);portalRefreshTimer=null;}show("mt-member-area",false);$("mt-account-state").textContent="You are not signed in.";return;}
     await ensureProfile(user);
+    const {data:adminFlag,error:adminFlagError}=await client.rpc("is_martin_hub_admin");
+    isJobAdmin=!adminFlagError&&adminFlag===true;
+    if(adminFlagError)console.warn("Could not verify administrator role:",adminFlagError.message);
     show("mt-member-area",true);
-    const roleLabel=currentProfile.account_type==="employer"?"Employer / Recruiter":"Job seeker";$("mt-account-state").textContent="Signed in as "+user.email+" · "+roleLabel;$("mt-last-account").textContent="Current account: "+roleLabel+" ("+user.email+"). Passwords are never saved here.";
-    $("mt-dashboard-title").textContent=currentProfile.account_type==="employer"?"Employer dashboard":"Job seeker dashboard";
+    const roleLabel=isJobAdmin?"Martin Hub Administrator":(currentProfile.account_type==="employer"?"Employer / Recruiter":"Job seeker");$("mt-account-state").textContent="Signed in as "+user.email+" · "+roleLabel;$("mt-last-account").textContent="Current account: "+roleLabel+" ("+user.email+"). Passwords are never saved here.";
+    $("mt-dashboard-title").textContent=isJobAdmin?"Martin Hub Admin Dashboard":(currentProfile.account_type==="employer"?"Employer dashboard":"Job seeker dashboard");
     document.body.classList.toggle("portal-member-mode",true);
-    show("mt-jobseeker-market",currentProfile.account_type==="job_seeker");
+    show("mt-jobseeker-market",currentProfile.account_type==="job_seeker"&&!isJobAdmin);
+    show("mt-tool-admin",isJobAdmin);
+    show("mt-admin-panel",false);
     show("mt-profile-panel",false);
     show("mt-account-tools",true);
     show("mt-activity-panel",false);
@@ -612,13 +718,14 @@ body.portal-member-mode #portal-app>.portal-app{margin:0;padding:24px;border-col
   $("mt-account-tools").addEventListener("click",async e=>{
     const b=e.target.closest("[data-account-panel]");if(!b)return;
     const panel=b.dataset.accountPanel;
-    ["profile","jobform","activity","messaging"].forEach(name=>{
-      const id={profile:"mt-profile-panel",jobform:"mt-job-form",activity:"mt-activity-panel",messaging:"mt-messaging"}[name];
+    ["profile","jobform","activity","messaging","admin"].forEach(name=>{
+      const id={profile:"mt-profile-panel",jobform:"mt-job-form",activity:"mt-activity-panel",messaging:"mt-messaging",admin:"mt-admin-panel"}[name];
       const el=$(id);if(el)el.classList.toggle("portal-hidden",name!==panel);
     });
     if(panel==="activity")await loadActivity().catch(err=>say(err.message||"Could not load activity.","error"));
     if(panel==="messaging")await loadMessages().catch(err=>say(err.message||"Could not load messages.","error"));
-    const target=$({profile:"mt-profile-panel",jobform:"mt-job-form",activity:"mt-activity-panel",messaging:"mt-messaging"}[panel]);
+    if(panel==="admin"){if(!isJobAdmin){say("Administrator access required.","error");return;}await loadAdminDashboard().catch(err=>say(err.message||"Could not load administrator dashboard.","error"));}
+    const target=$({profile:"mt-profile-panel",jobform:"mt-job-form",activity:"mt-activity-panel",messaging:"mt-messaging",admin:"mt-admin-panel"}[panel]);
     target?.scrollIntoView({behavior:"smooth",block:"start"});
   });
   $("mt-profile-form").addEventListener("submit",async e=>{
