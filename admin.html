@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Martin Hub Super Admin | Martin Tech & Business Hub</title>
+<style>
+:root{color-scheme:dark;--bg:#080d1b;--panel:#111d34;--line:#2d4267;--text:#f5f7ff;--muted:#aebbd5;--blue:#4f8cff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 80% 0,#25204c,transparent 35%),var(--bg);color:var(--text);font:15px/1.6 Inter,system-ui,Segoe UI,sans-serif}.wrap{width:min(1120px,94%);margin:auto}.top{display:flex;justify-content:space-between;align-items:center;gap:15px;padding:20px 0;border-bottom:1px solid var(--line)}a{color:#a9c7ff;text-decoration:none}.brand{font-weight:900;color:#fff}.brand span{color:#8caeff}.btn,button{border:1px solid var(--line);border-radius:10px;padding:10px 14px;background:#172744;color:#fff;font:inherit;font-weight:750;cursor:pointer}.primary{background:linear-gradient(100deg,#397dff,#895bff);border:0}.danger{background:#49212b;border-color:#84404d}.muted{color:var(--muted)}h1{font-size:clamp(30px,5vw,48px);line-height:1.1;margin:30px 0 8px}.panel{padding:22px;border:1px solid var(--line);border-radius:18px;background:#111d34;margin:18px 0}.hidden{display:none!important}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.field{display:grid;gap:6px;margin:10px 0}.field label{font-size:13px;color:#dce7ff;font-weight:700}.field input,.field select,.field textarea{width:100%;padding:12px;border:1px solid #405779;border-radius:10px;background:#091326;color:#fff;font:inherit}.field textarea{min-height:75px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.stat{padding:15px;border:1px solid var(--line);border-radius:12px;background:#ffffff08}.stat b{display:block;font-size:25px}.role-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.role-card,.user-row{padding:15px;border:1px solid var(--line);border-radius:13px;background:#0c172b;margin:10px 0}.user-row{display:grid;grid-template-columns:minmax(180px,1fr) minmax(150px,220px) auto auto;gap:10px;align-items:center}.user-row small{display:block;color:var(--muted);overflow-wrap:anywhere}.checks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0}.checks label{display:flex;gap:8px;align-items:center;padding:8px;border:1px solid var(--line);border-radius:9px;font-size:13px}.status{padding:12px;border-radius:10px;background:#172744;margin:14px 0;min-height:20px}.status.error{background:#49212b}.status.ok{background:#123b32}.pill{display:inline-block;border:1px solid #405779;border-radius:30px;padding:3px 9px;font-size:12px;color:#c8d9ff}.actions{display:flex;gap:10px;flex-wrap:wrap}.section-head{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}footer{padding:25px 0;color:var(--muted);border-top:1px solid var(--line);margin-top:35px}
+@media(max-width:760px){.form-grid,.role-grid{grid-template-columns:1fr}.user-row{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.checks{grid-template-columns:1fr}.top{align-items:flex-start;flex-wrap:wrap}}
+</style>
+</head>
+<body>
+<header class="wrap top"><a class="brand" href="index.html">MARTIN <span>TECH</span> & BUSINESS HUB</a><div class="actions"><a href="index.html">Main website</a><a href="jobs.html">Career portal</a></div></header>
+<main class="wrap">
+<h1>Martin Hub <span style="color:#9bbcff">Super Admin</span></h1>
+<p class="muted">Central access and role management for the website. Only the verified Super Admin can use this workspace.</p>
+<div id="status" class="status">Sign in with your administrator account to continue.</div>
+<section id="login-panel" class="panel">
+<h2>Administrator sign in</h2>
+<form id="login-form">
+<div class="form-grid"><div class="field"><label for="email">Administrator email</label><input id="email" type="email" autocomplete="username" required></div><div class="field"><label for="password">Password</label><input id="password" type="password" autocomplete="current-password" required></div></div>
+<div class="actions"><button class="primary" type="submit">Sign in securely</button><button type="button" id="reset-password">Reset password</button></div>
+</form>
+</section>
+<section id="dashboard" class="hidden">
+<div class="stats">
+<div class="stat"><b id="user-count">—</b><span class="muted">Registered accounts</span></div>
+<div class="stat"><b id="role-count">—</b><span class="muted">Available roles</span></div>
+<div class="stat"><b id="custom-count">—</b><span class="muted">Custom roles</span></div>
+</div>
+<section class="panel">
+<div class="section-head"><div><h2>Website roles</h2><p class="muted">Create reusable roles and define their permission sets.</p></div><button type="button" id="refresh">Refresh</button></div>
+<div id="role-list" class="role-grid"></div>
+</section>
+<section class="panel">
+<h2>Create a new role</h2>
+<form id="role-form">
+<div class="form-grid">
+<div class="field"><label for="role-name">Role name</label><input id="role-name" maxlength="60" placeholder="e.g. Social Media Manager" required></div>
+<div class="field"><label for="role-key">Role key (unique)</label><input id="role-key" maxlength="40" pattern="[a-z][a-z0-9_]{2,39}" placeholder="social_media_manager" required></div>
+</div>
+<div class="field"><label for="role-description">Description</label><textarea id="role-description" maxlength="240" placeholder="What should this role manage?"></textarea></div>
+<p><strong>Permissions</strong></p>
+<div class="checks">
+<label><input type="checkbox" value="site.dashboard"> View site dashboard</label>
+<label><input type="checkbox" value="users.manage"> Manage website users</label>
+<label><input type="checkbox" value="content.manage"> Manage website content</label>
+<label><input type="checkbox" value="career.manage"> Manage Career portal</label>
+<label><input type="checkbox" value="writing.manage"> Manage Writing Marketplace</label>
+<label><input type="checkbox" value="enquiries.manage"> Manage enquiries and support</label>
+<label><input type="checkbox" value="analytics.view"> View analytics</label>
+<label><input type="checkbox" value="settings.manage"> Manage website settings</label>
+</div>
+<button class="primary" type="submit">Create role</button>
+</form>
+</section>
+<section class="panel">
+<div class="section-head"><div><h2>Assign roles to people</h2><p class="muted">Choose a registered account and assign one website role. This is separate from the person's Career account type.</p></div></div>
+<div id="user-list"><p class="muted">Loading registered accounts…</p></div>
+</section>
+<section class="panel">
+<h2>Access protection</h2>
+<ul class="muted">
+<li>Your Super Admin account cannot be changed or revoked from this screen.</li>
+<li>Other people cannot grant themselves roles through their profile or browser.</li>
+<li>Role changes are checked by Supabase on the server, not just by this page.</li>
+<li>Assign roles only to people who have already registered. Creating/inviting new login accounts is a separate Auth administration step.</li>
+</ul>
+</section>
+<div class="actions"><button type="button" id="logout" class="danger">Sign out</button></div>
+</section>
+</main>
+<footer class="wrap">© <span id="year"></span> Martin Tech & Business Hub · Secure administration</footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(() => {
+ const PROJECT_URL="https://zvepoycrqjzuptccdffv.supabase.co";
+ const PUBLISHABLE_KEY="sb_publishable_oqLCl-FRoz_u7Yw3IUANow_4SBJTXqT";
+ const $=id=>document.getElementById(id);
+ const status=(message,type="")=>{$("status").textContent=message;$("status").className="status"+(type?" "+type:"");};
+ const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+ let client=null,superAdmin=false,users=[],roles=[];
+ $("year").textContent=new Date().getFullYear();
+ function showDashboard(yes){$("dashboard").classList.toggle("hidden",!yes);$("login-panel").classList.toggle("hidden",yes);}
+ async function verify(){
+   const {data:{user}}=await client.auth.getUser();
+   if(!user){showDashboard(false);status("Sign in with your administrator account to continue.");return false;}
+   const {data,error}=await client.rpc("is_martin_hub_super_admin");
+   if(error||data!==true){await client.auth.signOut();showDashboard(false);status("This account is not authorised for Super Admin access.","error");return false;}
+   superAdmin=true;showDashboard(true);status("Verified Super Admin session: "+user.email,"ok");await load();return true;
+ }
+ async function load(){
+   status("Loading users and role permissions…");
+   const [u,r]=await Promise.all([client.rpc("admin_list_site_users"),client.rpc("admin_list_site_roles")]);
+   if(u.error)throw u.error;if(r.error)throw r.error;
+   users=u.data||[];roles=r.data||[];
+   $("user-count").textContent=users.length;$("role-count").textContent=roles.length;
+   $("custom-count").textContent=roles.filter(x=>!x.is_system).length;
+   $("role-list").innerHTML=roles.map(x=>'<article class="role-card"><strong>'+esc(x.name)+'</strong> <span class="pill">'+(x.is_system?"System role":"Custom role")+'</span><p class="muted">'+esc(x.description)+'</p><small class="muted">'+esc(x.role_key)+'</small><p>'+((x.permissions||[]).length?x.permissions.map(p=>'<span class="pill">'+esc(p)+'</span>').join(" "):'<span class="pill">No extra permissions</span>')+'</p></article>').join("");
+   $("user-list").innerHTML=users.map(u=>{
+     const current=u.role_key||"member";
+     const options=roles.filter(r=>r.role_key!=="super_admin"&&r.is_active).map(r=>'<option value="'+esc(r.role_key)+'" '+(current===r.role_key?"selected":"")+'>'+esc(r.name)+'</option>').join("");
+     const protectedUser=u.role_key==="super_admin";
+     return '<div class="user-row"><div><strong>'+esc(u.full_name||"Unnamed account")+'</strong><small>'+esc(u.email||"No email")+'</small><small>'+esc(u.account_type||"Member account")+' · '+esc(u.created_at?new Date(u.created_at).toLocaleDateString():"")+'</small></div><div><label class="muted">Website role</label><select data-role-select="'+esc(u.user_id)+'" '+(protectedUser?"disabled":"")+'><option value="member" '+(current==="member"?"selected":"")+'>Member (default)</option>'+options+'</select></div><button type="button" data-role-save="'+esc(u.user_id)+'" '+(protectedUser?"disabled":"")+'>Save role</button><button type="button" class="danger" data-role-revoke="'+esc(u.user_id)+'" '+(!u.role_key||protectedUser?"disabled":"")+'>Revoke</button></div>';
+   }).join("")||'<p class="muted">No registered accounts found.</p>';
+   status("Dashboard refreshed. "+users.length+" accounts and "+roles.length+" roles loaded.","ok");
+ }
+ $("login-form").addEventListener("submit",async e=>{e.preventDefault();try{status("Signing in…");const {error}=await client.auth.signInWithPassword({email:$("email").value.trim(),password:$("password").value});if(error)throw error;await verify();}catch(err){status(err.message||"Sign-in failed.","error");}});
+ $("reset-password").addEventListener("click",async()=>{const email=$("email").value.trim();if(!email){status("Enter your administrator email first.","error");return;}const {error}=await client.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});status(error?error.message:"If the account exists, a password reset email has been sent.","ok");});
+ $("refresh").addEventListener("click",()=>load().catch(e=>status(e.message,"error")));
+ $("role-form").addEventListener("submit",async e=>{
+   e.preventDefault();try{
+     const permissions=[...document.querySelectorAll('#role-form input[type="checkbox"]:checked')].map(x=>x.value);
+     const {error}=await client.rpc("admin_create_site_role",{p_role_key:$("role-key").value.trim(),p_name:$("role-name").value.trim(),p_description:$("role-description").value.trim(),p_permissions:permissions});
+     if(error)throw error;$("role-form").reset();await load();status("New role created successfully.","ok");
+   }catch(err){status(err.message||"Could not create role.","error");}
+ });
+ $("user-list").addEventListener("click",async e=>{
+   const save=e.target.closest("[data-role-save]"),revoke=e.target.closest("[data-role-revoke]");
+   try{
+     if(save){const id=save.dataset.roleSave,select=document.querySelector('[data-role-select="'+CSS.escape(id)+'"]');if(!select)throw new Error("Role selector not found.");if(select.value==="member"){const {error}=await client.rpc("admin_revoke_site_role",{p_user_id:id});if(error)throw error;}else{const {error}=await client.rpc("admin_assign_site_role",{p_user_id:id,p_role_key:select.value});if(error)throw error;}await load();status("Website role updated successfully.","ok");}
+     if(revoke){const {error}=await client.rpc("admin_revoke_site_role",{p_user_id:revoke.dataset.roleRevoke});if(error)throw error;await load();status("Additional role access revoked. The account remains a standard member.","ok");}
+   }catch(err){status(err.message||"Could not update role.","error");}
+ });
+ $("logout").addEventListener("click",async()=>{await client.auth.signOut();superAdmin=false;showDashboard(false);status("You have signed out.");});
+ async function start(){client=window.supabase.createClient(PROJECT_URL,PUBLISHABLE_KEY);const {data:{session}}=await client.auth.getSession();if(session)await verify();client.auth.onAuthStateChange((_event,session)=>{setTimeout(()=>{if(!session){showDashboard(false);superAdmin=false;status("You are signed out.");}else verify().catch(e=>status(e.message,"error"));},0);});}
+ start().catch(e=>status(e.message||"Could not initialise the administrator dashboard.","error"));
+})();
+</script>
+</body></html>
