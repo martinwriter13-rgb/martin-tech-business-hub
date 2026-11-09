@@ -91,7 +91,7 @@ async function refreshData(){
 function renderProjects(){
  const q=($('projectSearch').value||'').toLowerCase();
  const list=projects.filter(p=>(p.title+' '+p.category+' '+p.brief).toLowerCase().includes(q));
- $('projectList').innerHTML=list.length?list.map(p=>'<article class="card"><span class="tag">'+esc(p.category)+'</span><h3>'+esc(p.title)+'</h3><p class="muted">'+esc(p.brief.slice(0,180))+(p.brief.length>180?'…':'')+'</p><div class="project-meta"><span>Budget: '+esc(money(p.budget_min,p.currency))+' – '+esc(money(p.budget_max,p.currency))+'</span><span>Deadline: '+esc(p.deadline||'Flexible')+'</span></div><div class="actions">'+(profile.role==='writer'?'<button onclick="applyProject(\\''+p.id+'\\')">Submit proposal</button>':'<span class="pill">Client opportunity</span>')+'</div></article>').join(''):'<div class="empty">No open projects match this search yet.</div>';
+ $('projectList').innerHTML=list.length?list.map(p=>'<article class="card"><span class="tag">'+esc(p.category)+'</span><h3>'+esc(p.title)+'</h3><p class="muted">'+esc(p.brief.slice(0,180))+(p.brief.length>180?'…':'')+'</p><div class="project-meta"><span>Budget: '+esc(money(p.budget_min,p.currency))+' – '+esc(money(p.budget_max,p.currency))+'</span><span>Deadline: '+esc(p.deadline||'Flexible')+'</span></div><div class="actions">'+(profile.role==='writer'?'<button onclick="applyProject(\''+p.id+'\')">Submit proposal</button>':'<span class="pill">Client opportunity</span>')+'</div></article>').join(''):'<div class="empty">No open projects match this search yet.</div>';
 }
 function renderWriters(){
  const q=($('writerSearch').value||'').toLowerCase();
@@ -105,7 +105,7 @@ function renderWork(){
  }else{
  supabase.from('writing_projects').select('*').eq('client_id',user.id).order('created_at',{ascending:false}).then(({data,error})=>{
   if(error){$('workList').innerHTML='<div class="notice error">'+esc(error.message)+'</div>';return}
-  $('workList').innerHTML=(data||[]).length?(data||[]).map(p=>'<div class="item"><strong>'+esc(p.title)+'</strong><div class="project-meta"><span>'+esc(p.status)+'</span><span>'+esc(money(p.budget_min,p.currency))+' – '+esc(money(p.budget_max,p.currency))+'</span></div><button class="secondary" onclick="viewProposals(\\''+p.id+'\\')">View proposals</button></div>').join(''):'<div class="empty">You have not posted a project yet.</div>';
+  $('workList').innerHTML=(data||[]).length?(data||[]).map(p=>'<div class="item"><strong>'+esc(p.title)+'</strong><div class="project-meta"><span>'+esc(p.status)+'</span><span>'+esc(money(p.budget_min,p.currency))+' – '+esc(money(p.budget_max,p.currency))+'</span></div><button class="secondary" onclick="viewProposals(\''+p.id+'\')">View proposals</button></div>').join(''):'<div class="empty">You have not posted a project yet.</div>';
  });
  }
 }
@@ -119,12 +119,12 @@ window.applyProject=async id=>{
 window.viewProposals=async id=>{
  const {data,error}=await supabase.from('writing_proposals').select('*,writing_profiles(display_name,headline,skills)').eq('project_id',id).order('created_at',{ascending:false});
  if(error)return alert(error.message);
- const target=$('workList');target.innerHTML='<h3>Project proposals</h3>'+(data||[]).map(p=>'<div class="item"><strong>'+esc(p.writing_profiles?.display_name||'Writer')+'</strong><p>'+esc(p.cover_letter)+'</p><div class="project-meta"><span>'+esc(money(p.bid_amount,p.currency))+'</span><span>'+esc(p.delivery_days)+' days</span><span>'+esc(p.status)+'</span></div>'+(p.status==='submitted'||p.status==='shortlisted'?'<button onclick="decideProposal(\\''+p.id+'\\',\\''+id+'\\')">Accept writer</button>':'')+'</div>').join('')||'<div class="empty">No proposals yet.</div>';
+ const target=$('workList');target.innerHTML='<h3>Project proposals</h3>'+(data||[]).map(p=>'<div class="item"><strong>'+esc(p.writing_profiles?.display_name||'Writer')+'</strong><p>'+esc(p.cover_letter)+'</p><div class="project-meta"><span>'+esc(money(p.bid_amount,p.currency))+'</span><span>'+esc(p.delivery_days)+' days</span><span>'+esc(p.status)+'</span></div>'+(p.status==='submitted'||p.status==='shortlisted'?'<button onclick="decideProposal(\''+p.id+'\',\''+id+'\')">Accept writer</button>':'')+'</div>').join('')||'<div class="empty">No proposals yet.</div>';
 };
 window.decideProposal=async(pid,projectId)=>{
  const {error}=await supabase.from('writing_proposals').update({status:'accepted',updated_at:new Date().toISOString()}).eq('id',pid);
  if(error)return alert(error.message);
- await supabase.from('writing_projects').update({status:'in_progress',updated_at:new Date().toISOString()}).eq('id',projectId);
+ await supabase.from('writing_projects').update({status:'in_progress',assigned_writer_id:(await supabase.from('writing_proposals').select('writer_id').eq('id',pid).single()).data.writer_id,updated_at:new Date().toISOString()}).eq('id',projectId);
  alert('Writer accepted. Project moved to in progress.');await refreshData();
 };
 $('signUpBtn').addEventListener('click',async()=>{
