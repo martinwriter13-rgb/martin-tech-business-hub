@@ -279,6 +279,63 @@ a, button { -webkit-tap-highlight-color:transparent; }
   *, *::before, *::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; }
 }
 </style>
+<style id="adaptive-device-layout">
+/* Device-adaptive presentation: viewport width + touch capability, not unreliable UA sniffing */
+:root{--device-gutter:clamp(16px,4vw,48px);--device-card-columns:3}
+html[data-device="phone"]{--device-gutter:14px;--device-card-columns:1}
+html[data-device="tablet"]{--device-gutter:24px;--device-card-columns:2}
+html[data-device="laptop"]{--device-gutter:clamp(28px,4vw,56px);--device-card-columns:3}
+@media(min-width:801px) and (max-width:1100px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(min-width:1101px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:800px){
+  .wrap{width:calc(100% - (var(--device-gutter)*2))}
+  .nav{gap:12px}
+  .nav .links{display:none}
+  .nav .links.mobile-open{display:flex}
+  .hero,.about,.contact{grid-template-columns:minmax(0,1fr)}
+  .hero{padding-top:clamp(34px,7vw,58px);gap:26px}
+  .hero h1{font-size:clamp(34px,7vw,52px);line-height:1.12;letter-spacing:-1.2px}
+  .btn{min-height:44px;display:inline-flex;align-items:center;justify-content:center}
+}
+@media(max-width:520px){
+  .grid{grid-template-columns:minmax(0,1fr)}
+  .metric{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .section-head h2{font-size:clamp(25px,7vw,30px)}
+  .hero-card{padding:18px}
+}
+@media(hover:none) and (pointer:coarse){
+  a,button,[role="button"],input,select,textarea{touch-action:manipulation}
+  a,button,[role="button"]{scroll-margin:12px}
+  .card:hover{transform:none}
+}
+@media(hover:hover) and (pointer:fine){
+  .card:hover{transform:translateY(-4px)}
+}
+</style>
+<script id="device-capability-detection">
+(function(){
+  const root=document.documentElement;
+  function classify(){
+    const width=window.innerWidth||root.clientWidth;
+    const touch=('ontouchstart' in window)||navigator.maxTouchPoints>0;
+    const device=width<=800?'phone':width<=1100?'tablet':'laptop';
+    root.dataset.device=device;
+    root.dataset.input=touch?'touch':'pointer';
+    root.classList.toggle('is-phone',device==='phone');
+    root.classList.toggle('is-tablet',device==='tablet');
+    root.classList.toggle('is-laptop',device==='laptop');
+    root.classList.toggle('has-touch',touch);
+    root.classList.toggle('has-pointer',!touch);
+  }
+  classify();
+  let resizeTimer;
+  window.addEventListener('resize',function(){
+    window.clearTimeout(resizeTimer);
+    resizeTimer=window.setTimeout(classify,100);
+  },{passive:true});
+  window.addEventListener('orientationchange',classify,{passive:true});
+})();
+</script>
 </head>
 <body>
 <!-- Google Tag Manager (noscript) -->
