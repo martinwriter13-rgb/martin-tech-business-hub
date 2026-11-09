@@ -161,7 +161,7 @@ body.portal-member-mode #portal-app>.portal-app{margin:0;padding:24px;border-col
 #opportunities .career-card:nth-child(6){background-image:url('https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=85')}
 @media(max-width:520px){#opportunities .career-card{min-height:205px}}
 
-</style>
+\n/* Career portal feature links shown clearly to every visitor */\n.portal-access-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.portal-access-card{display:flex;flex-direction:column;align-items:flex-start;min-height:230px}.portal-access-card p{flex:1}.portal-access-card .btn{margin-top:16px}@media(max-width:760px){.portal-access-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:520px){.portal-access-grid{grid-template-columns:1fr}}\n</style>
 </head>
 <body>
 <header class="wrap top"><a class="brand" href="index.html">MARTIN <span>TECH</span> & BUSINESS HUB</a><nav class="nav"><a href="index.html">Home</a><a href="#opportunities">Career areas</a><a href="#how">How it works</a><a href="#register">Join the portal</a></nav><a class="btn secondary" href="index.html">Back to hub</a></header>
@@ -214,7 +214,18 @@ body.portal-member-mode #portal-app>.portal-app{margin:0;padding:24px;border-col
 <article class="role"><div class="ico">💼</div><h3>For job seekers</h3><p class="lead">Present your skills and apply for opportunities.</p><ul><li>Create a professional candidate profile</li><li>Add skills, experience and CV</li><li>Search and filter opportunities</li><li>Track applications from a personal dashboard</li></ul><a class="btn secondary" href="#register">Job seeker registration</a></article>
 </div></section>
 <section class="wrap" id="how"><div class="heading"><h2>Designed for a clear, simple journey</h2><p>The full portal will support these steps once secure accounts and database services are connected.</p></div><div class="steps"><div class="step"><strong>Create an account</strong><p>Choose employer or job seeker and verify your email.</p></div><div class="step"><strong>Connect with opportunity</strong><p>Employers publish roles; candidates discover and apply.</p></div><div class="step"><strong>Manage progress</strong><p>Use dashboards to review listings, applications and updates.</p></div></div></section>
-<section class="wrap" id="register"><div class="notice"><strong>Portal launch preparation is underway</strong><p>This page introduces the global jobs portal. Secure sign-up, login, CV uploads, job posting, applications and dashboards are not active yet. They require a connected authentication service and database; we will not collect passwords or CVs until those protections are in place.</p><div class="actions"><a class="btn primary" href="mailto:martinwriter13@gmail.com?subject=Global%20Jobs%20Portal%20Launch">Contact Martin about the portal</a><a class="btn secondary" href="index.html">Explore Martin Tech & Business Hub</a></div></div></section>
+<section class="wrap" id="register">
+  <div class="heading"><h2>Career Portal</h2><p>Everything you need to hire, find work, apply and manage the platform — all in one place.</p></div>
+  <div class="grid portal-access-grid">
+    <article class="card portal-access-card"><div class="ico">📢</div><h3>Post a Job</h3><p>Employers publish vacancies and freelance opportunities for review.</p><a class="btn primary" href="#portal-app">Post a Job</a></article>
+    <article class="card portal-access-card"><div class="ico">🔎</div><h3>Find Jobs</h3><p>Browse available opportunities and search by title, skill or location.</p><a class="btn primary" href="#portal-app">Find Jobs</a></article>
+    <article class="card portal-access-card"><div class="ico">📄</div><h3>Apply for Jobs</h3><p>Submit your application and upload your CV for suitable vacancies.</p><a class="btn primary" href="#portal-app">Apply for Jobs</a></article>
+    <article class="card portal-access-card"><div class="ico">📊</div><h3>My Applications</h3><p>Track application status and follow updates from employers.</p><a class="btn primary" href="#portal-app">My Applications</a></article>
+    <article class="card portal-access-card"><div class="ico">🏢</div><h3>Employer Dashboard</h3><p>Manage your job vacancies, review applicants and update their progress.</p><a class="btn primary" href="#portal-app">Employer Dashboard</a></article>
+    <article class="card portal-access-card"><div class="ico">🛡️</div><h3>Admin Dashboard</h3><p>Martin Hub administrator workspace to oversee jobs, users, employers and applications.</p><a class="btn secondary" href="#portal-app">Administrator sign-in</a></article>
+  </div>
+  <p class="portal-muted" style="margin-top:14px">Sign in below to access the tools available to your account. Administrator controls require a verified administrator account.</p>
+</section>
 
 <section class="wrap" id="portal-app">
 <div class="portal-app">
