@@ -31,7 +31,7 @@
 @media(max-width:760px){.visual-showcase,.video-panel{grid-template-columns:1fr}.visual-feature,.visual-feature img{min-height:260px}.media-side{grid-template-columns:1fr 1fr;grid-template-rows:150px}.visual-tile,.visual-tile img{min-height:150px}}
 @media(max-width:480px){.media-side{grid-template-columns:1fr;grid-template-rows:repeat(2,145px)}}
 </style>
-</head>
+<style id="mt-managed-content-style">.mt-managed-wrap{width:min(1100px,92%);margin:28px auto}.mt-managed-card{padding:22px;margin:14px 0;border:1px solid rgba(130,165,230,.3);border-radius:16px;background:linear-gradient(145deg,#14213a,#0d1527);color:inherit}.mt-managed-card h2{margin-top:0}.mt-managed-card p{white-space:pre-wrap}.mt-managed-kicker{font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:#82baff;font-weight:800}</style></head>
 <body>
 <header><a class="brand" href="index.html">Martin Tech <span>& Business Hub</span></a><nav><a href="index.html">Home</a><a href="research-writing.html">Work & Writing Marketplace</a><a href="#online-jobs">Online Jobs</a><a href="services.html">Services</a></nav><div id="topAuth"><a href="#account" class="btn secondary">Sign in / Join</a></div></header>
 <main>
@@ -108,7 +108,7 @@
 </section>
 </div>
 <section class="panel"><div class="eyebrow">Marketplace standards</div><h2>Trust, quality and academic integrity</h2><div class="grid"><article class="card"><h3>Transparent proposals</h3><p class="muted">Agree on scope, deliverables, price and deadline before work begins.</p></article><article class="card"><h3>Responsible research</h3><p class="muted">No fabricated sources, fabricated data, plagiarism or dishonest academic submissions.</p></article><article class="card"><h3>Privacy by design</h3><p class="muted">Account and project data are protected by database access policies. Project files are stored in a private bucket.</p></article></div></section>
-</main>
+<section id="mt-managed-content" class="mt-managed-wrap" data-page="research-writing" hidden aria-label="Published website updates"></section></main>
 <footer class="footer"><div>Martin Tech & Business Hub · Writing Marketplace</div><div>Payments are not enabled yet. Never send money outside an agreed, verified payment process.</div><div><a href="research-writing.html">Research & Writing services</a> · <a href="index.html">Home</a></div></footer>
 <script type="module">
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
@@ -234,4 +234,4 @@ $('refreshBtn').addEventListener('click',()=>refreshData().catch(e=>msg(e.messag
 supabase.auth.getSession().then(async({data})=>{if(data.session){user=data.session.user;try{await loadProfile()}catch(e){msg(e.message,'error')}}});
 supabase.auth.onAuthStateChange((_event,session)=>{if(session){user=session.user;}else{user=null;profile=null}});
 \nconst jobsOpen=$('openJobsPortal'),jobsClose=$('closeJobsPortal'),jobsWrap=$('jobsPortalWrap'),jobsFrame=$('jobsPortalFrame');\njobsOpen?.addEventListener('click',()=>{jobsWrap.classList.remove('hidden');if(!jobsFrame.src)jobsFrame.src='jobs.html';jobsOpen.disabled=true;jobsOpen.textContent='Online Jobs Portal opened';jobsWrap.scrollIntoView({behavior:'smooth',block:'start'});});\njobsClose?.addEventListener('click',()=>{jobsWrap.classList.add('hidden');jobsOpen.disabled=false;jobsOpen.textContent='Open Online Jobs Portal';$('online-jobs').scrollIntoView({behavior:'smooth',block:'start'});});\n</script>
-</body></html>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>(async()=>{const host=document.getElementById("mt-managed-content");if(!host||!window.supabase?.createClient)return;const db=window.supabase.createClient("https://zvepoycrqjzuptccdffv.supabase.co","sb_publishable_oqLCl-FRoz_u7Yw3IUANow_4SBJTXqT");try{const {data,error}=await db.from("site_content").select("title,body,section_key,updated_at").eq("page_slug",host.dataset.page).eq("status","published").order("updated_at",{ascending:false}).limit(30);if(error)throw error;if(!data?.length)return;host.hidden=false;host.innerHTML='<div class="mt-managed-wrap"><div class="mt-managed-kicker">Updates from Martin Tech & Business Hub</div>'+data.map(x=>'<article class="mt-managed-card"><h2></h2><p></p></article>').join("")+'</div>';[...host.querySelectorAll(".mt-managed-card")].forEach((card,i)=>{card.querySelector("h2").textContent=data[i].title;card.querySelector("p").textContent=data[i].body;});}catch(e){console.warn("Managed content load:",e.message);}})();</script></body></html>
