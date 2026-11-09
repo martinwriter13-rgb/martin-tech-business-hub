@@ -230,15 +230,19 @@ body.portal-member-mode #portal-app>.portal-app{margin:0;padding:24px;border-col
 </div></section>
 <section class="wrap" id="available-jobs">
   <div class="heading"><h2>Find available jobs</h2><p>Browse approved vacancies before creating an account. Sign in as a job seeker to submit your CV and application.</p></div>
-  <div class="market-search"><input id="mt-public-job-search" type="search" placeholder="Search by job title, company or skill" aria-label="Search available jobs"><button class="btn primary" id="mt-public-search-button" type="button">Search jobs</button></div>
+  <div class="market-search"><input id="mt-public-job-search" type="search" placeholder="Search title, company, skill, location or pay" aria-label="Search available jobs"><button class="btn primary" id="mt-public-search-button" type="button">Search jobs</button></div>
+  <div class="portal-grid" style="margin:10px 0 16px">
+    <div class="portal-field"><label for="mt-public-category">Job category</label><select id="mt-public-category"><option value="">All categories</option><option>Virtual assistance</option><option>Writing & research</option><option>AI tasks & data</option><option>Marketing & sales</option><option>Creative & technology</option><option>Customer support</option><option>Other remote work</option></select></div>
+    <div class="portal-field"><label for="mt-public-type">Work arrangement</label><select id="mt-public-type"><option value="">All work types</option><option>Remote</option><option>Freelance</option><option>Full-time</option><option>Part-time</option><option>Contract</option><option>Internship</option></select></div>
+  </div>
   <div class="market-sub" id="mt-public-job-count"></div>
   <div id="mt-public-jobs-list" class="admin-list"><div class="admin-empty">Loading approved vacancies…</div></div>
 </section>
-<section class="wrap"><div class="heading"><h2>Two account types. One global community.</h2><p>Separate workspaces will be provided for people hiring and people looking for work.</p></div><div class="roles">
+<section class="wrap"><div class="heading"><h2>Two account types. One global community.</h2><p>Employers and job seekers each get a secure workspace with tools designed for their needs.</p></div><div class="roles">
 <article class="role"><div class="ico">🏢</div><h3>For employers</h3><p class="lead">Find the right people for your remote team or project.</p><ul><li>Create a company or client profile</li><li>Publish jobs and freelance projects</li><li>Review applications and shortlist candidates</li><li>Manage job posts from an employer dashboard</li></ul><a class="btn secondary" href="#register">Employer registration</a></article>
 <article class="role"><div class="ico">💼</div><h3>For job seekers</h3><p class="lead">Present your skills and apply for opportunities.</p><ul><li>Create a professional candidate profile</li><li>Add skills, experience and CV</li><li>Search and filter opportunities</li><li>Track applications from a personal dashboard</li></ul><a class="btn secondary" href="#register">Job seeker registration</a></article>
 </div></section>
-<section class="wrap" id="how"><div class="heading"><h2>Designed for a clear, simple journey</h2><p>The full portal will support these steps once secure accounts and database services are connected.</p></div><div class="steps"><div class="step"><strong>Create an account</strong><p>Choose employer or job seeker and verify your email.</p></div><div class="step"><strong>Connect with opportunity</strong><p>Employers publish roles; candidates discover and apply.</p></div><div class="step"><strong>Manage progress</strong><p>Use dashboards to review listings, applications and updates.</p></div></div></section>
+<section class="wrap" id="how"><div class="heading"><h2>Designed for a clear, simple journey</h2><p>Use your secure account to publish vacancies, apply for work, track application progress and communicate privately.</p></div><div class="steps"><div class="step"><strong>Create an account</strong><p>Choose employer or job seeker and verify your email.</p></div><div class="step"><strong>Connect with opportunity</strong><p>Employers publish roles; candidates discover and apply.</p></div><div class="step"><strong>Manage progress</strong><p>Use dashboards to review listings, applications and updates.</p></div></div></section>
 <section class="wrap" id="register">
   <div class="heading"><h2>Career Portal</h2><p>Everything you need to hire, find work, apply and manage the platform — all in one place.</p></div>
   <div class="grid portal-access-grid">
@@ -287,8 +291,7 @@ body.portal-member-mode #portal-app>.portal-app{margin:0;padding:24px;border-col
       <div class="market-top"><div><div class="market-title" id="mt-market-heading">Find your next opportunity</div><div class="market-sub" id="mt-market-greeting">Welcome to your work dashboard</div></div><button class="btn secondary" id="mt-dashboard-logout" type="button">Sign out</button></div>
       <div id="mt-jobseeker-market">
         <div class="market-tabs" role="tablist" aria-label="Job browsing sections">
-          <button class="market-tab active" data-market-tab="best" type="button">Best matches</button>
-          <button class="market-tab" data-market-tab="recent" type="button">Most recent</button>
+          <button class="market-tab active" data-market-tab="recent" type="button">Latest jobs</button>
           <button class="market-tab" data-market-tab="saved" type="button">Saved jobs</button>
           <button class="market-tab" data-market-tab="invites" type="button">Invites</button>
         </div>
@@ -408,13 +411,16 @@ body.portal-member-mode #portal-app>.portal-app{margin:0;padding:24px;border-col
     const cards=jobs.map(j=>'<article class="portal-job">'+jobArtwork(j)+'<h3>'+escapeHtml(j.title)+'</h3><small>'+escapeHtml(j.company_name)+' · '+escapeHtml(j.category)+' · '+escapeHtml(j.employment_type)+' · '+escapeHtml(j.location)+'</small><p>'+escapeHtml(j.description)+'</p>'+(j.salary_range?'<p><strong>Pay:</strong> '+escapeHtml(j.salary_range)+'</p>':'')+'</article>').join("");
     list.innerHTML=cards;
     const q=($("mt-public-job-search")?.value||"").trim().toLowerCase();
-    const visible=jobs.filter(j=>!q||[j.title,j.company_name,j.category,j.employment_type,j.location,j.description].join(" ").toLowerCase().includes(q));
+    const category=$("mt-public-category")?.value||"",type=$("mt-public-type")?.value||"";
+    const visible=jobs.filter(j=>(!q||[j.title,j.company_name,j.category,j.employment_type,j.location,j.salary_range,j.description,j.requirements].join(" ").toLowerCase().includes(q))&&(!category||j.category===category)&&(!type||j.employment_type===type));
     $("mt-public-job-count").textContent=visible.length+" of "+jobs.length+" approved vacancies";
-    publicList.innerHTML=visible.length?visible.map(j=>'<article class="portal-job">'+jobArtwork(j)+'<h3>'+escapeHtml(j.title)+'</h3><small>'+escapeHtml(j.company_name)+' · '+escapeHtml(j.category)+' · '+escapeHtml(j.employment_type)+' · '+escapeHtml(j.location)+'</small><p>'+escapeHtml(j.description)+'</p>'+(j.salary_range?'<p><strong>Pay:</strong> '+escapeHtml(j.salary_range)+'</p>':'')+'<button type="button" class="btn primary mt-public-apply" data-job-id="'+escapeHtml(j.id)+'">Sign in to apply</button></article>').join(""):'<div class="admin-empty">No vacancies match that search. Try another keyword.</div>';
+    publicList.innerHTML=visible.length?visible.map(j=>'<article class="portal-job">'+jobArtwork(j)+'<h3>'+escapeHtml(j.title)+'</h3><small>'+escapeHtml(j.company_name)+' · '+escapeHtml(j.category)+' · '+escapeHtml(j.employment_type)+' · '+escapeHtml(j.location)+'</small>'+(j.salary_range?'<p><strong>Pay:</strong> '+escapeHtml(j.salary_range)+'</p>':'')+'<p class="portal-muted">Posted '+escapeHtml(j.created_at?new Date(j.created_at).toLocaleDateString():"Recently")+'</p><details><summary>Read job description and requirements</summary><p>'+escapeHtml(j.description)+'</p>'+(j.requirements?'<p><strong>Requirements:</strong><br>'+escapeHtml(j.requirements)+'</p>':'')+'</details><button type="button" class="btn primary mt-public-apply" data-job-id="'+escapeHtml(j.id)+'">'+(currentUser&&currentProfile?.account_type==="job_seeker"?"Apply now":"Sign in to apply")+'</button></article>').join(""):'<div class="admin-empty">No vacancies match those filters. Try a different keyword or choose “All”.</div>';
     select.innerHTML='<option value="">Choose a job</option>'+jobs.map(j=>'<option value="'+j.id+'">'+escapeHtml(j.title)+' — '+escapeHtml(j.company_name)+'</option>').join("");
   }
   $("mt-public-search-button").addEventListener("click",renderJobs);
   $("mt-public-job-search").addEventListener("input",renderJobs);
+  $("mt-public-category").addEventListener("change",renderJobs);
+  $("mt-public-type").addEventListener("change",renderJobs);
   $("mt-public-jobs-list").addEventListener("click",e=>{
     const b=e.target.closest(".mt-public-apply");if(!b)return;
     if(!currentUser||currentProfile?.account_type!=="job_seeker"){
@@ -460,7 +466,7 @@ body.portal-member-mode #portal-app>.portal-app{margin:0;padding:24px;border-col
   $("mt-jobseeker-market").addEventListener("click",e=>{const tab=e.target.closest("[data-market-tab]");if(tab){marketTab=tab.dataset.marketTab;document.querySelectorAll("[data-market-tab]").forEach(b=>b.classList.toggle("active",b===tab));renderMarket();return;}const save=e.target.closest(".mt-save-job");if(save){const ids=savedJobIds();const next=ids.includes(save.dataset.jobId)?ids.filter(x=>x!==save.dataset.jobId):[...ids,save.dataset.jobId];try{localStorage.setItem("mt_saved_jobs_"+currentUser.id,JSON.stringify(next));}catch(err){}renderMarket();}});
   $("mt-search-button").addEventListener("click",renderMarket);$("mt-job-search").addEventListener("input",renderMarket);
   async function loadJobs() {
-    const {data,error}=await client.from("jobs").select("id,title,company_name,category,employment_type,location,description,salary_range,created_at").eq("status","active").order("created_at",{ascending:false}).limit(50);
+    const {data,error}=await client.from("jobs").select("id,title,company_name,category,employment_type,location,description,requirements,salary_range,created_at").eq("status","active").order("created_at",{ascending:false}).limit(100);
     if(error) throw error; jobs=data||[]; renderJobs(); renderMarket();
   }
   async function loadActivity() {
@@ -485,7 +491,7 @@ body.portal-member-mode #portal-app>.portal-app{margin:0;padding:24px;border-col
       }
       const profileById=new Map(profiles.map(p=>[p.id,p]));
       if(!apps?.length){
-        activity.innerHTML=ownJobs.map(j=>'<div class="portal-job"><strong>'+escapeHtml(j.title)+'</strong><p>Listing status: '+escapeHtml(j.status)+'</p><p class="portal-muted">No applications received yet.</p></div>').join("");
+        activity.innerHTML=ownJobs.map(j=>'<div class="portal-job"><strong>'+escapeHtml(j.title)+'</strong><p>Listing status: '+escapeHtml(j.status)+'</p><div class="portal-actions">'+(j.status==="active"?'<button type="button" class="btn secondary mt-close-own-job" data-job-id="'+escapeHtml(j.id)+'">Close vacancy</button>':'')+'</div><p class="portal-muted">No applications received yet.</p></div>').join("");
         return;
       }
       const cards=await Promise.all(apps.map(async a=>{
@@ -497,7 +503,7 @@ body.portal-member-mode #portal-app>.portal-app{margin:0;padding:24px;border-col
         }
         return '<article class="portal-job"><h3>'+escapeHtml(p.full_name||"Applicant")+'</h3><small>Applied for: '+escapeHtml(jobTitle.get(a.job_id)||"Your job")+' · '+escapeHtml(p.country||"Country not provided")+'</small>'+(p.headline?'<p><strong>Profile:</strong> '+escapeHtml(p.headline)+'</p>':'')+'<p><strong>Application:</strong><br>'+escapeHtml(a.cover_message||"No message supplied")+'</p>'+cvLink+'<p><strong>Status:</strong> '+escapeHtml(({submitted:"Pending employer review",reviewing:"Under review",shortlisted:"Shortlisted",interview:"Interview",hired:"Hired",rejected:"Not selected"})[a.status]||a.status)+'</p><div class="portal-actions"><button type="button" class="btn secondary" data-app-status="reviewing" data-app-id="'+escapeHtml(a.id)+'">Mark reviewing</button><button type="button" class="btn primary" data-app-status="shortlisted" data-app-id="'+escapeHtml(a.id)+'">Shortlist</button><button type="button" class="btn secondary" data-app-status="interview" data-app-id="'+escapeHtml(a.id)+'">Invite to interview</button><button type="button" class="btn primary" data-app-status="hired" data-app-id="'+escapeHtml(a.id)+'">Mark hired</button><button type="button" class="btn secondary" data-app-status="rejected" data-app-id="'+escapeHtml(a.id)+'">Reject</button></div><button type="button" class="btn secondary mt-start-chat" data-chat-app="'+escapeHtml(a.id)+'" data-chat-recipient="'+escapeHtml(a.applicant_id)+'" data-chat-label="'+escapeHtml(p.full_name||"Applicant")+'">Message applicant</button></article>';
       }));
-      activity.innerHTML=cards.join("");
+      activity.innerHTML=ownJobs.map(j=>'<div class="portal-job"><strong>'+escapeHtml(j.title)+'</strong><p>Listing status: '+escapeHtml(j.status)+'</p>'+(j.status==="active"?'<button type="button" class="btn secondary mt-close-own-job" data-job-id="'+escapeHtml(j.id)+'">Close vacancy</button>':'')+'</div>').join("")+cards.join("");
     } else {
       $("mt-activity-heading").textContent="Your applications";
       $("mt-activity-help").textContent="Track the progress of jobs you have applied for.";
@@ -523,6 +529,18 @@ body.portal-member-mode #portal-app>.portal-app{margin:0;padding:24px;border-col
     }
   }
   $("mt-activity").addEventListener("click",async e=>{
+    const closeJob=e.target.closest(".mt-close-own-job");
+    if(closeJob){
+      if(!confirm("Close this vacancy? It will disappear from public job search."))return;
+      closeJob.disabled=true;
+      try{
+        const {data,error}=await client.from("jobs").update({status:"closed",updated_at:new Date().toISOString()}).eq("id",closeJob.dataset.jobId).eq("employer_id",currentUser.id).select("id").maybeSingle();
+        if(error)throw error;
+        if(!data)throw new Error("The vacancy could not be closed. Check your employer permissions.");
+        await loadJobs();await loadActivity();say("Vacancy closed. It is no longer visible to job seekers.","ok");
+      }catch(err){closeJob.disabled=false;say(err.message||"Could not close vacancy.","error");}
+      return;
+    }
     const chatButton=e.target.closest(".mt-start-chat");
     if(chatButton){
       try{await openChat(chatButton.dataset.chatApp,chatButton.dataset.chatRecipient,chatButton.dataset.chatLabel||"Contact");}
