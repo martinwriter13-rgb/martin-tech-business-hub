@@ -228,6 +228,12 @@ body.portal-member-mode #portal-app>.portal-app{margin:0;padding:24px;border-col
 <article class="card career-card"><div class="ico">📣</div><h3>Marketing & sales</h3><p>Social media, lead generation, online sales and digital marketing roles.</p></article>
 <article class="card career-card"><div class="ico">🎨</div><h3>Creative & tech</h3><p>Graphic design, video editing, web development and other digital services.</p></article>
 </div></section>
+<section class="wrap" id="available-jobs">
+  <div class="heading"><h2>Find available jobs</h2><p>Browse approved vacancies before creating an account. Sign in as a job seeker to submit your CV and application.</p></div>
+  <div class="market-search"><input id="mt-public-job-search" type="search" placeholder="Search by job title, company or skill" aria-label="Search available jobs"><button class="btn primary" id="mt-public-search-button" type="button">Search jobs</button></div>
+  <div class="market-sub" id="mt-public-job-count"></div>
+  <div id="mt-public-jobs-list" class="admin-list"><div class="admin-empty">Loading approved vacancies…</div></div>
+</section>
 <section class="wrap"><div class="heading"><h2>Two account types. One global community.</h2><p>Separate workspaces will be provided for people hiring and people looking for work.</p></div><div class="roles">
 <article class="role"><div class="ico">🏢</div><h3>For employers</h3><p class="lead">Find the right people for your remote team or project.</p><ul><li>Create a company or client profile</li><li>Publish jobs and freelance projects</li><li>Review applications and shortlist candidates</li><li>Manage job posts from an employer dashboard</li></ul><a class="btn secondary" href="#register">Employer registration</a></article>
 <article class="role"><div class="ico">💼</div><h3>For job seekers</h3><p class="lead">Present your skills and apply for opportunities.</p><ul><li>Create a professional candidate profile</li><li>Add skills, experience and CV</li><li>Search and filter opportunities</li><li>Track applications from a personal dashboard</li></ul><a class="btn secondary" href="#register">Job seeker registration</a></article>
@@ -237,8 +243,8 @@ body.portal-member-mode #portal-app>.portal-app{margin:0;padding:24px;border-col
   <div class="heading"><h2>Career Portal</h2><p>Everything you need to hire, find work, apply and manage the platform — all in one place.</p></div>
   <div class="grid portal-access-grid">
     <article class="card portal-access-card"><div class="ico">📢</div><h3>Post a Job</h3><p>Employers publish vacancies and freelance opportunities for review.</p><a class="btn primary" href="#portal-app">Post a Job</a></article>
-    <article class="card portal-access-card"><div class="ico">🔎</div><h3>Find Jobs</h3><p>Browse available opportunities and search by title, skill or location.</p><a class="btn primary" href="#portal-app">Find Jobs</a></article>
-    <article class="card portal-access-card"><div class="ico">📄</div><h3>Apply for Jobs</h3><p>Submit your application and upload your CV for suitable vacancies.</p><a class="btn primary" href="#portal-app">Apply for Jobs</a></article>
+    <article class="card portal-access-card"><div class="ico">🔎</div><h3>Find Jobs</h3><p>Browse available opportunities and search by title, skill or location.</p><a class="btn primary" href="#available-jobs">Find Jobs</a></article>
+    <article class="card portal-access-card"><div class="ico">📄</div><h3>Apply for Jobs</h3><p>Submit your application and upload your CV for suitable vacancies.</p><a class="btn primary" href="#available-jobs">Apply for Jobs</a></article>
     <article class="card portal-access-card"><div class="ico">📊</div><h3>My Applications</h3><p>Track application status and follow updates from employers.</p><a class="btn primary" href="#portal-app">My Applications</a></article>
     <article class="card portal-access-card"><div class="ico">🏢</div><h3>Employer Dashboard</h3><p>Manage your job vacancies, review applicants and update their progress.</p><a class="btn primary" href="#portal-app">Employer Dashboard</a></article>
     <article class="card portal-access-card"><div class="ico">🛡️</div><h3>Admin Dashboard</h3><p>Martin Hub administrator workspace to oversee jobs, users, employers and applications.</p><a class="btn secondary" href="#portal-app">Administrator sign-in</a></article>
@@ -374,12 +380,14 @@ body.portal-member-mode #portal-app>.portal-app{margin:0;padding:24px;border-col
   const escapeHtml = (s="") => String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   const fileSafeName = (s) => String(s).replace(/[^a-zA-Z0-9._-]/g,"_").slice(-100);
   async function ensureProfile(user) {
-    const role = user.user_metadata?.account_type === "employer" ? "employer" : "job_seeker";
-    const payload = {id:user.id, account_type:role, full_name:user.user_metadata?.full_name || "", country:user.user_metadata?.country || ""};
-    const {error}=await client.from("profiles").upsert(payload,{onConflict:"id"});
-    if(error) throw error;
-    const {data,error:readError}=await client.from("profiles").select("id,account_type,full_name,country,headline,bio,company_name,website").eq("id",user.id).single();
-    if(readError) throw readError;
+    const columns="id,account_type,full_name,country,headline,bio,company_name,website";
+    const {data:existing,error:readError}=await client.from("profiles").select(columns).eq("id",user.id).maybeSingle();
+    if(readError)throw readError;
+    if(existing){currentProfile=existing;return;}
+    const role=user.user_metadata?.account_type==="employer"?"employer":"job_seeker";
+    const payload={id:user.id,account_type:role,full_name:user.user_metadata?.full_name||"",country:user.user_metadata?.country||""};
+    const {data,error}=await client.from("profiles").insert(payload).select(columns).single();
+    if(error)throw error;
     currentProfile=data;
   }
   function jobArtwork(j){
@@ -394,11 +402,30 @@ body.portal-member-mode #portal-app>.portal-app{margin:0;padding:24px;border-col
     return '<div class="job-visual"><img src="'+photo+'" alt="'+escapeHtml(j.category||"Remote work")+' job image" loading="lazy"><span class="company-mark" aria-label="'+escapeHtml(j.company_name||"Employer")+' brand mark">'+escapeHtml(initials)+'</span></div>';
   }
   function renderJobs() {
-    const list=$("mt-jobs-list"), select=$("mt-apply-job");
-    if(!jobs.length){list.innerHTML='<p class="portal-muted">No approved jobs are listed yet. Check again soon.</p>';select.innerHTML='<option value="">No active jobs yet</option>';return;}
-    list.innerHTML=jobs.map(j=>'<article class="portal-job">'+jobArtwork(j)+'<h3>'+escapeHtml(j.title)+'</h3><small>'+escapeHtml(j.company_name)+' · '+escapeHtml(j.category)+' · '+escapeHtml(j.employment_type)+' · '+escapeHtml(j.location)+'</small><p>'+escapeHtml(j.description)+'</p>'+(j.salary_range?'<p><strong>Pay:</strong> '+escapeHtml(j.salary_range)+'</p>':'')+(currentProfile?.account_type==="employer"?'<p class="portal-muted"><strong>Employer view:</strong> Your job listing.</p><button type="button" class="btn primary mt-manage-job" data-job-id="'+escapeHtml(j.id)+'">View applicants / Manage job</button>':'<button type="button" class="btn primary mt-choose-job" data-job-id="'+escapeHtml(j.id)+'">Apply for this job</button>')+'</article>').join("");
+    const list=$("mt-jobs-list"), publicList=$("mt-public-jobs-list"), select=$("mt-apply-job");
+    const empty='<div class="admin-empty">There are no approved vacancies at the moment. Please check again soon.</div>';
+    if(!jobs.length){list.innerHTML='<p class="portal-muted">No approved jobs are listed yet. Check again soon.</p>';publicList.innerHTML=empty;select.innerHTML='<option value="">No active jobs yet</option>';$("mt-public-job-count").textContent="0 approved vacancies";return;}
+    const cards=jobs.map(j=>'<article class="portal-job">'+jobArtwork(j)+'<h3>'+escapeHtml(j.title)+'</h3><small>'+escapeHtml(j.company_name)+' · '+escapeHtml(j.category)+' · '+escapeHtml(j.employment_type)+' · '+escapeHtml(j.location)+'</small><p>'+escapeHtml(j.description)+'</p>'+(j.salary_range?'<p><strong>Pay:</strong> '+escapeHtml(j.salary_range)+'</p>':'')+'</article>').join("");
+    list.innerHTML=cards;
+    const q=($("mt-public-job-search")?.value||"").trim().toLowerCase();
+    const visible=jobs.filter(j=>!q||[j.title,j.company_name,j.category,j.employment_type,j.location,j.description].join(" ").toLowerCase().includes(q));
+    $("mt-public-job-count").textContent=visible.length+" of "+jobs.length+" approved vacancies";
+    publicList.innerHTML=visible.length?visible.map(j=>'<article class="portal-job">'+jobArtwork(j)+'<h3>'+escapeHtml(j.title)+'</h3><small>'+escapeHtml(j.company_name)+' · '+escapeHtml(j.category)+' · '+escapeHtml(j.employment_type)+' · '+escapeHtml(j.location)+'</small><p>'+escapeHtml(j.description)+'</p>'+(j.salary_range?'<p><strong>Pay:</strong> '+escapeHtml(j.salary_range)+'</p>':'')+'<button type="button" class="btn primary mt-public-apply" data-job-id="'+escapeHtml(j.id)+'">Sign in to apply</button></article>').join(""):'<div class="admin-empty">No vacancies match that search. Try another keyword.</div>';
     select.innerHTML='<option value="">Choose a job</option>'+jobs.map(j=>'<option value="'+j.id+'">'+escapeHtml(j.title)+' — '+escapeHtml(j.company_name)+'</option>').join("");
   }
+  $("mt-public-search-button").addEventListener("click",renderJobs);
+  $("mt-public-job-search").addEventListener("input",renderJobs);
+  $("mt-public-jobs-list").addEventListener("click",e=>{
+    const b=e.target.closest(".mt-public-apply");if(!b)return;
+    if(!currentUser||currentProfile?.account_type!=="job_seeker"){
+      $("mt-login-role").value="job_seeker";
+      $("mt-portal-intro")?.scrollIntoView({behavior:"smooth",block:"start"});
+      $("portal-app").scrollIntoView({behavior:"smooth",block:"start"});
+      say("Create or sign in to a job-seeker account to apply and upload your CV.","ok");
+      return;
+    }
+    $("mt-apply-job").value=b.dataset.jobId;show("mt-apply-form",true);$("mt-apply-form").scrollIntoView({behavior:"smooth",block:"center"});$("mt-cover").focus();
+  });
   $("mt-jobs-list").addEventListener("click",e=>{
     const manage=e.target.closest(".mt-manage-job");
     if(manage){
