@@ -78,14 +78,22 @@ async function loadProfile(){
 }
 async function checkAdmin(){
  const {data,error}=await supabase.from('writing_admins').select('user_id').eq('user_id',user.id).maybeSingle();
- if(!error&&data){$('adminTab').classList.remove('hidden');}
+ if(!error&&data){$('adminTab').classList.remove('hidden');await loadAdminStats();}
+}
+async function loadAdminStats(){
+ const [u,p,pr]=await Promise.all([
+  supabase.from('writing_profiles').select('id',{count:'exact',head:true}),
+  supabase.from('writing_projects').select('id',{count:'exact',head:true}),
+  supabase.from('writing_proposals').select('id',{count:'exact',head:true})
+ ]);
+ $('adminStats').innerHTML='<div class="stats"><div class="stat"><strong>'+(u.count??'—')+'</strong><small>Marketplace accounts</small></div><div class="stat"><strong>'+(p.count??'—')+'</strong><small>Projects</small></div><div class="stat"><strong>'+(pr.count??'—')+'</strong><small>Proposals</small></div></div><p class="muted small">Admin membership is active for the site owner. Review and moderation controls can be expanded here as the marketplace grows.</p>';
 }
 async function refreshData(){
  if(!profile)return;
  const {data:p,error:e}=await supabase.from('writing_projects').select('*').eq('status','open').order('created_at',{ascending:false}).limit(60);
  if(e)throw e;projects=p||[];
  const {data:w}=await supabase.from('writing_profiles').select('*').eq('role','writer').eq('is_public',true).limit(60);writers=w||[];
- const {data:pr}=await supabase.from('writing_proposals').select('*,writing_projects(title,client_id,status)').or('writer_id.eq.'+user.id);proposals=pr||[];
+ const {data:pr}=await supabase.from('writing_proposals').select('*,writing_projects(title,client_id,status)').eq('writer_id',user.id);proposals=pr||[];
  renderProjects();renderWriters();renderWork();
 }
 function renderProjects(){
@@ -124,7 +132,10 @@ window.viewProposals=async id=>{
 window.decideProposal=async(pid,projectId)=>{
  const {error}=await supabase.from('writing_proposals').update({status:'accepted',updated_at:new Date().toISOString()}).eq('id',pid);
  if(error)return alert(error.message);
- await supabase.from('writing_projects').update({status:'in_progress',assigned_writer_id:(await supabase.from('writing_proposals').select('writer_id').eq('id',pid).single()).data.writer_id,updated_at:new Date().toISOString()}).eq('id',projectId);
+ const {data:chosen,error:chosenError}=await supabase.from('writing_proposals').select('writer_id').eq('id',pid).single();
+ if(chosenError)return alert(chosenError.message);
+ const {error:projectError}=await supabase.from('writing_projects').update({status:'in_progress',assigned_writer_id:chosen.writer_id,updated_at:new Date().toISOString()}).eq('id',projectId);
+ if(projectError)return alert(projectError.message);
  alert('Writer accepted. Project moved to in progress.');await refreshData();
 };
 $('signUpBtn').addEventListener('click',async()=>{
