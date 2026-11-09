@@ -135,3 +135,10 @@ drop policy if exists "Participants read writing project files" on storage.objec
 create policy "Participants read writing project files" on storage.objects for select to authenticated using(bucket_id='writing-project-files' and ((storage.foldername(name))[1]=(select auth.uid())::text or exists(select 1 from public.writing_attachments a join public.writing_projects p on p.id=a.project_id where a.storage_path=name and (p.client_id=(select auth.uid()) or exists(select 1 from public.writing_proposals pr where pr.project_id=p.id and pr.writer_id=(select auth.uid()) and pr.status in ('shortlisted','accepted'))))));
 drop policy if exists "Users delete own writing project files" on storage.objects;
 create policy "Users delete own writing project files" on storage.objects for delete to authenticated using(bucket_id='writing-project-files' and (storage.foldername(name))[1]=(select auth.uid())::text);
+
+-- Keep assigned writers able to access the project after it closes to new proposals.
+alter table public.writing_projects add column if not exists assigned_writer_id uuid references public.writing_profiles(id) on delete set null;
+drop policy if exists "Authenticated users read open projects and clients read own" on public.writing_projects;
+drop policy if exists "Marketplace users read open and assigned projects" on public.writing_projects;
+create policy "Marketplace users read open and assigned projects" on public.writing_projects for select to authenticated using(status='open' or client_id=(select auth.uid()) or assigned_writer_id=(select auth.uid()));
+create unique index if not exists writing_one_accepted_proposal_per_project on public.writing_proposals(project_id) where status='accepted';
