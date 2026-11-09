@@ -60,6 +60,16 @@
 <div id="user-list"><p class="muted">Loading registered accounts…</p></div>
 </section>
 <section class="panel">
+<div class="section-head"><div><h2>Website content manager</h2><p class="muted">Create drafts and published content records for the website. Drafts are private; published entries are publicly readable.</p></div></div>
+<form id="content-form"><input type="hidden" id="content-id">
+<div class="form-grid"><div class="field"><label for="content-page">Website page</label><select id="content-page"><option value="home">Home</option><option value="ai-academy">AI Academy</option><option value="digital-support">Digital Presence & Support</option><option value="trading-tools">Trading Tools</option><option value="shop-reviews">Shop & Reviews</option><option value="digital-products">Digital Resources</option><option value="business-consultancy">Consultancy & Our Work</option><option value="research-writing">Writing Marketplace</option><option value="jobs">Career</option><option value="website-design">Website Design</option><option value="contact">Contact</option><option value="blog">Blog</option></select></div>
+<div class="field"><label for="content-section">Section key</label><input id="content-section" pattern="[a-z0-9-]{2,80}" placeholder="homepage-introduction" required></div></div>
+<div class="field"><label for="content-title">Content title</label><input id="content-title" maxlength="160" required></div>
+<div class="field"><label for="content-body">Content text</label><textarea id="content-body" rows="5"></textarea></div>
+<div class="field"><label for="content-status">Publication status</label><select id="content-status"><option value="draft">Draft</option><option value="published">Published</option><option value="archived">Archived</option></select></div>
+<div class="actions"><button class="primary" type="submit">Save content</button><button type="button" id="content-clear">Clear editor</button></div></form>
+<div class="admin-list" id="content-list"><p class="muted">Loading content…</p></div></section>
+<section class="panel"><div class="section-head"><div><h2>Website audit trail</h2><p class="muted">Recent administrator activity and content changes.</p></div><button type="button" id="audit-refresh">Refresh audit trail</button></div><div id="audit-list"><p class="muted">Loading audit trail…</p></div></section><section class="panel">
 <h2>Access protection</h2>
 <ul class="muted">
 <li>Your Super Admin account cannot be changed or revoked from this screen.</li>
@@ -95,6 +105,7 @@
    const [u,r]=await Promise.all([client.rpc("admin_list_site_users"),client.rpc("admin_list_site_roles")]);
    if(u.error)throw u.error;if(r.error)throw r.error;
    users=u.data||[];roles=r.data||[];
+   await loadContentAndAudit();
    $("user-count").textContent=users.length;$("role-count").textContent=roles.length;
    $("custom-count").textContent=roles.filter(x=>!x.is_system).length;
    $("role-list").innerHTML=roles.map(x=>'<article class="role-card"><strong>'+esc(x.name)+'</strong> <span class="pill">'+(x.is_system?"System role":"Custom role")+'</span><p class="muted">'+esc(x.description)+'</p><small class="muted">'+esc(x.role_key)+'</small><p>'+((x.permissions||[]).length?x.permissions.map(p=>'<span class="pill">'+esc(p)+'</span>').join(" "):'<span class="pill">No extra permissions</span>')+'</p></article>').join("");
@@ -106,6 +117,30 @@
    }).join("")||'<p class="muted">No registered accounts found.</p>';
    status("Dashboard refreshed. "+users.length+" accounts and "+roles.length+" roles loaded.","ok");
  }
+
+ async function loadContentAndAudit(){
+   const {data:content,error}=await client.from("site_content").select("id,page_slug,section_key,title,body,status,updated_at").order("updated_at",{ascending:false}).limit(100);
+   if(error)throw error;
+   $("content-list").innerHTML=(content||[]).map(x=>'<article class="role-card"><div class="section-head"><strong>'+esc(x.title)+'</strong><span class="pill">'+esc(x.status)+'</span></div><p class="muted">'+esc(x.page_slug)+' / '+esc(x.section_key)+'</p><p>'+esc((x.body||"").slice(0,260))+'</p><div class="actions"><button type="button" data-content-edit="'+esc(x.id)+'">Edit</button><button type="button" class="danger" data-content-delete="'+esc(x.id)+'">Delete</button></div></article>').join("")||'<p class="muted">No content records yet.</p>';
+   const {data:logs,error:logError}=await client.rpc("admin_list_site_audit",{p_limit:60});
+   if(logError)throw logError;
+   $("audit-list").innerHTML=(logs||[]).map(x=>'<article class="user-row"><div><strong>'+esc(x.action)+'</strong><small>'+esc(x.actor_email||"System account")+' · '+esc(x.target_type)+' · '+esc(x.target_id||"")+'</small><small>'+esc(new Date(x.created_at).toLocaleString())+'</small></div><small>'+esc(JSON.stringify(x.details||{}))+'</small></article>').join("")||'<p class="muted">No administrator activity recorded yet.</p>';
+ }
+ $("content-form").addEventListener("submit",async e=>{
+   e.preventDefault();try{
+     const {error}=await client.rpc("admin_save_site_content",{p_id:$("content-id").value||null,p_page_slug:$("content-page").value,p_section_key:$("content-section").value.trim(),p_title:$("content-title").value.trim(),p_body:$("content-body").value,p_status:$("content-status").value});
+     if(error)throw error;$("content-form").reset();$("content-id").value="";await loadContentAndAudit();status("Content saved successfully.","ok");
+   }catch(err){status(err.message||"Could not save content.","error");}
+ });
+ $("content-clear").addEventListener("click",()=>{$("content-form").reset();$("content-id").value="";});
+ $("content-list").addEventListener("click",async e=>{
+   const edit=e.target.closest("[data-content-edit]"),del=e.target.closest("[data-content-delete]");
+   try{
+     if(edit){const {data,error}=await client.from("site_content").select("*").eq("id",edit.dataset.contentEdit).single();if(error)throw error;$("content-id").value=data.id;$("content-page").value=data.page_slug;$("content-section").value=data.section_key;$("content-title").value=data.title;$("content-body").value=data.body;$("content-status").value=data.status;$("content-form").scrollIntoView({behavior:"smooth"});}
+     if(del){if(!confirm("Delete this content record permanently?"))return;const {error}=await client.rpc("admin_delete_site_content",{p_id:del.dataset.contentDelete});if(error)throw error;await loadContentAndAudit();status("Content record deleted.","ok");}
+   }catch(err){status(err.message||"Content action failed.","error");}
+ });
+ $("audit-refresh").addEventListener("click",()=>loadContentAndAudit().then(()=>status("Audit trail refreshed.","ok")).catch(e=>status(e.message,"error")));
  $("login-form").addEventListener("submit",async e=>{e.preventDefault();try{status("Signing in…");const {error}=await client.auth.signInWithPassword({email:$("email").value.trim(),password:$("password").value});if(error)throw error;await verify();}catch(err){status(err.message||"Sign-in failed.","error");}});
  $("reset-password").addEventListener("click",async()=>{const email=$("email").value.trim();if(!email){status("Enter your administrator email first.","error");return;}const {error}=await client.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});status(error?error.message:"If the account exists, a password reset email has been sent.","ok");});
  $("refresh").addEventListener("click",()=>load().catch(e=>status(e.message,"error")));
