@@ -182,14 +182,9 @@
      const allIds=[...new Set([...careerRows,...writingRows].flatMap(m=>[m.sender_id,m.recipient_id]).filter(Boolean))];
      let names=new Map();
      if(allIds.length){
-       const [careerProfiles,writingProfiles]=await Promise.all([
-         client.from("profiles").select("id,full_name").in("id",allIds),
-         client.from("writing_profiles").select("id,display_name").in("id",allIds)
-       ]);
+       const careerProfiles=await client.from("profiles").select("id,full_name").in("id",allIds);
        if(careerProfiles.error)throw careerProfiles.error;
-       if(writingProfiles.error)throw writingProfiles.error;
-       (careerProfiles.data||[]).forEach(p=>names.set(p.id,p.full_name||"Career member"));
-       (writingProfiles.data||[]).forEach(p=>names.set(p.id,p.display_name||"Marketplace member"));
+       (careerProfiles.data||[]).forEach(p=>names.set(p.id,p.full_name||"Website member"));
      }
      const cards=[
        ...careerRows.map(m=>({kind:"Career",id:m.id,context:"Application "+m.application_id,from:names.get(m.sender_id)||m.sender_id,to:names.get(m.recipient_id)||m.recipient_id,body:m.body,created:m.created_at,read:!!m.read_at})),
