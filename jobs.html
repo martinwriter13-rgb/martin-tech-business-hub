@@ -889,4 +889,23 @@ body.portal-member-mode #portal-app>.portal-app{margin:0;padding:24px;border-col
 })();
 </script>
 
+
+<script>
+/* Keep public Career navigation usable while a member is signed in. */
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll('.nav a[href="#opportunities"], .nav a[href="#how"], .nav a[href="#register"]').forEach(link => {
+    link.addEventListener("click", event => {
+      const target = document.querySelector(link.getAttribute("href"));
+      if (!target) return;
+      if (document.body.classList.contains("portal-member-mode")) {
+        document.body.classList.remove("portal-member-mode");
+      }
+      event.preventDefault();
+      history.replaceState(null, "", link.getAttribute("href"));
+      requestAnimationFrame(() => target.scrollIntoView({behavior:"smooth", block:"start"}));
+    });
+  });
+});
+</script>
+
 </body></html>
