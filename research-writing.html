@@ -139,8 +139,9 @@ async function loadProfile(){
  else{$('workspace').classList.add('hidden');msg('Your sign-in worked. Save your marketplace profile to open your dashboard.','success')}
 }
 async function checkAdmin(){
- const {data,error}=await supabase.from('writing_admins').select('user_id').eq('user_id',user.id).maybeSingle();
- if(!error&&data){$('adminTab').classList.remove('hidden');await loadAdminStats();}
+ const {data,error}=await supabase.rpc('is_martin_hub_writing_admin');
+ if(!error&&data===true){$('adminTab').classList.remove('hidden');await loadAdminStats();}
+ else $('adminTab').classList.add('hidden');
 }
 async function loadAdminStats(){
  const [u,p,pr]=await Promise.all([
