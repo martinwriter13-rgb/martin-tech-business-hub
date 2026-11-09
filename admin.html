@@ -24,7 +24,7 @@
 </form>
 </section>
 <section id="dashboard" class="hidden">
-<div class="stats">
+<div class="stats" id="super-stats">
 <div class="stat"><b id="user-count">—</b><span class="muted">Registered accounts</span></div>
 <div class="stat"><b id="role-count">—</b><span class="muted">Available roles</span></div>
 <div class="stat"><b id="custom-count">—</b><span class="muted">Custom roles</span></div>
@@ -33,7 +33,7 @@
 <div class="section-head"><div><h2>Website roles</h2><p class="muted">Create reusable roles and define their permission sets.</p></div><button type="button" id="refresh">Refresh</button></div>
 <div id="role-list" class="role-grid"></div>
 </section>
-<section class="panel">
+<section class="panel" id="role-create-panel">
 <h2>Create a new role</h2>
 <form id="role-form">
 <div class="form-grid">
@@ -55,7 +55,7 @@
 <button class="primary" type="submit">Create role</button>
 </form>
 </section>
-<section class="panel">
+<section class="panel" id="user-roles-panel">
 <div class="section-head"><div><h2>Assign roles to people</h2><p class="muted">Choose a registered account and assign one website role. This is separate from the person's Career account type.</p></div></div>
 <div id="user-list"><p class="muted">Loading registered accounts…</p></div>
 </section>
@@ -90,44 +90,66 @@
  const $=id=>document.getElementById(id);
  const status=(message,type="")=>{$("status").textContent=message;$("status").className="status"+(type?" "+type:"");};
  const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
- let client=null,superAdmin=false,users=[],roles=[];
+ let client=null,superAdmin=false,permissions=[],users=[],roles=[];
  $("year").textContent=new Date().getFullYear();
  function showDashboard(yes){$("dashboard").classList.toggle("hidden",!yes);$("login-panel").classList.toggle("hidden",yes);}
  async function verify(){
    const {data:{user}}=await client.auth.getUser();
    if(!user){showDashboard(false);status("Sign in with your administrator account to continue.");return false;}
-   const {data,error}=await client.rpc("is_martin_hub_super_admin");
-   if(error||data!==true){await client.auth.signOut();showDashboard(false);status("This account is not authorised for Super Admin access.","error");return false;}
-   superAdmin=true;showDashboard(true);status("Verified Super Admin session: "+user.email,"ok");await load();return true;
+   const [adminCheck,permissionCheck]=await Promise.all([client.rpc("is_martin_hub_super_admin"),client.rpc("get_my_site_permissions")]);
+   superAdmin=!adminCheck.error&&adminCheck.data===true;
+   permissions=permissionCheck.error?[]:(permissionCheck.data||[]);
+   if(!superAdmin&&!permissions.length){await client.auth.signOut();showDashboard(false);status("This account has no website management permissions.","error");return false;}
+   showDashboard(true);
+   $("role-create-panel").classList.toggle("hidden",!superAdmin);
+   $("user-roles-panel").classList.toggle("hidden",!superAdmin);
+   $("super-stats").classList.toggle("hidden",!superAdmin);
+   $("audit-panel").classList.toggle("hidden",!superAdmin);
+   status((superAdmin?"Verified Super Admin: ":"Verified website staff: ")+user.email,"ok");await load();return true;
  }
  async function load(){
    status("Loading users and role permissions…");
-   const [u,r]=await Promise.all([client.rpc("admin_list_site_users"),client.rpc("admin_list_site_roles")]);
-   if(u.error)throw u.error;if(r.error)throw r.error;
-   users=u.data||[];roles=r.data||[];
-   await loadContentAndAudit();
-   $("user-count").textContent=users.length;$("role-count").textContent=roles.length;
-   $("custom-count").textContent=roles.filter(x=>!x.is_system).length;
-   $("role-list").innerHTML=roles.map(x=>'<article class="role-card"><strong>'+esc(x.name)+'</strong> <span class="pill">'+(x.is_system?"System role":"Custom role")+'</span><p class="muted">'+esc(x.description)+'</p><small class="muted">'+esc(x.role_key)+'</small><p>'+((x.permissions||[]).length?x.permissions.map(p=>'<span class="pill">'+esc(p)+'</span>').join(" "):'<span class="pill">No extra permissions</span>')+'</p></article>').join("");
-   $("user-list").innerHTML=users.map(u=>{
+   if(superAdmin){
+    const [u,r]=await Promise.all([client.rpc("admin_list_site_users"),client.rpc("admin_list_site_roles")]);
+    if(u.error)throw u.error;if(r.error)throw r.error;
+    users=u.data||[];roles=r.data||[];
+    $("user-count").textContent=users.length;$("role-count").textContent=roles.length;
+    $("custom-count").textContent=roles.filter(x=>!x.is_system).length;
+    $("role-list").innerHTML=roles.map(x=>'<article class="role-card"><strong>'+esc(x.name)+'</strong> <span class="pill">'+(x.is_system?"System role":"Custom role")+'</span><p class="muted">'+esc(x.description)+'</p><small class="muted">'+esc(x.role_key)+'</small><p>'+((x.permissions||[]).length?x.permissions.map(p=>'<span class="pill">'+esc(p)+'</span>').join(" "):'<span class="pill">No extra permissions</span>')+'</p></article>').join("");
+    $("user-list").innerHTML=users.map(u=>{
      const current=u.role_key||"member";
      const options=roles.filter(r=>r.role_key!=="super_admin"&&r.is_active).map(r=>'<option value="'+esc(r.role_key)+'" '+(current===r.role_key?"selected":"")+'>'+esc(r.name)+'</option>').join("");
      const protectedUser=u.role_key==="super_admin";
      return '<div class="user-row"><div><strong>'+esc(u.full_name||"Unnamed account")+'</strong><small>'+esc(u.email||"No email")+'</small><small>'+esc(u.account_type||"Member account")+' · '+esc(u.created_at?new Date(u.created_at).toLocaleDateString():"")+'</small></div><div><label class="muted">Website role</label><select data-role-select="'+esc(u.user_id)+'" '+(protectedUser?"disabled":"")+'><option value="member" '+(current==="member"?"selected":"")+'>Member (default)</option>'+options+'</select></div><button type="button" data-role-save="'+esc(u.user_id)+'" '+(protectedUser?"disabled":"")+'>Save role</button><button type="button" class="danger" data-role-revoke="'+esc(u.user_id)+'" '+(!u.role_key||protectedUser?"disabled":"")+'>Revoke</button></div>';
    }).join("")||'<p class="muted">No registered accounts found.</p>';
-   status("Dashboard refreshed. "+users.length+" accounts and "+roles.length+" roles loaded.","ok");
+   }
+   await loadContentAndAudit();
+   status(superAdmin?"Dashboard refreshed. "+users.length+" accounts and "+roles.length+" roles loaded.":"Your assigned website management workspace is ready.","ok");
  }
 
  async function loadContentAndAudit(){
+   const canContent=superAdmin||permissions.includes("content.manage");
+   const canEnquiries=superAdmin||permissions.includes("enquiries.manage");
+   const canAudit=superAdmin;
+   const contentPanel=document.getElementById("content-form")?.closest(".panel");
+   const enquiryPanel=document.getElementById("enquiry-list")?.closest(".panel");
+   if(contentPanel)contentPanel.classList.toggle("hidden",!canContent);
+   if(enquiryPanel)enquiryPanel.classList.toggle("hidden",!canEnquiries);
+   if(canContent){
    const {data:content,error}=await client.from("site_content").select("id,page_slug,section_key,title,body,status,updated_at").order("updated_at",{ascending:false}).limit(100);
    if(error)throw error;
    $("content-list").innerHTML=(content||[]).map(x=>'<article class="role-card"><div class="section-head"><strong>'+esc(x.title)+'</strong><span class="pill">'+esc(x.status)+'</span></div><p class="muted">'+esc(x.page_slug)+' / '+esc(x.section_key)+'</p><p>'+esc((x.body||"").slice(0,260))+'</p><div class="actions"><button type="button" data-content-edit="'+esc(x.id)+'">Edit</button><button type="button" class="danger" data-content-delete="'+esc(x.id)+'">Delete</button></div></article>').join("")||'<p class="muted">No content records yet.</p>';
+   }
+   if(canEnquiries){
    const {data:enquiries,error:enquiryError}=await client.from("site_enquiries").select("id,name,email,phone,company,service,message,status,created_at").order("created_at",{ascending:false}).limit(100);
    if(enquiryError)throw enquiryError;
    $("enquiry-list").innerHTML=(enquiries||[]).map(x=>'<article class="role-card"><div class="section-head"><strong>'+esc(x.name)+' · '+esc(x.service)+'</strong><span class="pill">'+esc(x.status)+'</span></div><p class="muted">'+esc(x.email)+' · '+esc(x.phone||"No phone")+' · '+esc(x.company||"No company")+' · '+esc(new Date(x.created_at).toLocaleString())+'</p><p>'+esc(x.message)+'</p><div class="actions"><select data-enquiry-status="'+esc(x.id)+'"><option value="new" '+(x.status==="new"?"selected":"")+'>New</option><option value="in_progress" '+(x.status==="in_progress"?"selected":"")+'>In progress</option><option value="resolved" '+(x.status==="resolved"?"selected":"")+'>Resolved</option><option value="spam" '+(x.status==="spam"?"selected":"")+'>Spam</option></select><button type="button" data-enquiry-save="'+esc(x.id)+'">Update status</button></div></article>').join("")||'<p class="muted">No website enquiries yet.</p>';
+   }
+   if(canAudit){
    const {data:logs,error:logError}=await client.rpc("admin_list_site_audit",{p_limit:60});
    if(logError)throw logError;
    $("audit-list").innerHTML=(logs||[]).map(x=>'<article class="user-row"><div><strong>'+esc(x.action)+'</strong><small>'+esc(x.actor_email||"System account")+' · '+esc(x.target_type)+' · '+esc(x.target_id||"")+'</small><small>'+esc(new Date(x.created_at).toLocaleString())+'</small></div><small>'+esc(JSON.stringify(x.details||{}))+'</small></article>').join("")||'<p class="muted">No administrator activity recorded yet.</p>';
+   }
  }
  $("content-form").addEventListener("submit",async e=>{
    e.preventDefault();try{
