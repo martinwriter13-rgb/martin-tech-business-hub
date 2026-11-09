@@ -105,6 +105,7 @@
    permissions=permissionCheck.error?[]:(permissionCheck.data||[]);
    if(!superAdmin&&!permissions.length){await client.auth.signOut();showDashboard(false);status("This account has no website management permissions.","error");return false;}
    showDashboard(true);
+   if(superAdmin||permissions.includes("content.manage"))refreshContentSectionIds();
    const moduleLinks=[];
    if(superAdmin||permissions.includes("career.manage"))moduleLinks.push('<a class="btn" href="jobs.html">Career administration</a>');
    if(superAdmin||permissions.includes("writing.manage"))moduleLinks.push('<a class="btn" href="research-writing.html">Writing Marketplace</a>');
