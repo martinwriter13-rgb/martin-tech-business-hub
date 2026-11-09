@@ -35,7 +35,7 @@
 </section>
 <section class="panel" id="role-create-panel">
 <h2>Create a new role</h2>
-<form id="role-form">
+<form id="role-form"><input type="hidden" id="role-editing-key">
 <div class="form-grid">
 <div class="field"><label for="role-name">Role name</label><input id="role-name" maxlength="60" placeholder="e.g. Social Media Manager" required></div>
 <div class="field"><label for="role-key">Role key (unique)</label><input id="role-key" maxlength="40" pattern="[a-z][a-z0-9_]{2,39}" placeholder="social_media_manager" required></div>
@@ -52,7 +52,8 @@
 <label><input type="checkbox" value="analytics.view"> View analytics</label>
 <label><input type="checkbox" value="settings.manage"> Manage website settings</label>
 </div>
-<button class="primary" type="submit">Create role</button>
+<label class="muted"><input id="role-active" type="checkbox" checked> Role is active</label>
+<div class="actions"><button class="primary" id="role-submit" type="submit">Create role</button><button type="button" id="role-cancel" class="hidden">Cancel editing</button></div>
 </form>
 </section>
 <section class="panel" id="user-roles-panel">
@@ -128,7 +129,7 @@
     $("account-target").innerHTML='<option value="">Select an account</option>'+users.filter(x=>x.role_key!=="super_admin").map(x=>'<option value="'+esc(x.user_id)+'">'+esc(x.email||x.full_name||x.user_id)+'</option>').join("");
     $("user-count").textContent=users.length;$("role-count").textContent=roles.length;
     $("custom-count").textContent=roles.filter(x=>!x.is_system).length;
-    $("role-list").innerHTML=roles.map(x=>'<article class="role-card"><strong>'+esc(x.name)+'</strong> <span class="pill">'+(x.is_system?"System role":"Custom role")+'</span><p class="muted">'+esc(x.description)+'</p><small class="muted">'+esc(x.role_key)+'</small><p>'+((x.permissions||[]).length?x.permissions.map(p=>'<span class="pill">'+esc(p)+'</span>').join(" "):'<span class="pill">No extra permissions</span>')+'</p></article>').join("");
+    $("role-list").innerHTML=roles.map(x=>'<article class="role-card"><strong>'+esc(x.name)+'</strong> <span class="pill">'+(x.is_system?"System role":"Custom role")+(x.is_active?"":" · Inactive")+'</span><p class="muted">'+esc(x.description)+'</p><small class="muted">'+esc(x.role_key)+'</small><p>'+((x.permissions||[]).length?x.permissions.map(p=>'<span class="pill">'+esc(p)+'</span>').join(" "):'<span class="pill">No extra permissions</span>')+'</p>'+(!x.is_system?'<div class="actions"><button type="button" data-role-edit="'+esc(x.role_key)+'">Edit role</button><button type="button" data-role-toggle="'+esc(x.role_key)+'">'+(x.is_active?"Deactivate":"Activate")+'</button></div>':"")+'</article>').join("");
     $("user-list").innerHTML=users.map(u=>{
      const current=u.role_key||"member";
      const options=roles.filter(r=>r.role_key!=="super_admin"&&r.is_active).map(r=>'<option value="'+esc(r.role_key)+'" '+(current===r.role_key?"selected":"")+'>'+esc(r.name)+'</option>').join("");
@@ -207,12 +208,39 @@
  $("login-form").addEventListener("submit",async e=>{e.preventDefault();try{status("Signing in…");const {error}=await client.auth.signInWithPassword({email:$("email").value.trim(),password:$("password").value});if(error)throw error;await verify();}catch(err){status(err.message||"Sign-in failed.","error");}});
  $("reset-password").addEventListener("click",async()=>{const email=$("email").value.trim();if(!email){status("Enter your administrator email first.","error");return;}const {error}=await client.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});status(error?error.message:"If the account exists, a password reset email has been sent.","ok");});
  $("refresh").addEventListener("click",()=>load().catch(e=>status(e.message,"error")));
+ $("role-list").addEventListener("click",async e=>{
+   const edit=e.target.closest("[data-role-edit]"),toggle=e.target.closest("[data-role-toggle]");
+   try{
+     if(edit){
+       const role=roles.find(r=>r.role_key===edit.dataset.roleEdit);if(!role)throw new Error("Role not found.");
+       $("role-editing-key").value=role.role_key;$("role-key").value=role.role_key;$("role-key").readOnly=true;
+       $("role-name").value=role.name;$("role-description").value=role.description||"";$("role-active").checked=role.is_active;
+       document.querySelectorAll('#role-form input[type="checkbox"][value]').forEach(x=>x.checked=(role.permissions||[]).includes(x.value));
+       $("role-submit").textContent="Save role changes";$("role-cancel").classList.remove("hidden");$("role-form").scrollIntoView({behavior:"smooth"});
+     }
+     if(toggle){
+       const role=roles.find(r=>r.role_key===toggle.dataset.roleToggle);if(!role)throw new Error("Role not found.");
+       const {error}=await client.rpc("admin_update_site_role",{p_role_key:role.role_key,p_name:role.name,p_description:role.description||"",p_permissions:role.permissions||[],p_is_active:!role.is_active});
+       if(error)throw error;await load();status(role.is_active?"Role deactivated.":"Role activated.","ok");
+     }
+   }catch(err){status(err.message||"Role update failed.","error");}
+ });
+ $("role-cancel").addEventListener("click",()=>{
+   $("role-form").reset();$("role-editing-key").value="";$("role-key").readOnly=false;$("role-active").checked=true;
+   $("role-submit").textContent="Create role";$("role-cancel").classList.add("hidden");
+ });
  $("role-form").addEventListener("submit",async e=>{
    e.preventDefault();try{
-     const permissions=[...document.querySelectorAll('#role-form input[type="checkbox"]:checked')].map(x=>x.value);
-     const {error}=await client.rpc("admin_create_site_role",{p_role_key:$("role-key").value.trim(),p_name:$("role-name").value.trim(),p_description:$("role-description").value.trim(),p_permissions:permissions});
-     if(error)throw error;$("role-form").reset();await load();status("New role created successfully.","ok");
-   }catch(err){status(err.message||"Could not create role.","error");}
+     const permissions=[...document.querySelectorAll('#role-form input[type="checkbox"][value]:checked')].map(x=>x.value);
+     const editingKey=$("role-editing-key").value;
+     const {error}=editingKey
+       ?await client.rpc("admin_update_site_role",{p_role_key:editingKey,p_name:$("role-name").value.trim(),p_description:$("role-description").value.trim(),p_permissions:permissions,p_is_active:$("role-active").checked})
+       :await client.rpc("admin_create_site_role",{p_role_key:$("role-key").value.trim(),p_name:$("role-name").value.trim(),p_description:$("role-description").value.trim(),p_permissions:permissions});
+     if(error)throw error;
+     $("role-form").reset();$("role-editing-key").value="";$("role-key").readOnly=false;$("role-active").checked=true;
+     $("role-submit").textContent="Create role";$("role-cancel").classList.add("hidden");
+     await load();status(editingKey?"Role updated successfully.":"New role created successfully.","ok");
+   }catch(err){status(err.message||"Could not save role.","error");}
  });
  $("invite-user-form").addEventListener("submit",async e=>{
    e.preventDefault();
