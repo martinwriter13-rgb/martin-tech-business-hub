@@ -181,7 +181,7 @@ body.portal-member-mode #portal-app>.portal-app{margin:0;padding:24px;border-col
 @media(max-width:760px){.admin-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.admin-row{grid-template-columns:minmax(0,1fr) auto}.admin-row select{grid-column:1/-1;width:100%}}
 @media(max-width:520px){.admin-block{padding:13px}.admin-stats{gap:8px}.admin-stat{padding:12px}.admin-stat b{font-size:23px}}
 </style>
-</head>
+<style id="mt-managed-content-style">.mt-managed-wrap{width:min(1100px,92%);margin:28px auto}.mt-managed-card{padding:22px;margin:14px 0;border:1px solid rgba(130,165,230,.3);border-radius:16px;background:linear-gradient(145deg,#14213a,#0d1527);color:inherit}.mt-managed-card h2{margin-top:0}.mt-managed-card p{white-space:pre-wrap}.mt-managed-kicker{font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:#82baff;font-weight:800}</style></head>
 <body>
 <header class="wrap top"><a class="brand" href="index.html">MARTIN <span>TECH</span> & BUSINESS HUB</a><nav class="nav"><a href="index.html">Home</a><a href="#opportunities">Career areas</a><a href="#how">How it works</a><a href="#register">Join the portal</a></nav><a class="btn secondary" href="index.html">Back to hub</a></header>
 <main>
@@ -365,7 +365,7 @@ body.portal-member-mode #portal-app>.portal-app{margin:0;padding:24px;border-col
 </div>
 </section>
 
-</main>
+<section id="mt-managed-content" class="mt-managed-wrap" data-page="jobs" hidden aria-label="Published website updates"></section></main>
 <footer><div class="wrap">© <span id="year"></span> Martin Tech & Business Hub · Career · <a href="index.html">Main website</a></div></footer>
 <script>document.getElementById('year').textContent=new Date().getFullYear();</script>
 
@@ -908,4 +908,4 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
-</body></html>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>(async()=>{const host=document.getElementById("mt-managed-content");if(!host||!window.supabase?.createClient)return;const db=window.supabase.createClient("https://zvepoycrqjzuptccdffv.supabase.co","sb_publishable_oqLCl-FRoz_u7Yw3IUANow_4SBJTXqT");try{const {data,error}=await db.from("site_content").select("title,body,section_key,updated_at").eq("page_slug",host.dataset.page).eq("status","published").order("updated_at",{ascending:false}).limit(30);if(error)throw error;if(!data?.length)return;host.hidden=false;host.innerHTML='<div class="mt-managed-wrap"><div class="mt-managed-kicker">Updates from Martin Tech & Business Hub</div>'+data.map(x=>'<article class="mt-managed-card"><h2></h2><p></p></article>').join("")+'</div>';[...host.querySelectorAll(".mt-managed-card")].forEach((card,i)=>{card.querySelector("h2").textContent=data[i].title;card.querySelector("p").textContent=data[i].body;});}catch(e){console.warn("Managed content load:",e.message);}})();</script></body></html>
