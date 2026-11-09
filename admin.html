@@ -17,9 +17,9 @@
 <p class="muted">Secure, permission-scoped administration. The tools shown depend on your assigned website role.</p>
 <div id="status" class="status">Sign in with your administrator account to continue.</div>
 <section id="login-panel" class="panel">
-<h2>Administrator sign in</h2>
+<h2>One secure sign-in</h2><p class="muted">Use your Super Admin account. Your secure session is remembered on this browser, so you will not need to sign in again on every website section.</p>
 <form id="login-form">
-<div class="form-grid"><div class="field"><label for="email">Administrator email</label><input id="email" type="email" autocomplete="username" required></div><div class="field"><label for="password">Password</label><input id="password" type="password" autocomplete="current-password" required></div></div>
+<div class="form-grid"><div class="field"><label for="email">Administrator email</label><input id="email" type="email" autocomplete="username" value="martinmgaza85@gmail.com" required></div><div class="field"><label for="password">Password</label><input id="password" type="password" autocomplete="current-password" required><button type="button" id="toggle-password" aria-pressed="false">Show password</button></div></div>
 <div class="actions"><button class="primary" type="submit">Sign in securely</button><button type="button" id="reset-password">Reset password</button></div>
 </form>
 </section>
@@ -246,6 +246,7 @@
  $("analytics-refresh").addEventListener("click",()=>loadContentAndAudit().then(()=>status("Analytics refreshed.","ok")).catch(e=>status(e.message,"error")));
  $("all-messages-refresh").addEventListener("click",()=>loadContentAndAudit().then(()=>status("Central message inbox refreshed.","ok")).catch(e=>status(e.message,"error")));
 
+ $("toggle-password").addEventListener("click",()=>{const field=$("password"),visible=field.type==="text";field.type=visible?"password":"text";$("toggle-password").textContent=visible?"Show password":"Hide password";$("toggle-password").setAttribute("aria-pressed",String(!visible));});
  $("login-form").addEventListener("submit",async e=>{e.preventDefault();try{status("Signing in…");const {error}=await client.auth.signInWithPassword({email:$("email").value.trim(),password:$("password").value});if(error)throw error;await verify();}catch(err){status(err.message||"Sign-in failed.","error");}});
  $("reset-password").addEventListener("click",async()=>{const email=$("email").value.trim();if(!email){status("Enter your administrator email first.","error");return;}const {error}=await client.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});status(error?error.message:"If the account exists, a password reset email has been sent.","ok");});
  $("refresh").addEventListener("click",()=>load().catch(e=>status(e.message,"error")));
@@ -315,7 +316,7 @@
    }catch(err){status(err.message||"Could not update role.","error");}
  });
  $("logout").addEventListener("click",async()=>{await client.auth.signOut();superAdmin=false;showDashboard(false);status("You have signed out.");});
- async function start(){client=window.supabase.createClient(PROJECT_URL,PUBLISHABLE_KEY);const {data:{session}}=await client.auth.getSession();if(session)await verify();client.auth.onAuthStateChange((_event,session)=>{setTimeout(()=>{if(!session){showDashboard(false);superAdmin=false;status("You are signed out.");}else verify().catch(e=>status(e.message,"error"));},0);});}
+ async function start(){client=window.supabase.createClient(PROJECT_URL,PUBLISHABLE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});const {data:{session}}=await client.auth.getSession();if(session)await verify();client.auth.onAuthStateChange((_event,session)=>{setTimeout(()=>{if(!session){showDashboard(false);superAdmin=false;status("You are signed out.");}else verify().catch(e=>status(e.message,"error"));},0);});}
  start().catch(e=>status(e.message||"Could not initialise the administrator dashboard.","error"));
 })();
 </script>
