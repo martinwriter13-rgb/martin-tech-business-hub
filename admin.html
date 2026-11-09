@@ -58,7 +58,7 @@
 </section>
 <section class="panel" id="user-roles-panel">
 <div class="section-head"><div><h2>Assign roles to people</h2><p class="muted">Choose a registered account and assign one website role. This is separate from the person's Career account type.</p></div></div>
-<form id="invite-user-form" class="form-grid"><div class="field"><label for="invite-email">Invite a new website user by email</label><input id="invite-email" type="email" maxlength="254" placeholder="person@example.com" required></div><div class="field" style="align-self:end"><button class="primary" type="submit">Send invitation</button></div></form>
+<form id="invite-user-form" class="form-grid"><div class="field"><label for="invite-email">Invite a new website user by email</label><input id="invite-email" type="email" maxlength="254" placeholder="person@example.com" required></div><div class="field"><label for="invite-role">Initial website role</label><select id="invite-role"><option value="">Member (no extra access)</option></select></div><div class="field" style="align-self:end"><button class="primary" type="submit">Send invitation</button></div></form>
 <p class="muted">Invitations use Supabase Auth email delivery. The recipient must accept the invitation before signing in. Assign their website role after registration.</p>
 <form id="account-action-form" class="form-grid"><div class="field"><label for="account-target">Registered account</label><select id="account-target" required><option value="">Select an account</option></select></div><div class="field"><label for="account-action">Account action</label><select id="account-action"><option value="suspend">Suspend sign-in</option><option value="restore">Restore sign-in</option></select></div><div class="field"><button class="danger" type="submit">Apply account action</button></div></form>
 <div id="user-list"><p class="muted">Loading registered accounts…</p></div>
@@ -127,6 +127,7 @@
     const [u,r,a]=await Promise.all([client.rpc("admin_list_site_users"),client.rpc("admin_list_site_roles"),client.rpc("admin_list_site_auth_status")]);
     if(u.error)throw u.error;if(r.error)throw r.error;if(a.error)throw a.error;
     users=u.data||[];roles=r.data||[];authStatuses=a.data||[];
+    $("invite-role").innerHTML='<option value="">Member (no extra access)</option>'+roles.filter(x=>x.role_key!=="super_admin"&&x.role_key!=="member"&&x.is_active).map(x=>'<option value="'+esc(x.role_key)+'">'+esc(x.name)+'</option>').join("");
     $("account-target").innerHTML='<option value="">Select an account</option>'+users.filter(x=>x.role_key!=="super_admin").map(x=>'<option value="'+esc(x.user_id)+'">'+esc(x.email||x.full_name||x.user_id)+'</option>').join("");
     $("user-count").textContent=users.length;$("role-count").textContent=roles.length;
     $("custom-count").textContent=roles.filter(x=>!x.is_system).length;
@@ -262,12 +263,14 @@
  $("invite-user-form").addEventListener("submit",async e=>{
    e.preventDefault();
    try{
-     const email=$("invite-email").value.trim();
+     const email=$("invite-email").value.trim(),roleKey=$("invite-role").value;
      status("Sending invitation…");
      const {data,error}=await client.functions.invoke("admin-user-management",{body:{action:"invite",email}});
      if(error)throw error;if(data?.error)throw new Error(data.error);
+     let roleNote="";
+     if(roleKey&&data.user_id){const {error:roleError}=await client.rpc("admin_assign_site_role",{p_user_id:data.user_id,p_role_key:roleKey});if(roleError)roleNote=" Invitation sent, but the initial role could not be assigned: "+roleError.message;}
      $("invite-user-form").reset();await load();
-     status(data.message+" Check the recipient email and SMTP delivery settings.","ok");
+     status(data.message+roleNote+" Check the recipient email and SMTP delivery settings.","ok");
    }catch(err){status(err.message||"Invitation failed. Check Supabase Auth email settings.","error");}
  });
  $("account-action-form").addEventListener("submit",async e=>{
