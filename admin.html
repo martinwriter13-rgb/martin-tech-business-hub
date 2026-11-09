@@ -57,6 +57,9 @@
 </section>
 <section class="panel" id="user-roles-panel">
 <div class="section-head"><div><h2>Assign roles to people</h2><p class="muted">Choose a registered account and assign one website role. This is separate from the person's Career account type.</p></div></div>
+<form id="invite-user-form" class="form-grid"><div class="field"><label for="invite-email">Invite a new website user by email</label><input id="invite-email" type="email" maxlength="254" placeholder="person@example.com" required></div><div class="field" style="align-self:end"><button class="primary" type="submit">Send invitation</button></div></form>
+<p class="muted">Invitations use Supabase Auth email delivery. The recipient must accept the invitation before signing in. Assign their website role after registration.</p>
+<form id="account-action-form" class="form-grid"><div class="field"><label for="account-target">Registered account</label><select id="account-target" required><option value="">Select an account</option></select></div><div class="field"><label for="account-action">Account action</label><select id="account-action"><option value="suspend">Suspend sign-in</option><option value="restore">Restore sign-in</option></select></div><div class="field"><button class="danger" type="submit">Apply account action</button></div></form>
 <div id="user-list"><p class="muted">Loading registered accounts…</p></div>
 </section>
 <section class="panel">
@@ -90,7 +93,7 @@
  const $=id=>document.getElementById(id);
  const status=(message,type="")=>{$("status").textContent=message;$("status").className="status"+(type?" "+type:"");};
  const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
- let client=null,superAdmin=false,permissions=[],users=[],roles=[];
+ let client=null,superAdmin=false,permissions=[],users=[],roles=[],authStatuses=[];
  $("year").textContent=new Date().getFullYear();
  function showDashboard(yes){$("dashboard").classList.toggle("hidden",!yes);$("login-panel").classList.toggle("hidden",yes);}
  async function verify(){
@@ -119,9 +122,10 @@
  async function load(){
    status("Loading users and role permissions…");
    if(superAdmin){
-    const [u,r]=await Promise.all([client.rpc("admin_list_site_users"),client.rpc("admin_list_site_roles")]);
-    if(u.error)throw u.error;if(r.error)throw r.error;
-    users=u.data||[];roles=r.data||[];
+    const [u,r,a]=await Promise.all([client.rpc("admin_list_site_users"),client.rpc("admin_list_site_roles"),client.rpc("admin_list_site_auth_status")]);
+    if(u.error)throw u.error;if(r.error)throw r.error;if(a.error)throw a.error;
+    users=u.data||[];roles=r.data||[];authStatuses=a.data||[];
+    $("account-target").innerHTML='<option value="">Select an account</option>'+users.filter(x=>x.role_key!=="super_admin").map(x=>'<option value="'+esc(x.user_id)+'">'+esc(x.email||x.full_name||x.user_id)+'</option>').join("");
     $("user-count").textContent=users.length;$("role-count").textContent=roles.length;
     $("custom-count").textContent=roles.filter(x=>!x.is_system).length;
     $("role-list").innerHTML=roles.map(x=>'<article class="role-card"><strong>'+esc(x.name)+'</strong> <span class="pill">'+(x.is_system?"System role":"Custom role")+'</span><p class="muted">'+esc(x.description)+'</p><small class="muted">'+esc(x.role_key)+'</small><p>'+((x.permissions||[]).length?x.permissions.map(p=>'<span class="pill">'+esc(p)+'</span>').join(" "):'<span class="pill">No extra permissions</span>')+'</p></article>').join("");
@@ -209,6 +213,28 @@
      const {error}=await client.rpc("admin_create_site_role",{p_role_key:$("role-key").value.trim(),p_name:$("role-name").value.trim(),p_description:$("role-description").value.trim(),p_permissions:permissions});
      if(error)throw error;$("role-form").reset();await load();status("New role created successfully.","ok");
    }catch(err){status(err.message||"Could not create role.","error");}
+ });
+ $("invite-user-form").addEventListener("submit",async e=>{
+   e.preventDefault();
+   try{
+     const email=$("invite-email").value.trim();
+     status("Sending invitation…");
+     const {data,error}=await client.functions.invoke("admin-user-management",{body:{action:"invite",email}});
+     if(error)throw error;if(data?.error)throw new Error(data.error);
+     $("invite-user-form").reset();await load();
+     status(data.message+" Check the recipient email and SMTP delivery settings.","ok");
+   }catch(err){status(err.message||"Invitation failed. Check Supabase Auth email settings.","error");}
+ });
+ $("account-action-form").addEventListener("submit",async e=>{
+   e.preventDefault();
+   const userId=$("account-target").value,action=$("account-action").value;
+   if(!userId){status("Select an account first.","error");return;}
+   if(!confirm(action==="suspend"?"Suspend this account so it cannot sign in?":"Restore this account's sign-in access?"))return;
+   try{
+     const {data,error}=await client.functions.invoke("admin-user-management",{body:{action,user_id:userId}});
+     if(error)throw error;if(data?.error)throw new Error(data.error);
+     await load();status(data.message,"ok");
+   }catch(err){status(err.message||"Account action failed.","error");}
  });
  $("user-list").addEventListener("click",async e=>{
    const save=e.target.closest("[data-role-save]"),revoke=e.target.closest("[data-role-revoke]");
