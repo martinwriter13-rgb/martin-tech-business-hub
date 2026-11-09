@@ -69,7 +69,7 @@
 <div class="field"><label for="content-status">Publication status</label><select id="content-status"><option value="draft">Draft</option><option value="published">Published</option><option value="archived">Archived</option></select></div>
 <div class="actions"><button class="primary" type="submit">Save content</button><button type="button" id="content-clear">Clear editor</button></div></form>
 <div class="admin-list" id="content-list"><p class="muted">Loading content…</p></div></section>
-<section class="panel"><div class="section-head"><div><h2>Website enquiries inbox</h2><p class="muted">Review contact form submissions from the website and track their status.</p></div></div><div id="enquiry-list"><p class="muted">Loading enquiries…</p></div></section><section class="panel"><div class="section-head"><div><h2>Website audit trail</h2><p class="muted">Recent administrator activity and content changes.</p></div><button type="button" id="audit-refresh">Refresh audit trail</button></div><div id="audit-list"><p class="muted">Loading audit trail…</p></div></section><section class="panel">
+<section class="panel"><div class="section-head"><div><h2>Website enquiries inbox</h2><p class="muted">Review contact form submissions from the website and track their status.</p></div></div><div id="enquiry-list"><p class="muted">Loading enquiries…</p></div></section><section class="panel"><div class="section-head"><div><h2>Website audit trail</h2><p class="muted">Recent administrator activity and content changes.</p></div><button type="button" id="audit-refresh">Refresh audit trail</button></div><div id="audit-list"><p class="muted">Loading audit trail…</p></div></section><section class="panel" id="settings-panel"><h2>Website settings</h2><p class="muted">Manage a site-wide announcement banner. You can switch it off without deleting the message.</p><form id="settings-form"><div class="field"><label for="announcement-text">Announcement message</label><textarea id="announcement-text" maxlength="300" rows="3" placeholder="Write a short announcement for visitors…"></textarea></div><label><input id="announcement-enabled" type="checkbox"> Show announcement on website pages</label><div class="actions"><button class="primary" type="submit">Save website settings</button></div></form></section><section class="panel">
 <h2>Access protection</h2>
 <ul class="muted">
 <li>Your Super Admin account cannot be changed or revoked from this screen.</li>
@@ -131,6 +131,9 @@
    const canContent=superAdmin||permissions.includes("content.manage");
    const canEnquiries=superAdmin||permissions.includes("enquiries.manage");
    const canAudit=superAdmin;
+   const canSettings=superAdmin||permissions.includes("settings.manage");
+   const settingsPanel=document.getElementById("settings-panel");
+   if(settingsPanel)settingsPanel.classList.toggle("hidden",!canSettings);
    const contentPanel=document.getElementById("content-form")?.closest(".panel");
    const enquiryPanel=document.getElementById("enquiry-list")?.closest(".panel");
    if(contentPanel)contentPanel.classList.toggle("hidden",!canContent);
@@ -145,12 +148,20 @@
    if(enquiryError)throw enquiryError;
    $("enquiry-list").innerHTML=(enquiries||[]).map(x=>'<article class="role-card"><div class="section-head"><strong>'+esc(x.name)+' · '+esc(x.service)+'</strong><span class="pill">'+esc(x.status)+'</span></div><p class="muted">'+esc(x.email)+' · '+esc(x.phone||"No phone")+' · '+esc(x.company||"No company")+' · '+esc(new Date(x.created_at).toLocaleString())+'</p><p>'+esc(x.message)+'</p><div class="actions"><select data-enquiry-status="'+esc(x.id)+'"><option value="new" '+(x.status==="new"?"selected":"")+'>New</option><option value="in_progress" '+(x.status==="in_progress"?"selected":"")+'>In progress</option><option value="resolved" '+(x.status==="resolved"?"selected":"")+'>Resolved</option><option value="spam" '+(x.status==="spam"?"selected":"")+'>Spam</option></select><button type="button" data-enquiry-save="'+esc(x.id)+'">Update status</button></div></article>').join("")||'<p class="muted">No website enquiries yet.</p>';
    }
+   if(canSettings){
+     const {data:setting,error:settingError}=await client.from("site_settings").select("setting_value").eq("setting_key","announcement_banner").maybeSingle();
+     if(settingError)throw settingError;
+     const value=setting?.setting_value||{};
+     $("announcement-text").value=value.text||"";
+     $("announcement-enabled").checked=value.enabled===true;
+   }
    if(canAudit){
    const {data:logs,error:logError}=await client.rpc("admin_list_site_audit",{p_limit:60});
    if(logError)throw logError;
    $("audit-list").innerHTML=(logs||[]).map(x=>'<article class="user-row"><div><strong>'+esc(x.action)+'</strong><small>'+esc(x.actor_email||"System account")+' · '+esc(x.target_type)+' · '+esc(x.target_id||"")+'</small><small>'+esc(new Date(x.created_at).toLocaleString())+'</small></div><small>'+esc(JSON.stringify(x.details||{}))+'</small></article>').join("")||'<p class="muted">No administrator activity recorded yet.</p>';
    }
  }
+ $("settings-form").addEventListener("submit",async e=>{e.preventDefault();try{const {error}=await client.rpc("admin_save_site_setting",{p_key:"announcement_banner",p_value:{text:$("announcement-text").value.trim(),enabled:$("announcement-enabled").checked},p_is_public:true});if(error)throw error;await loadContentAndAudit();status("Website announcement settings saved.","ok");}catch(err){status(err.message||"Could not save website settings.","error");}});
  $("content-form").addEventListener("submit",async e=>{
    e.preventDefault();try{
      const {error}=await client.rpc("admin_save_site_content",{p_id:$("content-id").value||null,p_page_slug:$("content-page").value,p_section_key:$("content-section").value.trim(),p_title:$("content-title").value.trim(),p_body:$("content-body").value,p_status:$("content-status").value});
