@@ -713,7 +713,7 @@ body.portal-member-mode #portal-app>.portal-app{margin:0;padding:24px;border-col
     $("mt-profile-bio").placeholder=currentProfile.account_type==="employer"?"Describe your company, services and the people you are looking to hire.":"Describe your experience, strengths and the work you do.";
     $("mt-market-greeting").textContent="Signed in as "+(currentProfile.full_name||user.email)+" · "+(currentProfile.country||"Global");
     $("mt-market-heading").textContent="Find your next opportunity";
-    $("mt-dashboard-copy").textContent=currentProfile.account_type==="employer"?"Submit remote opportunities for review and manage your listings.":"Browse approved jobs, apply and track your applications.";
+    $("mt-dashboard-copy").textContent=isJobAdmin?"Oversee registered users, moderate job listings, review applications and manage the Career marketplace.":(currentProfile.account_type==="employer"?"Submit remote opportunities for review and manage your listings.":"Browse approved jobs, apply and track your applications.");
     show("mt-job-form",false);
     show("mt-apply-form",currentProfile.account_type==="job_seeker");
     await loadJobs(); await loadActivity(); await loadMessages(); startPortalRefresh();
