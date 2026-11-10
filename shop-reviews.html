@@ -16,6 +16,13 @@
 .hero>.eyebrow,.hero>h1,.hero>p,.hero>figure{position:relative;z-index:1}
 @media(max-width:700px){.hero{padding:24px 15px 18px}.service-video-bg video{opacity:.16}}
 @media(prefers-reduced-motion:reduce){.service-video-bg video{display:none}}
+
+.market-message-box{margin-top:22px;padding:20px;border:1px solid #3b5682;border-radius:16px;background:linear-gradient(145deg,#172947,#101a2e)}
+.market-message-form{display:grid;gap:11px;max-width:760px}.market-message-form .market-message-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.market-message-form label{display:grid;gap:5px;color:#d5e2fa;font-size:13px}
+.market-message-form input,.market-message-form textarea{width:100%;min-width:0;padding:12px;border-radius:10px;border:1px solid #30466c;background:#080f20;color:#f5f7ff;font:inherit;margin:0}
+.market-message-form button{justify-self:start;padding:12px 18px;border:0;border-radius:9px;background:#20b968;color:#062b17;font-weight:800;cursor:pointer}
+@media(max-width:650px){.market-message-form .market-message-grid{grid-template-columns:1fr}.market-message-form button{width:100%}}
 </style><!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-PPLT5Z6J');</script>
 <!-- End Google Tag Manager -->
@@ -85,6 +92,23 @@
     </div>
     <div id="market-admin" hidden class="market-admin"><h3>Marketplace review desk</h3><p class="muted">Admin view: review submissions before publication.</p><div id="market-pending"></div></div>
   </div>
+  
+  <section class="market-message-box" id="contact-martin">
+    <div class="tag">Need help with a transaction?</div>
+    <h2>Message Martin directly</h2>
+    <p class="muted">Questions about buying, selling, payment arrangements, delivery or a marketplace listing? Send Martin a message using this form. It will open WhatsApp with your message ready to send.</p>
+    <form class="market-message-form" id="market-contact-form">
+      <div class="market-message-grid">
+        <label>Your name<input name="name" required maxlength="100" autocomplete="name" placeholder="Your name"></label>
+        <label>Your phone / WhatsApp<input name="phone" required type="tel" maxlength="25" autocomplete="tel" placeholder="Your contact number"></label>
+      </div>
+      <label>Product or listing (optional)<input name="item" maxlength="150" placeholder="Product name or listing reference"></label>
+      <label>Your message<textarea name="message" rows="4" required minlength="5" maxlength="2000" placeholder="Tell Martin how he can help with your transaction…"></textarea></label>
+      <button type="submit">Send message to Martin on WhatsApp</button>
+      <p class="muted" id="market-contact-status" role="status" aria-live="polite">Your message is sent only after you press Send in WhatsApp.</p>
+    </form>
+  </section>
+
   <p class="market-disclaimer">Martin Tech Marketplace connects buyers and sellers. Payments and delivery are arranged directly between the parties; always verify products and sellers before paying. Martin Tech does not hold buyer funds.</p>
 </section>
 <section class="grid"><article class="card"><img class="card-photo" src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&amp;fit=crop&amp;w=720&amp;q=72" alt="Professional shop reviews visual" loading="lazy" decoding="async"><div class="tag">Technology</div><h2>Phones & accessories</h2><p class="muted">Buying considerations for smartphones, chargers, audio gear and everyday tech.</p></article><article class="card"><img class="card-photo" src="https://images.unsplash.com/photo-1557821552-17105176677c?auto=format&amp;fit=crop&amp;w=720&amp;q=72" alt="Professional shop reviews visual" loading="lazy" decoding="async"><div class="tag">Work tools</div><h2>Office & productivity</h2><p class="muted">Tools that support home offices, small businesses and digital work.</p></article><article class="card"><img class="card-photo" src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&amp;fit=crop&amp;w=720&amp;q=72" alt="Professional shop reviews visual" loading="lazy" decoding="async"><div class="tag">Digital</div><h2>Software & subscriptions</h2><p class="muted">Feature comparisons, usability notes and value-for-money considerations.</p></article></section><section style="margin-top:32px" class="card"><h2>How our reviews work</h2><ul><li>We distinguish hands-on testing from desk research.</li><li>We state the review date and the criteria used.</li><li>We disclose affiliate or sponsored relationships where they apply.</li><li>We do not publish invented customer testimonials, ratings or product claims.</li></ul><p class="muted">Marketplace listings are submitted by registered sellers and published after review. Browse approved products above, or use the seller centre to list your own items. Product reviews and buying guides remain below.</p></section><section style="margin-top:22px" class="card"><h2>Suggest a product for review</h2><p class="muted">Use this brief to prepare a suggestion. Copy it and send it through the contact channel once published.</p><label>Product name<input id="product" placeholder="Brand and model"></label><label>What would you like to know?<textarea id="question" rows="3" placeholder="Price, durability, features, alternatives..."></textarea></label><button onclick="copyBrief()">Copy review request</button><p id="status" class="muted" aria-live="polite"></p></section><section id="resources" style="margin-top:44px"><div class="tag">Free digital resources • Templates • Checklists • Guides</div><h2>Practical resources for work and business</h2><h1>Practical resources for work and business.</h1><p class="muted">A starter library of copy-ready tools. These resources are free to use and adapt; paid downloads may be introduced only when clearly described.</p>
@@ -269,5 +293,9 @@ body:has(.service-order-bar) .martin-whatsapp-float{bottom:104px}
  db.auth.onAuthStateChange((_event,session)=>applySession(session?.user||null));
  loadListings();
 })();
+</script>
+
+<script id="market-contact-martin">
+(()=>{const form=document.getElementById("market-contact-form");if(!form)return;form.addEventListener("submit",e=>{e.preventDefault();const fd=new FormData(form);const msg=["Hello Martin, I need help with a Martin Tech Marketplace transaction.","Name: "+String(fd.get("name")).trim(),"Phone: "+String(fd.get("phone")).trim(),"Product/listing: "+(String(fd.get("item")).trim()||"Not specified"),"Message: "+String(fd.get("message")).trim()].join("\n");const url="https://wa.me/254715499170?text="+encodeURIComponent(msg);window.open(url,"_blank","noopener,noreferrer");document.getElementById("market-contact-status").textContent="WhatsApp opened with your message. Press Send in WhatsApp to deliver it to Martin.";});})();
 </script>
 </body></html>
