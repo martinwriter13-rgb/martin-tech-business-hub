@@ -373,12 +373,41 @@ html[data-device="laptop"]{--device-gutter:clamp(28px,4vw,56px);--device-card-co
   window.addEventListener('orientationchange',classify,{passive:true});
 })();
 </script>
-<style id="mt-managed-content-style">.mt-managed-wrap{width:min(1100px,92%);margin:28px auto}.mt-managed-card{padding:22px;margin:14px 0;border:1px solid rgba(130,165,230,.3);border-radius:16px;background:linear-gradient(145deg,#14213a,#0d1527);color:inherit}.mt-managed-card h2{margin-top:0}.mt-managed-card p{white-space:pre-wrap}.mt-managed-kicker{font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:#82baff;font-weight:800}</style></head>
+<style id="mt-managed-content-style">.mt-managed-wrap{width:min(1100px,92%);margin:28px auto}.mt-managed-card{padding:22px;margin:14px 0;border:1px solid rgba(130,165,230,.3);border-radius:16px;background:linear-gradient(145deg,#14213a,#0d1527);color:inherit}.mt-managed-card h2{margin-top:0}.mt-managed-card p{white-space:pre-wrap}.mt-managed-kicker{font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:#82baff;font-weight:800}</style><style id="compact-six-section-navigation">
+.nav .links{gap:5px!important}
+.nav .links>.nav-home,.nav-group>summary{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 11px;border-radius:10px;color:#dbe6ff;font-size:14px;font-weight:750;cursor:pointer;list-style:none;min-height:42px}
+.nav-group>summary::-webkit-details-marker{display:none}
+.nav-group>summary:after{content:"⌄";color:#9dbbff;font-size:17px}
+.nav-group[open]>summary:after{content:"⌃"}
+.nav .links>.nav-home:hover,.nav-group>summary:hover,.nav-group[open]>summary{background:#ffffff12;color:#fff}
+.nav-submenu{display:grid;gap:2px;padding:2px 0 8px 12px}
+.nav-submenu a{display:block;padding:8px 10px!important;border-left:2px solid #466aa9;border-radius:0 8px 8px 0!important;color:#aebfe0;font-size:13px!important;line-height:1.35}
+.nav-submenu a:hover{background:#ffffff12;color:#fff}
+@media(max-width:800px){
+ .nav .links.mobile-open{gap:3px!important}
+ .nav .links.mobile-open>.nav-home,.nav .links.mobile-open .nav-group>summary{min-height:46px;padding:11px 5px;border-bottom:1px solid rgba(255,255,255,.1)}
+ .nav .links.mobile-open .nav-submenu{padding:2px 0 8px 13px}
+ .nav .links.mobile-open .nav-submenu a{min-height:40px;padding:9px 10px!important}
+}
+@media(min-width:801px){.nav-group{width:100%}.nav-submenu{padding-left:13px}}
+</style><style id="hub-guide-link-style">
+.hub-guide-links{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin:8px auto 20px;max-width:950px}
+.hub-guide-links a{display:inline-flex;align-items:center;justify-content:center;padding:9px 13px;border:1px solid #4969a8;border-radius:999px;background:#172744;color:#e2ebff;font-size:13px;font-weight:750}
+.hub-guide-links a:hover{background:#263e69;border-color:#8db7ff}
+@media(max-width:520px){.hub-guide-links{gap:7px}.hub-guide-links a{font-size:12px;padding:8px 10px}}
+</style></head>
 <body>
 <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PPLT5Z6J" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
-<header class="wrap nav"><div class="nav-media" aria-hidden="true"><video autoplay muted loop playsinline preload="metadata" poster="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&amp;fit=crop&amp;w=1800&amp;q=80"><source src="https://videos.pexels.com/video-files/28561463/12421439_3840_2160_30fps.mp4" type="video/mp4"></video></div><a class="brand" href="#">MARTIN <span>TECH</span> & BUSINESS HUB</a><nav class="links" id="primary-navigation" aria-label="Main navigation"><a href="admin.html">Sign In / Admin</a><a href="#services">Explore</a><a href="ai-academy.html">AI Academy</a><a href="digital-support.html">Digital Presence & Support</a><a href="trading-tools.html">Trading Tools</a><a href="shop-reviews.html">Marketplace</a><a href="business-consultancy.html">Consultancy & Our Work</a><a href="research-writing.html">Work & Writing Marketplace</a><a href="jobs.html">Career</a><a href="website-design.html">Website Design</a><a href="contact.html">Hire Us & Get in Touch</a><a href="cyber-cafe.html">Online Cyber Café</a><a href="business-consultancy.html#our-work">Consultancy & Our Work</a><a href="faq.html">FAQs</a><a href="blog.html">Blog</a><a href="#contact">Contact</a></nav><a class="btn primary" href="admin.html" aria-label="Super Admin login">Super Admin Login</a><button class="btn secondary mobile nav-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation" onclick="toggleMartinMobileMenu(this)">Menu ☰</button></header>
+<header class="wrap nav"><div class="nav-media" aria-hidden="true"><video autoplay muted loop playsinline preload="metadata" poster="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&amp;fit=crop&amp;w=1800&amp;q=80"><source src="https://videos.pexels.com/video-files/28561463/12421439_3840_2160_30fps.mp4" type="video/mp4"></video></div><a class="brand" href="index.html">MARTIN <span>TECH</span> & BUSINESS HUB</a><nav class="links" id="primary-navigation" aria-label="Main navigation">
+<a class="nav-home" href="index.html">Home</a>
+<details class="nav-group"><summary>About Us</summary><div class="nav-submenu"><a href="index.html#about">Our Story</a><a href="portfolio.html">Our Work</a><a href="contact.html">Contact Us</a><a href="faq.html">FAQs</a></div></details>
+<details class="nav-group"><summary>Services</summary><div class="nav-submenu"><a href="services.html">All Services</a><a href="business-consultancy.html">Business Consultancy</a><a href="research-writing.html">Research & Writing</a><a href="virtual-assistant.html">Virtual Assistant</a><a href="website-design.html">Website Design</a><a href="cyber-cafe.html">Online Cyber Café</a></div></details>
+<details class="nav-group"><summary>Learning & Resources</summary><div class="nav-submenu"><a href="ai-academy.html">AI Academy</a><a href="digital-products.html">Digital Products & Guides</a><a href="blog.html">Articles & Blog</a><a href="faq.html">Help Centre</a></div></details>
+<details class="nav-group"><summary>Careers & Opportunities</summary><div class="nav-submenu"><a href="jobs.html">Online Jobs Portal</a><a href="write-for-us.html">Write for Us</a><a href="write-for-us.html#contribute">Become a Contributor</a><a href="write-for-us.html#partnerships">Partnerships & Collaborations</a></div></details>
+<details class="nav-group"><summary>Technology & Business</summary><div class="nav-submenu"><a href="trading-tools.html">Trading Tools</a><a href="social-media.html">Social Media</a><a href="shop-reviews.html">Shop & Reviews</a><a href="digital-support.html">Digital Presence & Support</a></div></details>
+</nav><a class="btn primary" href="admin.html" aria-label="Super Admin login">Super Admin Login</a><button class="btn secondary mobile nav-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation" onclick="toggleMartinMobileMenu(this)">Menu ☰</button></header>
 <main>
 <div class="wrap hero">
 <div class="hero-video-bg" aria-hidden="true"><video autoplay muted loop playsinline preload="metadata" poster="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&amp;fit=crop&amp;w=1800&amp;q=80"><source src="https://videos.pexels.com/video-files/28561463/12421439_3840_2160_30fps.mp4" type="video/mp4"></video></div>
@@ -539,6 +568,9 @@ html[data-device="laptop"]{--device-gutter:clamp(28px,4vw,56px);--device-card-co
     <div class="explainer-lower-third"><strong>MARTIN TECH & BUSINESS HUB</strong><span id="explainerTicker">Technology · Learning · Business · Digital growth</span></div>
   </div>
   <div class="explainer-subtitle" id="explainerSubtitle" aria-live="polite">Your ideas deserve the right tools, skills and support. Let's explore.</div>
+  <div class="hub-guide-links" aria-label="Explore the six main areas of Martin Tech">
+    <a href="index.html#about">About Us</a><a href="services.html">Services</a><a href="ai-academy.html">Learning & Resources</a><a href="jobs.html">Careers & Opportunities</a><a href="trading-tools.html">Technology & Business</a><a href="contact.html">Contact Us</a>
+  </div>
   <div class="explainer-progress" role="progressbar" aria-label="Video progress" aria-valuemin="0" aria-valuemax="120" aria-valuenow="0" id="explainerProgress"><span id="explainerBar"></span></div>
   <div class="explainer-controls">
     <button class="play" id="explainerPlay" type="button">▶ Play 2-minute video</button>
@@ -603,19 +635,15 @@ html[data-device="laptop"]{--device-gutter:clamp(28px,4vw,56px);--device-card-co
   </div>
   <div class="welcome-visual"><img src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=900&q=85" alt="A professional team collaborating in a modern workspace" loading="lazy"><div class="welcome-visual-copy"><strong>Ideas. Technology. Growth.</strong><span>Discover what Martin Tech & Business Hub can do for you</span></div></div>
   <div class="welcome-messages" id="welcomeMessages" aria-live="polite">
-    <div class="chat-bubble bot">Hello! 👋 Welcome. I can help you find the right section of the hub.
+    <div class="chat-bubble bot">Hello! 👋 Welcome to Martin Tech & Business Hub. I'm your virtual guide. Use the six main menu sections to find your way around:
 
-We offer:
-✦ AI Academy and digital skills
-◈ Social media management
-⌁ Trading tools and trade journal
-▣ Online shop and product reviews
-◎ Digital products and templates
-◉ Business consultancy
-✎ Research and writing support
-▤ Virtual assistant and remote support
+• About Us — our story, work and contact details
+• Services — consultancy, research & writing, virtual assistance and website design
+• Learning & Resources — AI Academy, guides and articles
+• Careers & Opportunities — online jobs, Write for Us and contributor opportunities
+• Technology & Business — trading tools, social media, shop and reviews
 
-Choose a topic below or type your question. I use information from this website, not a live ChatGPT service.</div>
+You can also choose a quick topic below or ask me a question.</div>
     <div class="chat-quick">
       <button type="button" data-question="Tell me about all services">All services</button>
       <button type="button" data-question="Tell me about academic writing">Academic writing</button>
@@ -710,7 +738,7 @@ welcomeMessages.addEventListener('click',function(e){
 /* Two-minute animated explainer: timed scenes with optional device narration */
 (function(){
  const scenes=[
-  {k:"Welcome to the hub",t:"Your ideas deserve a place to grow.",v:"💡 🌍 🚀",s:"Welcome to Martin Tech and Business Hub. One destination bringing together practical technology, learning and business support.",n:"Welcome to Martin Tech and Business Hub. One destination bringing together practical technology, learning and business support."},
+  {k:"Welcome to the hub",t:"Your ideas deserve a place to grow.",v:"💡 🌍 🚀",s:"Welcome to Martin Tech and Business Hub. I will guide you through About Us, Services, Learning and Resources, Careers and Opportunities, and Technology and Business. Select any of the guide links below to open that part of the website.",n:"Welcome to Martin Tech and Business Hub. I will guide you through About Us, Services, Learning and Resources, Careers and Opportunities, and Technology and Business. Select any of the guide links below to open that part of the website."},
   {k:"Learn with confidence",t:"Make artificial intelligence practical.",v:"🤖 📚 ✨",s:"Explore our AI Academy for practical lessons, useful prompts and digital skills you can apply in everyday work and business.",n:"Explore our AI Academy for practical lessons, useful prompts and digital skills you can apply in everyday work and business."},
   {k:"Build your presence",t:"Help your business get noticed.",v:"📱 📣 📈",s:"Our social media support helps businesses plan content, manage pages and strengthen their presence across digital platforms.",n:"Our social media support helps businesses plan content, manage pages and strengthen their presence across digital platforms."},
   {k:"Discover and create",t:"Find useful products and resources.",v:"🛍️ ⭐ 📦",s:"Explore product reviews, comparisons, digital guides and templates designed to make online discovery and everyday tasks easier.",n:"Explore product reviews, comparisons, digital guides and templates designed to make online discovery and everyday tasks easier."},
