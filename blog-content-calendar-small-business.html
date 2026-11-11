@@ -12,4 +12,51 @@
 <section><h2>Use a simple 30-day structure</h2><p>Week one can introduce the business and explain what problem it solves. Week two can answer common questions and show how the service works. Week three can share practical tips and behind-the-scenes content. Week four can highlight frequently requested products, invite questions and review what performed well. Adapt the plan to real stock and capacity.</p></section>
 <section><h2>Make each post useful</h2><p>A caption should give the reader a reason to pause. Explain a benefit, answer a question or show a practical detail. Use clear photographs that represent the real product. If an image is illustrative, do not present it as an actual customer result or item in stock.</p></section>
 <section><h2>Include a clear next step</h2><p>Tell readers what they can do: ask for the current catalogue, request a quotation, book a consultation or visit the website. Make the next step easy to understand. Avoid vague captions that leave people wondering how to enquire.</p></section>
-<section><h2>Review results without chasing vanity metrics</h2><p>Track messages, enquiries, bookings, website visits and sales where possible—not only likes. Note which topics generate genuine questions. Repeat useful formats and stop spending time on content that does not support the business goal.</p></section><div class="take"><h2>Final thought</h2><p>A practical content calendar makes marketing less stressful because it turns a large task into a few planned actions. Choose a small number of themes, publish at a sustainable pace and learn from real customer responses. The best schedule is one the business can keep.</p></div><div class="related"><strong>Keep learning with Martin Tech &amp; Business Hub</strong><p>Explore more practical guides on technology, digital skills, business growth and online work.</p><a href="blog.html">Browse all articles →</a></div></main><footer><div class="wrap">© <span id="year"></span> Martin Tech &amp; Business Hub</div></footer><script>document.getElementById('year').textContent=new Date().getFullYear();</script></body></html>
+<section><h2>Review results without chasing vanity metrics</h2><p>Track messages, enquiries, bookings, website visits and sales where possible—not only likes. Note which topics generate genuine questions. Repeat useful formats and stop spending time on content that does not support the business goal.</p></section><div class="take"><h2>Final thought</h2><p>A practical content calendar makes marketing less stressful because it turns a large task into a few planned actions. Choose a small number of themes, publish at a sustainable pace and learn from real customer responses. The best schedule is one the business can keep.</p></div><div class="related"><strong>Keep learning with Martin Tech &amp; Business Hub</strong><p>Explore more practical guides on technology, digital skills, business growth and online work.</p><a href="blog.html">Browse all articles →</a></div></main><footer><div class="wrap">© <span id="year"></span> Martin Tech &amp; Business Hub</div></footer>
+<section class="share-article" aria-labelledby="share-heading">
+  <h2 id="share-heading">Found this useful? Share it.</h2>
+  <p>Help someone else learn by sharing this article.</p>
+  <div class="share-actions">
+    <a class="share-btn whatsapp-share" id="share-whatsapp" href="#" target="_blank" rel="noopener noreferrer">Share on WhatsApp</a>
+    <a class="share-btn facebook-share" id="share-facebook" href="#" target="_blank" rel="noopener noreferrer">Share on Facebook</a>
+    <button class="share-btn copy-share" id="copy-article-link" type="button">Copy article link</button>
+  </div>
+  <p class="share-feedback" id="share-feedback" role="status" aria-live="polite"></p>
+</section>
+<style>
+.share-article{margin:2.5rem 0 1rem;padding:1.35rem;border:1px solid #dbe4ee;border-radius:16px;background:#f7fafc}
+.share-article h2{margin:0 0 .45rem;font-size:1.35rem;color:#152b45}
+.share-article p{margin:.35rem 0 1rem;color:#526174}
+.share-actions{display:flex;flex-wrap:wrap;gap:.7rem}
+.share-btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:.7rem 1rem;border:0;border-radius:9px;text-decoration:none;font:600  .95rem inherit;cursor:pointer}
+.whatsapp-share{background:#168b50;color:#fff}.facebook-share{background:#1769d2;color:#fff}.copy-share{background:#183b5b;color:#fff}
+.share-btn:focus-visible{outline:3px solid #f0b429;outline-offset:3px}
+.share-feedback{min-height:1.2em;margin:.6rem 0 0!important;font-size:.9rem}
+@media(max-width:520px){.share-actions{display:grid;grid-template-columns:1fr}.share-btn{width:100%;box-sizing:border-box}}
+</style>
+<script>
+(function(){
+ const pageUrl=window.location.href.split('#')[0];
+ const shareText=document.title+' — '+pageUrl;
+ const wa=document.getElementById('share-whatsapp');
+ const fb=document.getElementById('share-facebook');
+ const copy=document.getElementById('copy-article-link');
+ const feedback=document.getElementById('share-feedback');
+ wa.href='https://wa.me/?text='+encodeURIComponent(shareText);
+ fb.href='https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(pageUrl);
+ copy.addEventListener('click',async function(){
+   try{
+     if(navigator.clipboard && window.isSecureContext){await navigator.clipboard.writeText(pageUrl);}
+     else{
+       const field=document.createElement('textarea');field.value=pageUrl;field.setAttribute('readonly','');
+       field.style.position='absolute';field.style.left='-9999px';document.body.appendChild(field);
+       field.select();const copied=document.execCommand('copy');document.body.removeChild(field);
+       if(!copied) throw new Error('Copy unavailable');
+     }
+     feedback.textContent='Article link copied. You can now paste it anywhere.';
+   }catch(error){feedback.textContent='Copy was not available on this browser. Please copy the page address from your browser bar.';}
+ });
+})();
+</script>
+
+<script>document.getElementById('year').textContent=new Date().getFullYear();</script></body></html>
