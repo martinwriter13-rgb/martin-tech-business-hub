@@ -12,4 +12,51 @@
 <section><h2>Describe the format</h2><p>Tell the tool whether you need a table, checklist, email draft, lesson plan, short caption or step-by-step guide. Add a sensible length or structure. For example: “Write a 150-word friendly email with a subject line and three clear next steps.” Format instructions reduce editing later.</p></section>
 <section><h2>Set quality rules</h2><p>Explain what to avoid: unsupported claims, invented statistics, jargon, exaggerated promises or a pushy tone. Ask the tool to flag assumptions and identify details that need verification. If the task involves facts that may change, check them against current reliable sources rather than treating an AI response as proof.</p></section>
 <section><h2>Improve the answer through follow-up</h2><p>A useful workflow is iterative. First request an outline. Then ask for a draft. Finally ask for a review against specific criteria such as clarity, accuracy, tone and missing steps. Correct the tool when it misunderstands something. Do not accept a polished answer simply because it sounds confident.</p></section>
-<section><h2>Keep human judgement in charge</h2><p>AI can help brainstorm, organise and draft, but people remain responsible for what they publish or send. Check names, dates, calculations, legal statements and financial information. Read the final output aloud and make sure it reflects your own standards and the real needs of the audience.</p></section><div class="take"><h2>Final thought</h2><p>A good prompt is a clear brief. State the outcome, add relevant context, request a useful format and define quality rules. Then review the result carefully. The goal is not to make AI think for you; it is to use it as a tool that helps you work more clearly and efficiently.</p></div><div class="related"><strong>Keep learning with Martin Tech &amp; Business Hub</strong><p>Explore more practical guides on technology, digital skills, business growth and online work.</p><a href="blog.html">Browse all articles →</a></div></main><footer><div class="wrap">© <span id="year"></span> Martin Tech &amp; Business Hub</div></footer><script>document.getElementById('year').textContent=new Date().getFullYear();</script></body></html>
+<section><h2>Keep human judgement in charge</h2><p>AI can help brainstorm, organise and draft, but people remain responsible for what they publish or send. Check names, dates, calculations, legal statements and financial information. Read the final output aloud and make sure it reflects your own standards and the real needs of the audience.</p></section><div class="take"><h2>Final thought</h2><p>A good prompt is a clear brief. State the outcome, add relevant context, request a useful format and define quality rules. Then review the result carefully. The goal is not to make AI think for you; it is to use it as a tool that helps you work more clearly and efficiently.</p></div><div class="related"><strong>Keep learning with Martin Tech &amp; Business Hub</strong><p>Explore more practical guides on technology, digital skills, business growth and online work.</p><a href="blog.html">Browse all articles →</a></div></main><footer><div class="wrap">© <span id="year"></span> Martin Tech &amp; Business Hub</div></footer>
+<section class="share-article" aria-labelledby="share-heading">
+  <h2 id="share-heading">Found this useful? Share it.</h2>
+  <p>Help someone else learn by sharing this article.</p>
+  <div class="share-actions">
+    <a class="share-btn whatsapp-share" id="share-whatsapp" href="#" target="_blank" rel="noopener noreferrer">Share on WhatsApp</a>
+    <a class="share-btn facebook-share" id="share-facebook" href="#" target="_blank" rel="noopener noreferrer">Share on Facebook</a>
+    <button class="share-btn copy-share" id="copy-article-link" type="button">Copy article link</button>
+  </div>
+  <p class="share-feedback" id="share-feedback" role="status" aria-live="polite"></p>
+</section>
+<style>
+.share-article{margin:2.5rem 0 1rem;padding:1.35rem;border:1px solid #dbe4ee;border-radius:16px;background:#f7fafc}
+.share-article h2{margin:0 0 .45rem;font-size:1.35rem;color:#152b45}
+.share-article p{margin:.35rem 0 1rem;color:#526174}
+.share-actions{display:flex;flex-wrap:wrap;gap:.7rem}
+.share-btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:.7rem 1rem;border:0;border-radius:9px;text-decoration:none;font:600  .95rem inherit;cursor:pointer}
+.whatsapp-share{background:#168b50;color:#fff}.facebook-share{background:#1769d2;color:#fff}.copy-share{background:#183b5b;color:#fff}
+.share-btn:focus-visible{outline:3px solid #f0b429;outline-offset:3px}
+.share-feedback{min-height:1.2em;margin:.6rem 0 0!important;font-size:.9rem}
+@media(max-width:520px){.share-actions{display:grid;grid-template-columns:1fr}.share-btn{width:100%;box-sizing:border-box}}
+</style>
+<script>
+(function(){
+ const pageUrl=window.location.href.split('#')[0];
+ const shareText=document.title+' — '+pageUrl;
+ const wa=document.getElementById('share-whatsapp');
+ const fb=document.getElementById('share-facebook');
+ const copy=document.getElementById('copy-article-link');
+ const feedback=document.getElementById('share-feedback');
+ wa.href='https://wa.me/?text='+encodeURIComponent(shareText);
+ fb.href='https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(pageUrl);
+ copy.addEventListener('click',async function(){
+   try{
+     if(navigator.clipboard && window.isSecureContext){await navigator.clipboard.writeText(pageUrl);}
+     else{
+       const field=document.createElement('textarea');field.value=pageUrl;field.setAttribute('readonly','');
+       field.style.position='absolute';field.style.left='-9999px';document.body.appendChild(field);
+       field.select();const copied=document.execCommand('copy');document.body.removeChild(field);
+       if(!copied) throw new Error('Copy unavailable');
+     }
+     feedback.textContent='Article link copied. You can now paste it anywhere.';
+   }catch(error){feedback.textContent='Copy was not available on this browser. Please copy the page address from your browser bar.';}
+ });
+})();
+</script>
+
+<script>document.getElementById('year').textContent=new Date().getFullYear();</script></body></html>
