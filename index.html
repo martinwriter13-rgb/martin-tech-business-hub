@@ -885,7 +885,7 @@ body:has(.service-order-bar) .martin-whatsapp-float{bottom:104px}
 <span>Chat with Martin on WhatsApp</span></a>
 
 <script>
-window.toggleMartinMobileMenu=function(button){var menu=document.getElementById("primary-navigation");if(!menu)return;var opening=button.getAttribute("aria-expanded")!=="true";button.setAttribute("aria-expanded",String(opening));button.textContent=opening?"Close ×":"Menu ☰";menu.classList.toggle("mobile-open",opening);if(opening){menu.style.cssText="display:flex!important;position:fixed!important;top:"+Math.ceil(button.getBoundingClientRect().bottom+window.scrollY)+"px!important;left:0!important;right:0!important;z-index:2147483000!important;flex-direction:column!important;align-items:stretch!important;gap:0!important;background:#08101f!important;padding:12px 18px!important;max-height:70vh!important;overflow-y:auto!important;border:1px solid rgba(160,190,255,.4)!important;box-shadow:0 18px 35px #000b!important;";}else{menu.style.removeProperty("cssText");menu.removeAttribute("style");}};document.addEventListener("click",function(event){var menu=document.getElementById("primary-navigation");var button=document.querySelector(".nav-toggle");if(menu&&button&&!menu.contains(event.target)&&!button.contains(event.target)&&button.getAttribute("aria-expanded")==="true"){button.setAttribute("aria-expanded","false");button.textContent="Menu ☰";menu.classList.remove("mobile-open");menu.removeAttribute("style");}});document.addEventListener("keydown",function(event){if(event.key==="Escape"){var button=document.querySelector(".nav-toggle");var menu=document.getElementById("primary-navigation");if(button&&menu){button.setAttribute("aria-expanded","false");button.textContent="Menu ☰";menu.classList.remove("mobile-open");menu.removeAttribute("style");}}});</script>
+window.toggleMartinMobileMenu=function(button){var menu=document.getElementById("primary-navigation");if(!menu)return;var opening=button.getAttribute("aria-expanded")!=="true";button.setAttribute("aria-expanded",String(opening));button.textContent=opening?"Close ×":"Menu ☰";menu.classList.toggle("mobile-open",opening);document.body.classList.toggle("menu-open",opening);if(opening){menu.style.setProperty("--mobile-menu-top",Math.ceil(button.getBoundingClientRect().bottom)+"px");menu.style.cssText="display:flex!important;position:fixed!important;top:"+Math.ceil(button.getBoundingClientRect().bottom)+"px!important;left:0!important;right:0!important;z-index:2147483000!important;flex-direction:column!important;align-items:stretch!important;gap:0!important;background:#08101f!important;padding:12px 18px!important;max-height:70vh!important;overflow-y:auto!important;border:1px solid rgba(160,190,255,.4)!important;box-shadow:0 18px 35px #000b!important;";}else{menu.style.removeProperty("cssText");menu.removeAttribute("style");}};document.addEventListener("click",function(event){var menu=document.getElementById("primary-navigation");var button=document.querySelector(".nav-toggle");if(menu&&button&&!menu.contains(event.target)&&!button.contains(event.target)&&button.getAttribute("aria-expanded")==="true"){button.setAttribute("aria-expanded","false");button.textContent="Menu ☰";menu.classList.remove("mobile-open");document.body.classList.remove("menu-open");menu.removeAttribute("style");}});document.addEventListener("keydown",function(event){if(event.key==="Escape"){var button=document.querySelector(".nav-toggle");var menu=document.getElementById("primary-navigation");if(button&&menu){button.setAttribute("aria-expanded","false");button.textContent="Menu ☰";menu.classList.remove("mobile-open");document.body.classList.remove("menu-open");menu.removeAttribute("style");}}});</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>(async()=>{const host=document.getElementById("mt-managed-content");if(!host||!window.supabase?.createClient)return;const db=window.supabase.createClient("https://zvepoycrqjzuptccdffv.supabase.co","sb_publishable_oqLCl-FRoz_u7Yw3IUANow_4SBJTXqT");try{const {data,error}=await db.from("site_content").select("title,body,section_key,updated_at").eq("page_slug",host.dataset.page).eq("status","published").order("updated_at",{ascending:false}).limit(30);if(error)throw error;if(!data?.length)return;const makeCard=item=>{const article=document.createElement("article");article.className="mt-managed-card";const h=document.createElement("h2");h.textContent=item.title;const p=document.createElement("p");p.textContent=item.body||"";article.append(h,p);return article;};const appended=[];for(const item of data){const target=document.getElementById(item.section_key);if(target&&target!==host&&!target.hasAttribute("data-managed-content")){const replacement=document.createElement(target.tagName.toLowerCase());if(target.id)replacement.id=target.id;replacement.className=target.className||"";replacement.setAttribute("data-managed-content","true");const wrap=document.createElement("div");wrap.className="mt-managed-wrap";const kicker=document.createElement("div");kicker.className="mt-managed-kicker";kicker.textContent="Updated by Martin Tech & Business Hub";wrap.append(kicker,makeCard(item));replacement.append(wrap);target.replaceWith(replacement);}else appended.push(item);}if(appended.length){host.hidden=false;const wrap=document.createElement("div");wrap.className="mt-managed-wrap";const kicker=document.createElement("div");kicker.className="mt-managed-kicker";kicker.textContent="Updates from Martin Tech & Business Hub";wrap.append(kicker);appended.forEach(item=>wrap.append(makeCard(item)));host.replaceChildren(wrap);}}catch(e){console.warn("Managed content load:",e.message);}})();</script><script>(async()=>{try{if(!window.supabase?.createClient)return;const db=window.supabase.createClient("https://zvepoycrqjzuptccdffv.supabase.co","sb_publishable_oqLCl-FRoz_u7Yw3IUANow_4SBJTXqT");const {data,error}=await db.from("site_settings").select("setting_value").eq("setting_key","announcement_banner").eq("is_public",true).maybeSingle();if(error||!data?.setting_value?.enabled||!data.setting_value.text)return;const bar=document.createElement("aside");bar.setAttribute("role","status");bar.style.cssText="padding:12px 18px;text-align:center;background:linear-gradient(90deg,#1d4d8c,#513a88);color:#fff;font-weight:700";bar.textContent=data.setting_value.text;document.body.prepend(bar);}catch(e){console.warn("Website announcement unavailable:",e.message);}})();</script><script>(async()=>{try{if(!window.supabase?.createClient)return;let file=location.pathname.split("/").pop()||"index.html";let slug=file.replace(/\.html$/,"");if(slug==="index")slug="home";if(slug.startsWith("blog-"))slug="blog";const db=window.supabase.createClient("https://zvepoycrqjzuptccdffv.supabase.co","sb_publishable_oqLCl-FRoz_u7Yw3IUANow_4SBJTXqT");const getId=(key,store)=>{let id=store.getItem(key);if(!id){id=crypto.randomUUID?crypto.randomUUID():"v"+Date.now().toString(36)+Math.random().toString(36).slice(2);store.setItem(key,id);}return id;};const visitor=getId("mth_visitor_id",localStorage),session=getId("mth_session_id",sessionStorage);const ua=navigator.userAgent||"";const device=/ipad|tablet/i.test(ua)?"tablet":(/mobile|android|iphone/i.test(ua)?"mobile":"desktop");const browser=/Edg\//.test(ua)?"Edge":/OPR\//.test(ua)?"Opera":/Firefox\//.test(ua)?"Firefox":/Chrome\//.test(ua)?"Chrome":/Safari\//.test(ua)?"Safari":"Other";const ref=document.referrer?new URL(document.referrer).hostname:null;const {error}=await db.from("site_page_views").insert({page_slug:slug,referrer_host:ref,visitor_id:visitor,session_id:session,device_type:device,browser_name:browser});if(error)console.warn("Visitor analytics was not recorded:",error.message);}catch(e){console.warn("Analytics counter unavailable:",e.message);}})();</script>
 <style id="mobile-menu-final-fix">
 @media(max-width:800px){
@@ -897,4 +897,84 @@ header.nav #primary-navigation.mobile-open a{display:flex!important;min-height:4
 }
 </style>
 <script src="/install-app.js" defer></script>
+
+<style id="responsive-desktop-phone-final">
+/* Desktop: keep the brand and account action on the first row; use compact dropdown navigation below. */
+@media (min-width: 801px) {
+  header.nav {
+    display:grid!important;
+    grid-template-columns:minmax(220px,1fr) auto;
+    grid-template-areas:"brand account" "navigation navigation";
+    align-items:center;
+    gap:10px 18px;
+    padding:18px 24px!important;
+  }
+  header.nav>.brand {grid-area:brand;min-width:0}
+  header.nav>#primary-navigation {
+    grid-area:navigation;
+    display:flex!important;
+    align-items:center;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:6px!important;
+    min-width:0;
+    width:100%;
+  }
+  header.nav>#primary-navigation>.nav-home,
+  header.nav>#primary-navigation>.nav-group {width:auto!important;flex:0 0 auto;position:relative}
+  header.nav>#primary-navigation>.nav-group>summary {white-space:nowrap}
+  header.nav>#primary-navigation .nav-submenu {
+    display:none;
+    position:absolute;
+    top:100%;
+    left:0;
+    z-index:1500;
+    min-width:220px;
+    max-width:min(300px,80vw);
+    padding:8px!important;
+    border:1px solid #3c5687;
+    border-radius:12px;
+    background:#0b1427;
+    box-shadow:0 16px 35px #000b;
+  }
+  header.nav>#primary-navigation .nav-group[open]>.nav-submenu {display:grid}
+  header.nav>.btn.primary {grid-area:account;justify-self:end;white-space:nowrap}
+  header.nav>.nav-toggle {display:none!important}
+}
+@media (max-width: 800px) {
+  header.nav {
+    display:flex!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    gap:10px!important;
+    padding:12px 14px!important;
+  }
+  header.nav>.brand {flex:1 1 130px;max-width:calc(100% - 124px);font-size:clamp(13px,3.5vw,17px);line-height:1.25}
+  header.nav>.btn.primary {display:none!important}
+  header.nav>.nav-toggle {flex:0 0 112px!important}
+  header.nav>#primary-navigation.mobile-open {
+    position:fixed!important;
+    top:var(--mobile-menu-top,70px)!important;
+    left:10px!important;
+    right:10px!important;
+    width:auto!important;
+    max-width:none!important;
+    max-height:calc(100dvh - var(--mobile-menu-top,70px) - 14px)!important;
+    overflow-y:auto!important;
+    overscroll-behavior:contain;
+    border-radius:0 0 14px 14px!important;
+  }
+  header.nav>#primary-navigation.mobile-open .nav-group {width:100%!important}
+  header.nav>#primary-navigation.mobile-open .nav-group>summary {width:100%;text-align:left}
+  header.nav>#primary-navigation.mobile-open .nav-submenu {position:static!important;max-width:none!important}
+  body.menu-open {overflow:hidden}
+}
+@media (max-width: 380px) {
+  header.nav>.brand {font-size:12px;letter-spacing:-.2px}
+  header.nav>.nav-toggle {min-width:96px!important;width:96px!important;flex-basis:96px!important;padding:0 8px!important}
+}
+@media (prefers-reduced-motion: reduce) {
+  html {scroll-behavior:auto}
+}
+</style>
 </body></html>
