@@ -1,4 +1,5 @@
 {
+  "id": "/",
   "name": "Martin Tech & Business Hub",
   "short_name": "Martin Tech",
   "description": "Install Martin Tech & Business Hub on your phone or computer.",
@@ -11,9 +12,9 @@
   "icons": [
     {
       "src": "/app-icon.svg",
-      "sizes": "192x192 512x512",
+      "sizes": "any",
       "type": "image/svg+xml",
-      "purpose": "any"
+      "purpose": "any maskable"
     }
   ],
   "display_override": [
