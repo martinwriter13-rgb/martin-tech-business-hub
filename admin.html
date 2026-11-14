@@ -136,6 +136,7 @@
   const pane=$("guest-payment-thread");pane.replaceChildren();
   pane.append(guestPostNode("h3","",item.contact_email));
   pane.append(guestPostNode("p","muted",item.country+" · "+String(item.package_code).toUpperCase()+" package"));
+  if(item.message){const initial=guestPostNode("div","role-card");initial.style.margin="10px 0";initial.append(guestPostNode("strong","","Visitor · original enquiry"));const initialBody=guestPostNode("p","",item.message);initialBody.style.whiteSpace="pre-wrap";initial.append(initialBody);pane.append(initial);}
   try{
    await guestPostCall("payment_mark_read",{inquiry_id:item.id});
    const data=await guestPostCall("payment_thread",{inquiry_id:item.id});
