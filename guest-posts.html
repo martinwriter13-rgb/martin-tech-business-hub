@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Submit a quality guest article to Martin Tech & Business Hub. Choose a publishing package and pay securely with PayPal.">
+<link rel="canonical" href="https://martin-tech-business-hub.onrender.com/guest-posts.html">
+<meta name="theme-color" content="#070b18">
+<title>Write for Martin Tech | Guest Posting</title>
+<style>
+:root{color-scheme:dark;--bg:#070b18;--panel:#10182b;--muted:#a8b3cc;--line:rgba(255,255,255,.12);--blue:#4f8cff;--purple:#9a6bff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 85% 0%,#1a1741 0,transparent 34%),radial-gradient(circle at 0 40%,#10254b 0,transparent 30%),var(--bg);color:#f5f7ff;font:16px/1.6 Inter,system-ui,-apple-system,Segoe UI,sans-serif}a{color:#b9ccff;text-decoration:none}.wrap{width:min(1050px,92%);margin:auto}.nav{display:flex;justify-content:space-between;align-items:center;padding:20px 0;border-bottom:1px solid var(--line)}.brand{font-weight:850;letter-spacing:-.4px;color:#fff}.brand span{color:#8caeff}.nav a:last-child{border:1px solid #47639b;padding:8px 13px;border-radius:10px}.hero{padding:58px 0 28px}.eyebrow{display:inline-block;padding:6px 11px;border:1px solid #344c82;border-radius:25px;color:#b9ccff;background:#17264b;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}.hero h1{font-size:clamp(38px,6vw,62px);line-height:1.05;letter-spacing:-2px;margin:18px 0}.gradient{background:linear-gradient(100deg,#70a8ff,#b38aff);-webkit-background-clip:text;background-clip:text;color:transparent}.lead{max-width:760px;color:var(--muted);font-size:18px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin:28px 0}.package{display:block;text-align:left;width:100%;background:linear-gradient(145deg,#14213d,#0e172a);border:1px solid var(--line);border-radius:16px;padding:17px;color:#fff;cursor:pointer}.package[aria-pressed=true]{border:2px solid #78a8ff;background:linear-gradient(145deg,#1c3767,#1c1c46);padding:16px}.package strong{display:block;font-size:18px}.package b{display:block;font-size:26px;margin:7px 0}.package small{color:var(--muted)}.panel{background:linear-gradient(150deg,#121d35,#0d1426);border:1px solid var(--line);border-radius:20px;padding:24px;margin:24px 0}.panel h2{margin:0 0 6px}.muted{color:var(--muted)}form{display:grid;grid-template-columns:1fr 1fr;gap:14px}label{display:grid;gap:6px;font-weight:650;font-size:14px}label.full{grid-column:1/-1}input,select,textarea{width:100%;border:1px solid #34466e;border-radius:10px;background:#091326;color:#fff;padding:13px;font:inherit}textarea{min-height:220px;resize:vertical}input:focus,select:focus,textarea:focus{outline:2px solid #689cff;outline-offset:1px}.payarea{margin-top:20px;padding:18px;border:1px dashed #5875aa;border-radius:15px;background:#0b1426}.notice{padding:12px 14px;border-radius:12px;background:#172747;border:1px solid #344c82;color:#dce7ff;margin:12px 0}.notice.error{background:#3a1c29;border-color:#88445c;color:#ffe1e9}.notice.success{background:#123626;border-color:#2c8058;color:#d9ffea}.fine{font-size:12px;color:var(--muted)}footer{padding:28px 0 40px;border-top:1px solid var(--line);margin-top:40px;color:var(--muted);font-size:13px}
+@media(max-width:850px){.grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:560px){.grid,form{grid-template-columns:1fr}.hero{padding-top:40px}.hero h1{letter-spacing:-1px}.panel{padding:17px}.package{padding:14px}}
+</style>
+</head>
+<body>
+<header class="wrap nav"><a class="brand" href="index.html">MARTIN <span>TECH</span> & BUSINESS HUB</a><a href="index.html">← Back to home</a></header>
+<main class="wrap">
+<section class="hero"><span class="eyebrow">Contribute • Publish • Grow</span><h1>Write for <span class="gradient">Martin Tech</span></h1><p class="lead">Share practical knowledge with readers interested in technology, business, finance, education, careers and digital growth. Submit original work for editorial review and choose a publishing package.</p></section>
+<section aria-labelledby="packages-heading"><h2 id="packages-heading">Choose a publishing package</h2><p class="muted">Prices are in US dollars. Payment is collected securely through PayPal before editorial review.</p>
+<div class="grid">
+<button class="package" type="button" data-package="standard" aria-pressed="true"><strong>Standard</strong><b>$10</b><small>Standard article placement</small></button>
+<button class="package" type="button" data-package="featured" aria-pressed="false"><strong>Featured</strong><b>$20</b><small>Featured article placement</small></button>
+<button class="package" type="button" data-package="sponsored" aria-pressed="false"><strong>Sponsored</strong><b>$35</b><small>Clearly labelled sponsored article</small></button>
+<button class="package" type="button" data-package="homepage" aria-pressed="false"><strong>Homepage</strong><b>$50</b><small>Homepage feature, subject to approval</small></button>
+</div></section>
+<section class="panel"><h2>Submit your article</h2><p class="muted">Complete the details below. Your article will not be published automatically after payment; Martin Tech will review it first.</p>
+<form id="guestForm">
+<label>Your full name<input name="author_name" required minlength="2" maxlength="100" autocomplete="name"></label>
+<label>Email address<input name="author_email" type="email" required maxlength="254" autocomplete="email"></label>
+<label class="full">Article title<input name="article_title" required minlength="8" maxlength="180" placeholder="Enter a clear, informative headline"></label>
+<label>Category<select name="category" required><option value="">Choose a category</option><option>Technology</option><option>Business</option><option>Finance & Fintech</option><option>Education</option><option>Careers</option><option>Digital Marketing</option><option>Research</option></select></label>
+<label>Selected package<input id="packageName" value="Standard — $10 USD" readonly></label>
+<label class="full">Full article<textarea name="article_body" required minlength="100" maxlength="30000" placeholder="Paste your original article here (100–30,000 characters). Do not include copied or plagiarised content."></textarea><span class="fine" id="charCount">0 / 30,000 characters</span></label>
+<label class="full" style="display:flex;grid-template-columns:auto 1fr;align-items:start;font-weight:400"><input type="checkbox" name="rights" required style="width:auto;margin-top:5px"> I confirm this is original work, I have the right to submit it, and I agree to editorial review and the publishing terms.</label>
+</form>
+<div class="payarea"><h3 style="margin:0 0 6px">Pay securely with PayPal</h3><p class="fine">Your payment is processed by PayPal. We do not collect or store your PayPal password or card details.</p><div id="paymentStatus" class="notice" role="status">Checking PayPal checkout configuration…</div><div id="paypalButtons"></div></div>
+</section>
+<section class="panel"><h2>Editorial standards</h2><ul class="muted"><li>Articles must be original, useful and relevant to our readers.</li><li>No plagiarism, malware, illegal content, misleading claims or spam backlink schemes.</li><li>We may edit for clarity, reject unsuitable submissions or request revisions.</li><li>Payment does not guarantee acceptance, publication, search rankings or backlinks.</li><li>Sponsored content will be clearly identified. Any refund decision will follow the published terms.</li></ul><p class="fine">Questions? Email <a href="mailto:martinwriter13@gmail.com">martinwriter13@gmail.com</a>.</p></section>
+</main>
+<footer><div class="wrap">© <span id="year"></span> Martin Tech & Business Hub. All submissions are subject to editorial approval.</div></footer>
+<script>
+const FUNCTION_URL="https://zvepoycrqjzuptccdffv.supabase.co/functions/v1/guest-post-payments";
+const form=document.getElementById("guestForm");
+const statusBox=document.getElementById("paymentStatus");
+const buttonsHost=document.getElementById("paypalButtons");
+const packageName=document.getElementById("packageName");
+const packageLabels={standard:"Standard — $10 USD",featured:"Featured — $20 USD",sponsored:"Sponsored — $35 USD",homepage:"Homepage — $50 USD"};
+let selectedPackage="standard";
+let config=null;
+document.getElementById("year").textContent=new Date().getFullYear();
+document.querySelectorAll("[data-package]").forEach(button=>button.addEventListener("click",()=>{
+  selectedPackage=button.dataset.package;
+  document.querySelectorAll("[data-package]").forEach(item=>item.setAttribute("aria-pressed",String(item===button)));
+  packageName.value=packageLabels[selectedPackage];
+}));
+form.elements.article_body.addEventListener("input",()=>document.getElementById("charCount").textContent=form.elements.article_body.value.length+" / 30,000 characters");
+function showStatus(message,type="notice"){statusBox.className="notice"+(type==="error"?" error":type==="success"?" success":"");statusBox.textContent=message;}
+async function callFunction(payload){
+  const response=await fetch(FUNCTION_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
+  const data=await response.json().catch(()=>({}));
+  if(!response.ok||data.error)throw new Error(data.error||"Payment service request failed.");
+  return data;
+}
+function loadPayPal(clientId){
+  return new Promise((resolve,reject)=>{
+    if(window.paypal){resolve();return;}
+    const script=document.createElement("script");
+    script.src="https://www.paypal.com/sdk/js?client-id="+encodeURIComponent(clientId)+"&currency=USD&intent=capture&components=buttons";
+    script.onload=resolve;script.onerror=()=>reject(new Error("PayPal checkout could not load. Refresh and try again."));
+    document.head.appendChild(script);
+  });
+}
+async function initialise(){
+  try{
+    config=await callFunction({action:"config"});
+    if(!config.ready||!config.clientId){
+      showStatus("PayPal is not connected yet. The submission page is ready, but checkout will activate after the PayPal developer credentials are added securely.", "error");
+      return;
+    }
+    await loadPayPal(config.clientId);
+    showStatus("PayPal checkout is ready ("+config.environment+" mode). Select a package, complete the article form and pay.", "success");
+    window.paypal.Buttons({
+      style:{layout:"vertical",shape:"rect",label:"paypal"},
+      onClick:(data,actions)=>form.reportValidity()?actions.resolve():actions.reject(),
+      createOrder:async()=>{
+        const values=Object.fromEntries(new FormData(form).entries());
+        if(!form.reportValidity())throw new Error("Please complete all required fields.");
+        const result=await callFunction({
+          action:"create_order",
+          author_name:values.author_name,
+          author_email:values.author_email,
+          article_title:values.article_title,
+          category:values.category,
+          article_body:values.article_body,
+          package_code:selectedPackage
+        });
+        window.currentGuestSubmission=result.submission_id;
+        return result.order_id;
+      },
+      onApprove:async(data)=>{
+        showStatus("PayPal approved the payment. Confirming it securely…");
+        try{
+          const result=await callFunction({action:"capture_order",submission_id:window.currentGuestSubmission,order_id:data.orderID});
+          showStatus(result.message||"Payment confirmed. Your article is awaiting editorial review.","success");
+          form.reset();document.getElementById("charCount").textContent="0 / 30,000 characters";
+        }catch(error){showStatus(error.message,"error");}
+      },
+      onCancel:()=>showStatus("Payment was cancelled. Your article has not been submitted for review."),
+      onError:error=>showStatus(error?.message||"PayPal checkout encountered an error. Please try again.","error")
+    }).render("#paypalButtons");
+  }catch(error){showStatus(error.message||"Could not initialise PayPal checkout.","error");}
+}
+initialise();
+</script>
+</body></html>
