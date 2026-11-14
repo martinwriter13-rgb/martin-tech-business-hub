@@ -94,7 +94,21 @@ section[aria-labelledby="packages-heading"]>h2{font-size:clamp(25px,3vw,34px);le
 <label class="full">Full article<textarea name="article_body" required minlength="100" maxlength="30000" placeholder="Paste your original article here (100–30,000 characters). Do not include copied or plagiarised content."></textarea><span class="fine" id="charCount">0 / 30,000 characters</span></label>
 <label class="full" style="display:flex;grid-template-columns:auto 1fr;align-items:start;font-weight:400"><input type="checkbox" name="rights" required style="width:auto;margin-top:5px"> I confirm this is original work, I have the right to submit it, and I agree to editorial review and the publishing terms.</label>
 </form>
-<div class="payarea"><h3 style="margin:0 0 6px">Pay securely with PayPal</h3><p class="fine">Your payment is processed by PayPal. We do not collect or store your PayPal password or card details.</p><div id="paymentStatus" class="notice" role="status">Checking PayPal checkout configuration…</div><div id="paypalButtons"></div></div>
+<div class="payarea">
+<h3 style="margin:0 0 6px">Payment options for international contributors</h3><p class="fine">First, tell us whether PayPal is available to you. Your country and choice help us guide you to the right payment option.</p>
+<label class="full" for="paymentCountry">Which country are you submitting from?<input id="paymentCountry" name="payment_country" autocomplete="country-name" maxlength="100" placeholder="Enter your country"></label>
+<fieldset id="paypalAvailability" style="border:1px solid #34466e;border-radius:12px;padding:14px;margin:14px 0"><legend style="padding:0 7px;font-weight:750">Does your country support PayPal payments?</legend>
+<label style="display:flex;grid-template-columns:auto 1fr;align-items:center;margin:8px 0"><input type="radio" name="paypal_available" value="yes" style="width:auto"> Yes, I can pay with PayPal</label>
+<label style="display:flex;grid-template-columns:auto 1fr;align-items:center;margin:8px 0"><input type="radio" name="paypal_available" value="no" style="width:auto"> No, PayPal is not available to me</label></fieldset>
+<div id="paymentStatus" class="notice" role="status">Choose Yes or No above to see your payment option.</div>
+<div id="paypalChoice" hidden><h3 style="margin:0 0 6px">Pay securely with PayPal</h3><p class="fine">Your payment is processed by PayPal. We do not collect or store your PayPal password or card details.</p><div id="paypalButtons"></div></div>
+<div id="alternativePayment" class="notice" hidden><h3 style="margin:0 0 6px">Request another payment option</h3><p>If PayPal does not work in your country, leave your email below. We will receive your request in our private Super Admin dashboard and contact you with available alternatives.</p>
+<form id="paymentHelpForm" style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+<label>Your email address<input id="paymentHelpEmail" type="email" required maxlength="254" autocomplete="email" placeholder="you@example.com"></label>
+<label>Your name (optional)<input id="paymentHelpName" maxlength="100" autocomplete="name" placeholder="Your name"></label>
+<label class="full">Article title (optional)<input id="paymentHelpTitle" maxlength="180" placeholder="If you have already chosen a title"></label>
+<label class="full">Message (optional)<textarea id="paymentHelpMessage" maxlength="1000" rows="3" placeholder="Tell us which payment method you can use"></textarea></label>
+<button class="primary-cta" type="submit" style="border:0;cursor:pointer">Send my payment request</button></form></div></div>
 </section>
 <section class="panel"><h2>Editorial standards</h2><ul class="muted"><li>Articles must be original, useful and relevant to our readers.</li><li>No plagiarism, malware, illegal content, misleading claims or spam backlink schemes.</li><li>We may edit for clarity, reject unsuitable submissions or request revisions.</li><li>Payment does not guarantee acceptance, publication, search rankings or backlinks.</li><li>Sponsored content will be clearly identified. Any refund decision will follow the published terms.</li></ul><p class="fine">Questions? Email <a href="mailto:martinwriter13@gmail.com">martinwriter13@gmail.com</a>.</p></section>
 </main>
@@ -115,7 +129,16 @@ document.querySelectorAll("[data-package]").forEach(button=>button.addEventListe
   packageName.value=packageLabels[selectedPackage];
 }));
 form.elements.article_body.addEventListener("input",()=>document.getElementById("charCount").textContent=form.elements.article_body.value.length+" / 30,000 characters");
+const paymentCountry=document.getElementById("paymentCountry");
+const paypalChoice=document.getElementById("paypalChoice");
+const alternativePayment=document.getElementById("alternativePayment");
 function showStatus(message,type="notice"){statusBox.className="notice"+(type==="error"?" error":type==="success"?" success":"");statusBox.textContent=message;}
+document.querySelectorAll('input[name="paypal_available"]').forEach(choice=>choice.addEventListener("change",()=>{
+ const yes=choice.value==="yes"&&choice.checked,no=choice.value==="no"&&choice.checked;
+ paypalChoice.hidden=!yes;alternativePayment.hidden=!no;paymentCountry.required=no;
+ if(yes)showStatus("PayPal selected. Complete the article form above, then use the secure PayPal button below.","success");
+ if(no)showStatus("No problem. Leave your email and country and we will contact you about another payment method.");
+}));
 async function callFunction(payload){
   const response=await fetch(FUNCTION_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
   const data=await response.json().catch(()=>({}));
@@ -135,11 +158,11 @@ async function initialise(){
   try{
     config=await callFunction({action:"config"});
     if(!config.ready||!config.clientId){
-      showStatus("PayPal is not connected yet. The submission page is ready, but checkout will activate after the PayPal developer credentials are added securely.", "error");
+      showStatus("PayPal checkout is not connected yet. If PayPal is unavailable in your country, you can still request an alternative payment method below.", "error");
       return;
     }
     await loadPayPal(config.clientId);
-    showStatus("PayPal checkout is ready ("+config.environment+" mode). Select a package, complete the article form and pay.", "success");
+    
     window.paypal.Buttons({
       style:{layout:"vertical",shape:"rect",label:"paypal"},
       onClick:(data,actions)=>form.reportValidity()?actions.resolve():actions.reject(),
@@ -171,6 +194,17 @@ async function initialise(){
     }).render("#paypalButtons");
   }catch(error){showStatus(error.message||"Could not initialise PayPal checkout.","error");}
 }
+document.getElementById("paymentHelpForm").addEventListener("submit",async event=>{
+ event.preventDefault();const submit=event.currentTarget.querySelector('button[type="submit"]');
+ const country=paymentCountry.value.trim(),email=document.getElementById("paymentHelpEmail").value.trim();
+ if(country.length<2){showStatus("Please enter your country so we can check suitable payment options.","error");paymentCountry.focus();return;}
+ submit.disabled=true;submit.textContent="Sending request…";
+ try{
+  const result=await callFunction({action:"payment_inquiry",contact_email:email,country,package_code:selectedPackage,author_name:document.getElementById("paymentHelpName").value.trim(),article_title:document.getElementById("paymentHelpTitle").value.trim(),message:document.getElementById("paymentHelpMessage").value.trim()});
+  showStatus(result.message||"Your alternative payment request has been sent.","success");event.currentTarget.reset();
+ }catch(error){showStatus(error.message||"Could not send your request. Please try again.","error");}
+ finally{submit.disabled=false;submit.textContent="Send my payment request";}
+});
 initialise();
 </script>
 </body></html>
